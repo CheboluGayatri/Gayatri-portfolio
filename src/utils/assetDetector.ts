@@ -46,6 +46,34 @@ export interface DetectedAssets {
   isScanning: boolean;
 }
 
+export function getEmbedVideoUrl(url: string | null): { type: "direct" | "youtube" | "vimeo"; embedUrl: string } {
+  if (!url) return { type: "direct", embedUrl: "" };
+  
+  // YouTube patterns
+  const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+  const ytMatch = url.match(ytRegex);
+  if (ytMatch) {
+    const videoId = ytMatch[1];
+    return {
+      type: "youtube",
+      embedUrl: `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1`
+    };
+  }
+  
+  // Vimeo patterns
+  const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-8a-zA-Z._-]+)/i;
+  const vimeoMatch = url.match(vimeoRegex);
+  if (vimeoMatch) {
+    const videoId = vimeoMatch[1];
+    return {
+      type: "vimeo",
+      embedUrl: `https://player.vimeo.com/video/${videoId}?autoplay=1&loop=1&muted=1&background=1&autoplay=true`
+    };
+  }
+  
+  return { type: "direct", embedUrl: url };
+}
+
 // Fallback high-quality design assets if local files are missing
 // 💡 VS CODE TIP FOR YOUR PORTFOLIO:
 // 1. To set your profile photo permanently, place your image inside the folder "/src/assets/images/" 
@@ -122,8 +150,8 @@ async function fileExists(url: string): Promise<boolean> {
 
 export function useAssetDetection() {
   const [assets, setAssets] = useState<DetectedAssets>({
-    profileUrl: getLocalProfileImage() || defaultProfile,
-    videoUrl: getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl,
+    profileUrl: localStorage.getItem("custom_profile_url") || getLocalProfileImage() || defaultProfile,
+    videoUrl: localStorage.getItem("custom_video_url") || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl,
     resumeUrl: null,
     projectScreenshots: STATIC_PROJECT_SCREENSHOTS,
     certificateImages: {},
@@ -132,12 +160,11 @@ export function useAssetDetection() {
 
   useEffect(() => {
     let active = true;
-    const createdUrls: string[] = [];
 
     async function scan() {
       // 1. Check IndexedDB first for user-uploaded custom pictures or videos (from UI settings)
-      let customProfileBlobUrl: string | null = null;
-      let customVideoBlobUrl: string | null = null;
+      let customProfileBase64: string | null = null;
+      let customVideoBase64: string | null = null;
 
       try {
         const [localProf, localVid] = await Promise.all([
@@ -146,12 +173,10 @@ export function useAssetDetection() {
         ]);
 
         if (localProf && active) {
-          customProfileBlobUrl = URL.createObjectURL(localProf);
-          createdUrls.push(customProfileBlobUrl);
+          customProfileBase64 = localProf;
         }
         if (localVid && active) {
-          customVideoBlobUrl = URL.createObjectURL(localVid);
-          createdUrls.push(customVideoBlobUrl);
+          customVideoBase64 = localVid;
         }
       } catch (e) {
         console.error("IndexedDB profile/video retrieval issue:", e);
@@ -193,11 +218,13 @@ export function useAssetDetection() {
 
       if (!active) return;
 
+      const pastedProfileUrl = localStorage.getItem("custom_profile_url");
+      const pastedVideoUrl = localStorage.getItem("custom_video_url");
+
       // 3. Update State with discovered custom IndexedDB media, static local assets, or local PDF.
-      // Notice: we DO NOT run any slow sequential fetch probes for profile & video as they are matched synchronously.
       setAssets((prev) => {
-        const nextProfileUrl = resolvedProfile || customProfileBlobUrl || prev.profileUrl;
-        const nextVideoUrl = resolvedVideo || customVideoBlobUrl || prev.videoUrl;
+        const nextProfileUrl = pastedProfileUrl || customProfileBase64 || resolvedProfile || prev.profileUrl;
+        const nextVideoUrl = pastedVideoUrl || customVideoBase64 || resolvedVideo || prev.videoUrl;
         const nextResumeUrl = resolvedResume || prev.resumeUrl;
 
         if (
@@ -223,7 +250,6 @@ export function useAssetDetection() {
 
     return () => {
       active = false;
-      createdUrls.forEach((url) => URL.revokeObjectURL(url));
     };
   }, []);
 

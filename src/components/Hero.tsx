@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Code2, Database, X } from "lucide-react";
-import { motion } from "motion/react";
-import { useAssetDetection, FALLBACK_ASSETS } from "../utils/assetDetector";
+import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Code2, Database, X, Settings, Upload, RotateCcw, AlertTriangle, Check, Link, Globe } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { useAssetDetection, FALLBACK_ASSETS, getEmbedVideoUrl } from "../utils/assetDetector";
+import { saveLocalMedia, clearLocalMedia } from "../utils/db";
 
 interface HeroProps {
   name: string;
@@ -26,9 +27,20 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
   const [showVolumePrompt, setShowVolumePrompt] = useState(true);
 
+  // Settings Panel States
+  const [isSetupOpen, setIsSetupOpen] = useState(false);
+  const [videoUrlInput, setVideoUrlInput] = useState(() => localStorage.getItem("custom_video_url") || "");
+  const [imageUrlInput, setImageUrlInput] = useState(() => localStorage.getItem("custom_profile_url") || "");
+  const [uploadStatus, setUploadStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [uploadError, setUploadError] = useState("");
+  const [infoMessage, setInfoMessage] = useState("");
+
   // Determine active video source (dynamic local or premium cloud tech b-roll fallback)
   const activeVideoUrl = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
   const activeProfileUrl = assets.profileUrl || FALLBACK_ASSETS.profileUrl;
+  
+  // Resolve embed details if using YouTube/Vimeo
+  const videoDetails = getEmbedVideoUrl(activeVideoUrl);
 
   // Sync video audio/playback state
   useEffect(() => {
@@ -142,6 +154,120 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     }
   };
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Check file size (suggest under 25MB for browser safety)
+    if (file.size > 25 * 1024 * 1024) {
+      setUploadStatus("error");
+      setUploadError(`⚠️ Video file is too large (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please choose a compressed video under 25MB, or paste a direct video link in the URL tab!`);
+      return;
+    }
+
+    setUploadStatus("loading");
+    setUploadError("");
+    setInfoMessage("");
+    
+    try {
+      await saveLocalMedia("custom_video", file);
+      localStorage.removeItem("custom_video_url"); // Clear URL override
+      setUploadStatus("success");
+      setInfoMessage("🎥 Gayatri's background video uploaded to IndexedDB successfully! Reloading browser...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err: any) {
+      console.error(err);
+      setUploadStatus("error");
+      setUploadError("Could not store video in IndexedDB: " + (err.message || err.toString()) + ". Try pasting a video link in the URL tab, which is 100% reliable on Vercel!");
+    }
+  };
+
+  const handleProfileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadStatus("error");
+      setUploadError(`⚠️ Image file is too large (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please select a photo under 10MB.`);
+      return;
+    }
+
+    setUploadStatus("loading");
+    setUploadError("");
+    setInfoMessage("");
+    
+    try {
+      await saveLocalMedia("custom_profile", file);
+      localStorage.removeItem("custom_profile_url"); // Clear URL override
+      setUploadStatus("success");
+      setInfoMessage("📸 New profile picture saved to IndexedDB! Page will auto-reload to update...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err: any) {
+      console.error(err);
+      setUploadStatus("error");
+      setUploadError("Could not store image in IndexedDB: " + (err.message || err.toString()));
+    }
+  };
+
+  const handleSaveUrls = () => {
+    setUploadStatus("loading");
+    setUploadError("");
+    setInfoMessage("");
+
+    try {
+      if (videoUrlInput.trim()) {
+        localStorage.setItem("custom_video_url", videoUrlInput.trim());
+      } else {
+        localStorage.removeItem("custom_video_url");
+      }
+
+      if (imageUrlInput.trim()) {
+        localStorage.setItem("custom_profile_url", imageUrlInput.trim());
+      } else {
+        localStorage.removeItem("custom_profile_url");
+      }
+
+      setUploadStatus("success");
+      setInfoMessage("✨ Custom media links saved successfully! Page will reload to update...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err: any) {
+      setUploadStatus("error");
+      setUploadError("Failed to save links: " + (err.message || err.toString()));
+    }
+  };
+
+  const handleResetVideo = async () => {
+    try {
+      await clearLocalMedia("custom_video");
+      localStorage.removeItem("custom_video_url");
+      setInfoMessage("Restoring Gayatri's default background video...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleResetProfile = async () => {
+    try {
+      await clearLocalMedia("custom_profile");
+      localStorage.removeItem("custom_profile_url");
+      setInfoMessage("Restoring default Gayatri profile photo...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <section
       id="home"
@@ -150,16 +276,26 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       {/* 1. Cinematic Autoplay Fullscreen Background Video & Soundtrack */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
         {/* Background Video element (HD clearly visible format) */}
-        <video
-          ref={videoRef}
-          src={activeVideoUrl}
-          preload="auto"
-          muted={isMuted}
-          playsInline
-          loop
-          autoPlay
-          className="absolute inset-0 w-full h-full object-cover opacity-100"
-        />
+        {videoDetails.type === "direct" ? (
+          <video
+            ref={videoRef}
+            src={activeVideoUrl}
+            preload="auto"
+            muted={isMuted}
+            playsInline
+            loop
+            autoPlay
+            className="absolute inset-0 w-full h-full object-cover opacity-100"
+          />
+        ) : (
+          <iframe
+            src={videoDetails.embedUrl}
+            className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none scale-105"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        )}
 
         {/* Subtle left gradient overlay only to ensure text legibility while keeping her video extremely clear and bright */}
         <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-10 pointer-events-none" />
@@ -322,6 +458,16 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           {isMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-blue-400 animate-pulse" />}
           <span className="text-[9px] font-mono font-bold hidden sm:inline text-slate-400">SPEECH/SOUND</span>
         </button>
+        
+        {/* Custom Settings button to configure backgrounds and profile photos */}
+        <button
+          onClick={() => setIsSetupOpen(true)}
+          className="p-1.5 rounded bg-white/5 hover:bg-white/10 hover:text-blue-400 text-slate-300 transition cursor-pointer flex items-center gap-1"
+          title="Open Custom Background & Profile Photo Panel"
+        >
+          <Settings className="w-3.5 h-3.5 animate-spin-slow" />
+          <span className="text-[9px] font-mono font-bold hidden sm:inline">BG SETTINGS</span>
+        </button>
       </div>
 
       {/* Floating Scroll Down button indicators */}
@@ -334,6 +480,216 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           <div className="w-1 h-2 rounded-full bg-blue-400 animate-scroll" />
         </button>
       </div>
+
+      {/* Modern High-End Media Setup Modal for Background Video and Profile Images */}
+      <AnimatePresence>
+        {isSetupOpen && (
+          <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+            <motion.div
+              initial={{ scale: 0.95, y: 15, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.95, y: 15, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-xl rounded-3xl border border-white/10 bg-slate-900/95 p-6 shadow-2xl text-left"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex justify-between items-center pb-4 border-b border-white/5 mb-6">
+                <div>
+                  <span className="text-[9px] font-mono tracking-widest text-blue-400 uppercase font-bold">
+                    SYSTEM MEDIA SETTINGS
+                  </span>
+                  <h3 className="font-display font-bold text-lg text-white">
+                    Customize Portfolio Media
+                  </h3>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsSetupOpen(false);
+                    setUploadStatus("idle");
+                    setUploadError("");
+                    setInfoMessage("");
+                  }}
+                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Status and Action alerts */}
+              {infoMessage && (
+                <div className="p-3.5 bg-emerald-500/15 border border-emerald-500/35 rounded-xl text-emerald-400 text-xs font-mono mb-6 flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>{infoMessage}</span>
+                </div>
+              )}
+
+              {uploadError && (
+                <div className="p-3.5 bg-red-500/15 border border-red-500/35 rounded-xl text-red-400 text-xs font-mono mb-6 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+                  <span>{uploadError}</span>
+                </div>
+              )}
+
+              <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                {/* Section 1: Presentation Background Video */}
+                <div className="space-y-3 p-4 rounded-2xl bg-white/5 border border-white/5">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                      <Play className="w-3.5 h-3.5" /> 1. Home Background Video
+                    </h4>
+                    {(localStorage.getItem("custom_video_url") || assets.videoUrl !== FALLBACK_ASSETS.videoUrl) && (
+                      <button
+                        onClick={handleResetVideo}
+                        className="text-[10px] font-mono text-red-400 hover:text-red-300 font-bold uppercase cursor-pointer flex items-center gap-1"
+                      >
+                        <RotateCcw className="w-3 h-3" /> Reset Default
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* Option A: Link pasting (Best for Vercel!) */}
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-mono text-slate-300 block">
+                      🔗 Paste Direct Web Link (Supports direct .mp4, YouTube, or Vimeo!)
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="relative flex-grow">
+                        <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                        <input
+                          type="url"
+                          placeholder="https://example.com/video.mp4 or YouTube URL"
+                          value={videoUrlInput}
+                          onChange={(e) => setVideoUrlInput(e.target.value)}
+                          className="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="relative my-3 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+                    <span className="relative bg-slate-900 px-3 text-[9px] font-mono text-slate-500 uppercase">OR UPLOAD</span>
+                  </div>
+
+                  {/* Option B: Local upload */}
+                  <div className="relative p-4 rounded-xl border border-dashed border-white/10 hover:border-blue-500/30 transition-all text-center group bg-black/20 flex flex-col items-center justify-center space-y-1 cursor-pointer">
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleVideoUpload}
+                      disabled={uploadStatus === "loading"}
+                      className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                    />
+                    <Upload className="w-5 h-5 text-slate-400 group-hover:text-blue-400 duration-200" />
+                    <span className="text-[11px] text-slate-300">
+                      {uploadStatus === "loading" ? "Uploading..." : "Select Local Video File (.mp4 / .mov)"}
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-mono">
+                      (Max 25MB for local browser memory)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Section 2: Profile Picture */}
+                <div className="space-y-3 p-4 rounded-2xl bg-white/5 border border-white/5">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-bold text-violet-400 uppercase tracking-wider flex items-center gap-2">
+                      <Globe className="w-3.5 h-3.5" /> 2. Profile Photo
+                    </h4>
+                    {(localStorage.getItem("custom_profile_url") || assets.profileUrl !== FALLBACK_ASSETS.profileUrl) && (
+                      <button
+                        onClick={handleResetProfile}
+                        className="text-[10px] font-mono text-red-400 hover:text-red-300 font-bold uppercase cursor-pointer flex items-center gap-1"
+                      >
+                        <RotateCcw className="w-3 h-3" /> Reset Default
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Option A: Link pasting (Best for Vercel!) */}
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-mono text-slate-300 block">
+                      🔗 Paste Direct Image URL (https://...)
+                    </label>
+                    <div className="flex gap-2">
+                      <div className="relative flex-grow">
+                        <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                        <input
+                          type="url"
+                          placeholder="https://example.com/photo.jpg"
+                          value={imageUrlInput}
+                          onChange={(e) => setImageUrlInput(e.target.value)}
+                          className="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white focus:outline-none focus:border-violet-500 transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="relative my-3 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+                    <span className="relative bg-slate-900 px-3 text-[9px] font-mono text-slate-500 uppercase">OR UPLOAD</span>
+                  </div>
+
+                  {/* Option B: Local upload */}
+                  <div className="relative p-4 rounded-xl border border-dashed border-white/10 hover:border-violet-500/30 transition-all text-center group bg-black/20 flex flex-col items-center justify-center space-y-1 cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleProfileUpload}
+                      disabled={uploadStatus === "loading"}
+                      className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                    />
+                    <Upload className="w-5 h-5 text-slate-400 group-hover:text-violet-400 duration-200" />
+                    <span className="text-[11px] text-slate-300">
+                      {uploadStatus === "loading" ? "Uploading..." : "Select Local Image File (.png / .jpg)"}
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-mono">
+                      (Saved to browser IndexedDB)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Info Guide */}
+                <div className="p-4 rounded-xl border border-blue-500/10 bg-blue-500/5 text-xs text-slate-400 leading-relaxed space-y-1.5">
+                  <p className="font-bold text-blue-300 flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 text-blue-400 shrink-0" /> Why use direct Web Links?
+                  </p>
+                  <p>
+                    Since your portfolio is deployed on **Vercel**, local file uploads are stored in your private browser database. Other people visiting your URL will see the default portfolio images.
+                  </p>
+                  <p>
+                    To ensure **everyone in the world** sees your personal video and photo immediately, upload them to a hosting site (like Cloudinary, Google Drive public links, YouTube/Vimeo, or Imgbb) and **paste the direct links** here!
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="border-t border-white/5 pt-4 mt-6 flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setIsSetupOpen(false);
+                    setUploadStatus("idle");
+                    setUploadError("");
+                    setInfoMessage("");
+                  }}
+                  className="px-4 py-2 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 text-xs font-semibold text-slate-300 transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveUrls}
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition cursor-pointer flex items-center gap-1.5 shadow"
+                >
+                  <Check className="w-3.5 h-3.5" /> Save Links
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
