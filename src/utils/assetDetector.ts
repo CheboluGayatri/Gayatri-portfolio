@@ -46,12 +46,23 @@ export interface DetectedAssets {
   isScanning: boolean;
 }
 
-export function getEmbedVideoUrl(url: string | null): { type: "direct" | "youtube" | "vimeo"; embedUrl: string } {
-  if (!url) return { type: "direct", embedUrl: "" };
+export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vimeo"; embedUrl: string } {
+  let urlStr = "";
+  if (url) {
+    if (typeof url === "string") {
+      urlStr = url;
+    } else if (typeof url === "object") {
+      urlStr = url.default || url.src || "";
+    }
+  }
+
+  if (!urlStr) {
+    return { type: "direct", embedUrl: "" };
+  }
   
   // YouTube patterns
   const ytRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
-  const ytMatch = url.match(ytRegex);
+  const ytMatch = urlStr.match(ytRegex);
   if (ytMatch) {
     const videoId = ytMatch[1];
     return {
@@ -62,7 +73,7 @@ export function getEmbedVideoUrl(url: string | null): { type: "direct" | "youtub
   
   // Vimeo patterns
   const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-8a-zA-Z._-]+)/i;
-  const vimeoMatch = url.match(vimeoRegex);
+  const vimeoMatch = urlStr.match(vimeoRegex);
   if (vimeoMatch) {
     const videoId = vimeoMatch[1];
     return {
@@ -71,7 +82,7 @@ export function getEmbedVideoUrl(url: string | null): { type: "direct" | "youtub
     };
   }
   
-  return { type: "direct", embedUrl: url };
+  return { type: "direct", embedUrl: urlStr };
 }
 
 // Fallback high-quality design assets if local files are missing

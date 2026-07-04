@@ -36,8 +36,11 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const [infoMessage, setInfoMessage] = useState("");
 
   // Determine active video source (dynamic local or premium cloud tech b-roll fallback)
-  const activeVideoUrl = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
-  const activeProfileUrl = assets.profileUrl || FALLBACK_ASSETS.profileUrl;
+  const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
+  const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl;
+
+  const activeVideoUrl = typeof activeVideoRaw === "string" ? activeVideoRaw : (activeVideoRaw as any)?.default || (activeVideoRaw as any)?.src || "";
+  const activeProfileUrl = typeof activeProfileRaw === "string" ? activeProfileRaw : (activeProfileRaw as any)?.default || (activeProfileRaw as any)?.src || "";
   
   // Resolve embed details if using YouTube/Vimeo
   const videoDetails = getEmbedVideoUrl(activeVideoUrl);
@@ -276,26 +279,28 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       {/* 1. Cinematic Autoplay Fullscreen Background Video & Soundtrack */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
         {/* Background Video element (HD clearly visible format) */}
-        {videoDetails.type === "direct" ? (
-          <video
-            ref={videoRef}
-            src={activeVideoUrl}
-            preload="auto"
-            muted={isMuted}
-            playsInline
-            loop
-            autoPlay
-            className="absolute inset-0 w-full h-full object-cover opacity-100"
-          />
-        ) : (
-          <iframe
-            src={videoDetails.embedUrl}
-            className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none scale-105"
-            frameBorder="0"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-          />
-        )}
+        {activeVideoUrl ? (
+          videoDetails.type === "direct" ? (
+            <video
+              ref={videoRef}
+              src={activeVideoUrl || undefined}
+              preload="auto"
+              muted={isMuted}
+              playsInline
+              loop
+              autoPlay
+              className="absolute inset-0 w-full h-full object-cover opacity-100"
+            />
+          ) : (
+            <iframe
+              src={videoDetails.embedUrl || undefined}
+              className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none scale-105"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
+          )
+        ) : null}
 
         {/* Subtle left gradient overlay only to ensure text legibility while keeping her video extremely clear and bright */}
         <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-10 pointer-events-none" />

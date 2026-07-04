@@ -46,19 +46,46 @@ export default function Skills() {
       <div className="absolute bottom-[30%] right-[-5%] w-[35rem] h-[35rem] rounded-full bg-blue-500/5 blur-[150px] -z-10 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
+        {/* Section Header with Premium Scroll-Triggered Reveal */}
         <div className="flex flex-col items-center mb-16 text-center">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4"
+          >
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             <span>02 // CAPABILITIES</span>
-          </div>
-          <h2 className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight leading-none uppercase">
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight leading-none uppercase"
+          >
             Skills
-          </h2>
-          <div className="w-16 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-4" />
-          <p className="text-slate-400 text-xs sm:text-sm max-w-lg mt-5 leading-relaxed">
+          </motion.h2>
+          
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="w-16 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-4 origin-center" 
+          />
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="text-slate-400 text-xs sm:text-sm max-w-lg mt-5 leading-relaxed"
+          >
             A concise overview of my technical competencies and tools used to build AI/ML solutions.
-          </p>
+          </motion.p>
         </div>
 
         {/* Categories Grid */}
@@ -66,10 +93,10 @@ export default function Skills() {
           {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="group relative p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-blue-500/30 hover:shadow-[0_0_25px_rgba(59,130,246,0.12)] duration-305 flex flex-col justify-start overflow-hidden hover:scale-[1.02] transition-all"
             >
               {/* Card Header with Icon */}
@@ -84,13 +111,17 @@ export default function Skills() {
 
               {/* Badges/Pills rendering without progress percentages */}
               <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
-                  <span
+                {category.skills.map((skill, sIdx) => (
+                  <motion.span
                     key={skill}
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: (index * 0.08) + (sIdx * 0.04) }}
                     className="px-3.5 py-1.5 rounded-xl bg-blue-500/5 border border-blue-500/15 text-slate-300 text-xs font-semibold tracking-wide hover:bg-blue-600 hover:text-white transition-all duration-300 hover:border-blue-400 select-none cursor-default"
                   >
                     {skill}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </motion.div>

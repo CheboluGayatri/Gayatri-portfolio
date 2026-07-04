@@ -36,6 +36,26 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
     { name: "Ollama", icon: <Bot className="w-3.5 h-3.5 text-pink-400" /> },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const badgeVariants = {
+    hidden: { opacity: 0, y: 12 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.4, ease: "easeOut" } 
+    }
+  };
+
   return (
     <section id="about" className="relative bg-[#030712] py-28 px-6 sm:px-12 md:px-24 overflow-hidden border-t border-white/5">
       {/* Sci-Fi Radial Glow highlights */}
@@ -46,7 +66,13 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-center">
           
           {/* LEFT COLUMN: Premium High-Fidelity Studio Portrait Terminal */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
+          <motion.div 
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 flex flex-col items-center justify-center relative"
+          >
             <div 
               className="relative w-full max-w-[340px] aspect-[4/5] rounded-3xl bg-[#070e1e]/60 p-3 border border-blue-500/15 shadow-[0_0_50px_rgba(59,130,246,0.1)] group overflow-hidden"
             >
@@ -62,7 +88,7 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
               {/* Picture Screen Frame */}
               <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-slate-950 select-none z-10 shadow-2xl">
                 <img
-                  src={assets.profileUrl || defaultProfilePic}
+                  src={assets.profileUrl || defaultProfilePic || undefined}
                   alt="Gayatri Chebolu Portrait"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover group-hover:scale-105 duration-700 transition-transform brightness-[0.9] contrast-[1.05]"
@@ -73,17 +99,17 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none z-20" />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* RIGHT COLUMN: Redesigned typography detail matching mockup */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             
             {/* Title block */}
             <motion.h1 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="font-sans text-[70px] sm:text-[85px] leading-none font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-blue-500 tracking-tighter uppercase mb-4"
             >
               HELLO!
@@ -91,26 +117,39 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
 
             {/* Main Statement bio details block */}
             <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="font-sans text-[15px] sm:text-base text-slate-300 font-medium leading-relaxed max-w-2xl mb-8"
             >
               {fullAbout || "Hi, I'm Gayatri Chebolu, an aspiring AI/ML Engineer and Computer Science graduate from Andhra Pradesh, India. Passionate about Artificial Intelligence, Machine Learning, and Generative AI, I enjoy building intelligent solutions, exploring emerging technologies, and continuously expanding my skills through hands-on learning and real-world projects."}
             </motion.p>
 
             {/* Technologies subtitle with requested format */}
-            <div className="w-full text-left">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full text-left"
+            >
               <h3 className="text-xs font-mono font-bold text-blue-200 uppercase tracking-widest mb-6 leading-none block">
                 // TECHNOLOGIES I WORK WITH
               </h3>
               
               {/* Badges styling as shown in the mockup: Dark navy capsules, white labels */}
-              <div className="flex flex-wrap gap-2.5 max-w-2xl">
+              <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                className="flex flex-wrap gap-2.5 max-w-2xl"
+              >
                 {technologies.map((tech) => (
                   <motion.div
                     key={tech.name}
+                    variants={badgeVariants}
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 450, damping: 15 }}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0a1845] border border-[#112d7a] text-white text-[12.5px] font-mono leading-none font-bold tracking-tight cursor-default uppercase hover:bg-[#0d1f5c] hover:border-[#1e48c4] transition-all duration-300"
@@ -121,8 +160,8 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
                     <span>{tech.name}</span>
                   </motion.div>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
           </div>
 

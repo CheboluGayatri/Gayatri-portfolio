@@ -1,6 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Award, BookOpen, ShieldCheck, Sparkles, Terminal, Layers, Download, Calendar, RotateCw } from "lucide-react";
+import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
 import { Certification } from "../data";
+
+interface TiltWrapperProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
+function TiltWrapper({ children, className = "", onClick }: TiltWrapperProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const springConfig = { damping: 25, stiffness: 200, mass: 0.6 };
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), springConfig);
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), springConfig);
+  
+  const glareX = useSpring(useTransform(x, [-0.5, 0.5], [0, 100]), springConfig);
+  const glareY = useSpring(useTransform(y, [-0.5, 0.5], [0, 100]), springConfig);
+  const glareOpacity = useSpring(useMotionValue(0), springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left - width / 2;
+    const mouseY = e.clientY - rect.top - height / 2;
+    
+    x.set(mouseX / width);
+    y.set(mouseY / height);
+    glareOpacity.set(0.12);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+    glareOpacity.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+      style={{
+        rotateX: rotateX,
+        rotateY: rotateY,
+        transformStyle: "preserve-3d",
+        perspective: 1200,
+      }}
+      whileHover={{ 
+        scale: 1.018,
+        boxShadow: "0px 20px 40px rgba(59, 130, 246, 0.15)"
+      }}
+      className={`relative w-full h-full rounded-2xl cursor-pointer select-none ${className}`}
+    >
+      {/* Glare spotlight layer */}
+      <motion.div
+        style={{
+          background: useTransform(
+            [glareX, glareY],
+            ([gx, gy]) => `radial-gradient(circle 160px at ${gx}% ${gy}%, rgba(255, 255, 255, 0.1), transparent)`
+          ),
+          opacity: glareOpacity,
+        }}
+        className="absolute inset-0 pointer-events-none z-30 mix-blend-overlay rounded-2xl"
+      />
+      
+      {/* Outer subtle glow highlight layer */}
+      <motion.div 
+        style={{
+          background: useTransform(
+            [glareX, glareY],
+            ([gx, gy]) => `radial-gradient(circle 260px at ${gx}% ${gy}%, rgba(59, 130, 246, 0.18), transparent)`
+          ),
+          opacity: glareOpacity,
+        }}
+        className="absolute inset-0 pointer-events-none z-20 rounded-2xl"
+      />
+
+      {children}
+    </motion.div>
+  );
+}
 
 interface CertificationsProps {
   certs: Certification[];
@@ -854,10 +942,9 @@ export default function Certifications({ certs }: CertificationsProps) {
 
                 return (
                   <div key={index} className="w-[330px] sm:w-[460px] h-[210px] shrink-0">
-                    <div
+                    <TiltWrapper
                       onClick={() => setActiveFlippedIndex(isFlipped ? null : uniqueId)}
-                      className="w-full h-full relative cursor-pointer group"
-                      style={{ perspective: "1000px" }}
+                      className="group"
                     >
                       <div
                         className="w-full h-full relative"
@@ -956,7 +1043,7 @@ export default function Certifications({ certs }: CertificationsProps) {
                           {renderCertificateBack(cert)}
                         </div>
                       </div>
-                    </div>
+                    </TiltWrapper>
                   </div>
                 );
               })}
@@ -985,10 +1072,9 @@ export default function Certifications({ certs }: CertificationsProps) {
 
                 return (
                   <div key={index} className="w-[330px] sm:w-[460px] h-[210px] shrink-0">
-                    <div
+                    <TiltWrapper
                       onClick={() => setActiveFlippedIndex(isFlipped ? null : uniqueId)}
-                      className="w-full h-full relative cursor-pointer group"
-                      style={{ perspective: "1000px" }}
+                      className="group"
                     >
                       <div
                         className="w-full h-full relative"
@@ -1087,7 +1173,7 @@ export default function Certifications({ certs }: CertificationsProps) {
                           {renderCertificateBack(cert)}
                         </div>
                       </div>
-                    </div>
+                    </TiltWrapper>
                   </div>
                 );
               })}

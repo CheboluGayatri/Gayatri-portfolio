@@ -16,42 +16,75 @@ export default function Experience({ internships, educations }: ExperienceProps)
       <div className="absolute bottom-[20%] left-[-5%] w-[35rem] h-[35rem] rounded-full bg-indigo-650/5 blur-[130px] -z-10 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
+        {/* Section Header with Premium Scroll-Triggered Reveal */}
         <div className="flex flex-col items-center mb-20 text-center">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4"
+          >
             <Compass className="w-3.5 h-3.5 text-blue-500" />
             <span>03 // TRACK TIMELINE</span>
-          </div>
-          <h2 className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight leading-none">
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-3xl sm:text-5xl font-black text-white tracking-tight leading-none"
+          >
             Journey &amp; <span className="text-blue-500">Experience</span>
-          </h2>
-          <div className="w-16 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-4" />
-          <p className="text-slate-400 text-xs sm:text-sm max-w-lg mt-5 leading-relaxed">
+          </motion.h2>
+          
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="w-16 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-4 origin-center" 
+          />
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="text-slate-400 text-xs sm:text-sm max-w-lg mt-5 leading-relaxed"
+          >
             Academic pathways, deep machine learning internships, and industrial-analytics credentials plotted across a futuristic timeline.
-          </p>
+          </motion.p>
         </div>
 
         {/* Side-by-Side Split Structured Timeline columns */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Column 1: Internship & Professional Experience */}
           <div className="space-y-8 flex flex-col items-start">
-            <div className="flex items-center gap-3 mb-2">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="flex items-center gap-3 mb-2"
+            >
               <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
                 <Briefcase className="w-5 h-5" />
               </div>
               <h3 className="font-display text-xl sm:text-2xl font-black text-white tracking-wide">
                 Internships Experience
               </h3>
-            </div>
+            </motion.div>
 
             <div className="relative border-l-2 border-blue-500/20 pl-7 ml-4.5 space-y-10 w-full text-left">
               {internships.map((job, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -15 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: -25, y: 15 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
                   className="relative group"
                 >
                   {/* Glowing Node Marker */}
@@ -102,23 +135,29 @@ export default function Experience({ internships, educations }: ExperienceProps)
 
           {/* Column 2: Educational Trajectory */}
           <div className="space-y-8 flex flex-col items-start w-full">
-            <div className="flex items-center gap-3 mb-2">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="flex items-center gap-3 mb-2"
+            >
               <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
                 <GraduationCap className="w-5 h-5" />
               </div>
               <h3 className="font-display text-xl sm:text-2xl font-black text-white tracking-wide">
                 Education &amp; Credentials
               </h3>
-            </div>
+            </motion.div>
 
             <div className="relative border-l-2 border-blue-500/20 pl-7 ml-4.5 space-y-10 w-full text-left">
               {educations.map((school, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: 15 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: 25, y: 15 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
                   className="relative group"
                 >
                   {/* Glowing Node Marker */}

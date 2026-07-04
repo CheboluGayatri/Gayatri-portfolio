@@ -158,7 +158,7 @@ export default function Projects({ projects }: ProjectsProps) {
       return (
         <div className="w-full h-full relative overflow-hidden group/img bg-[#020617] flex items-center justify-center border-b border-blue-950/20">
           <img
-            src={screens[0]}
+            src={screens[0] || undefined}
             alt={`${title} Preview`}
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover group-hover/img:scale-105 duration-700"
@@ -560,7 +560,7 @@ export default function Projects({ projects }: ProjectsProps) {
                     {hasMultipleImages ? (
                       <div className="w-full h-full relative">
                         <img
-                          src={screens[carouselIndex]}
+                          src={screens[carouselIndex] || undefined}
                           alt={`${selectedProject.title} Slide ${carouselIndex + 1}`}
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover"
