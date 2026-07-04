@@ -1,10 +1,9 @@
 import React from "react";
 import { 
-  Code2, Database, Table, Cpu, Network, LineChart, Monitor, GitBranch, FileCode2, Bot, Upload, GraduationCap, Briefcase
+  Code2, Database, Table, Cpu, Network, LineChart, Monitor, GitBranch, FileCode2, Bot, GraduationCap, Briefcase
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useAssetDetection } from "../utils/assetDetector";
-import { saveLocalMedia } from "../utils/db";
 import defaultProfilePic from "../assets/images/default_profile_image_1781969359775.jpg";
 
 interface StatusItem {
@@ -23,17 +22,6 @@ interface AboutProps {
 
 export default function About({ fullAbout, stats, location, email, phone, onNavigate }: AboutProps) {
   const assets = useAssetDetection();
-
-  const handleProfileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      await saveLocalMedia("custom_profile", file);
-      window.location.reload();
-    } catch (err) {
-      console.error("Failed to store custom profile picture:", err);
-    }
-  };
 
   const technologies = [
     { name: "Python", icon: <Code2 className="w-3.5 h-3.5 text-emerald-400" /> },
@@ -83,27 +71,6 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
                 {/* Tech scanline / glass reflection sheen */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/40 via-transparent to-white/[0.03] pointer-events-none z-20" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none z-20" />
-
-                {/* Professional Photo upload & modification overlay */}
-                <label className="absolute inset-0 bg-[#040812]/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center gap-3.5 duration-300 transition-opacity cursor-pointer z-35">
-                  <div className="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center text-blue-450 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                    <Upload className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <div className="text-center px-4">
-                    <span className="text-[10px] font-mono font-black tracking-widest text-white uppercase bg-blue-600/90 hover:bg-blue-500/95 px-4 py-2 rounded-xl shadow-lg border border-blue-400/30 transition-all duration-300 inline-block">
-                      REPLACE PORTFOLIO PHOTO
-                    </span>
-                    <p className="text-[8.5px] font-mono text-slate-400 uppercase tracking-widest mt-2">
-                       Supports PNG, JPG, JPEG // Max 5MB
-                    </p>
-                  </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfileUpload}
-                    className="hidden"
-                  />
-                </label>
               </div>
             </div>
           </div>

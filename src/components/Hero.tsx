@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Code2, Database, Settings, Upload, RotateCcw, AlertTriangle, X, Check, Music } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Code2, Database, X } from "lucide-react";
+import { motion } from "motion/react";
 import { useAssetDetection, FALLBACK_ASSETS } from "../utils/assetDetector";
-import { saveLocalMedia, clearLocalMedia } from "../utils/db";
 
 interface HeroProps {
   name: string;
@@ -25,79 +24,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasInteractedRef = useRef(false);
 
-  const [isSetupOpen, setIsSetupOpen] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [uploadError, setUploadError] = useState("");
-  const [infoMessage, setInfoMessage] = useState("");
   const [showVolumePrompt, setShowVolumePrompt] = useState(true);
-
-  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    setUploadStatus("loading");
-    setUploadError("");
-    setInfoMessage("");
-    
-    try {
-      await saveLocalMedia("custom_video", file);
-      setUploadStatus("success");
-      setInfoMessage("🎥 Gayatri's background video uploaded with sound! Reloading browser to activate...");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } catch (err: any) {
-      console.error(err);
-      setUploadStatus("error");
-      setUploadError("Could not store video resource in browser: " + (err.message || err.toString()));
-    }
-  };
-
-  const handleClearCustomVideo = async () => {
-    try {
-      await clearLocalMedia("custom_video");
-      setInfoMessage("Custom background video cleared. Restoring cinematic b-roll...");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1200);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleProfileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    setUploadStatus("loading");
-    setUploadError("");
-    setInfoMessage("");
-    
-    try {
-      await saveLocalMedia("custom_profile", file);
-      setUploadStatus("success");
-      setInfoMessage("📸 New profile picture saved! Page will auto-reload to update...");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } catch (err: any) {
-      console.error(err);
-      setUploadStatus("error");
-      setUploadError("Could not store image resource in browser: " + (err.message || err.toString()));
-    }
-  };
-
-  const handleClearCustomProfile = async () => {
-    try {
-      await clearLocalMedia("custom_profile");
-      setInfoMessage("Custom profile photo cleared. Restoring default...");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1200);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   // Determine active video source (dynamic local or premium cloud tech b-roll fallback)
   const activeVideoUrl = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
@@ -231,21 +158,21 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           playsInline
           loop
           autoPlay
-          className="absolute inset-0 w-full h-full object-cover opacity-75"
+          className="absolute inset-0 w-full h-full object-cover opacity-100"
         />
 
-        <div className="absolute inset-x-0 inset-y-0 bg-[#0047e1] mix-blend-color opacity-10 z-10 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-950/60 via-stone-950/40 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#030712] z-10 pointer-events-none" />
+        {/* Subtle left gradient overlay only to ensure text legibility while keeping her video extremely clear and bright */}
+        <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent z-10 pointer-events-none" />
 
         {/* Cinematic Glowing Background blobs constantly active underneath the video */}
         <div className="absolute inset-0">
-          <div className="absolute top-[15%] left-[5%] w-[35rem] h-[35rem] rounded-full bg-blue-600/10 blur-[130px]" />
-          <div className="absolute bottom-[15%] right-[5%] w-[40rem] h-[40rem] rounded-full bg-blue-800/10 blur-[150px]" />
+          <div className="absolute top-[15%] left-[5%] w-[35rem] h-[35rem] rounded-full bg-blue-600/5 blur-[130px]" />
+          <div className="absolute bottom-[15%] right-[5%] w-[40rem] h-[40rem] rounded-full bg-blue-800/5 blur-[150px]" />
         </div>
 
         {/* Grid Overlay with a subtle blue glow feel */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.012)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.012)_1px,transparent_1px)] bg-[size:42px_42px] opacity-80 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.005)_1px,transparent_1px)] bg-[size:42px_42px] opacity-10 z-10 pointer-events-none" />
       </div>
 
       {/* 2. Floating Unmute Action Notification */}
@@ -395,15 +322,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           {isMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-blue-400 animate-pulse" />}
           <span className="text-[9px] font-mono font-bold hidden sm:inline text-slate-400">SPEECH/SOUND</span>
         </button>
-        <div className="h-4.5 w-[1px] bg-white/10 px-0.5" />
-        <button
-          onClick={() => setIsSetupOpen(true)}
-          className="px-2.5 py-1.5 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 transition cursor-pointer flex items-center gap-1.5 text-[10px] font-mono font-bold hover:scale-[1.02] active:scale-[0.98]"
-          title="Open Custom Background Setup Hub"
-        >
-          <Settings className="w-3.5 h-3.5 animate-spin [animation-duration:8s]" />
-          <span>BG SETTINGS</span>
-        </button>
       </div>
 
       {/* Floating Scroll Down button indicators */}
@@ -416,152 +334,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           <div className="w-1 h-2 rounded-full bg-blue-400 animate-scroll" />
         </button>
       </div>
-
-      {/* Modern High-End Media Setup Modal for Background Video and Profile Images */}
-      <AnimatePresence>
-        {isSetupOpen && (
-          <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-            <motion.div
-              initial={{ scale: 0.95, y: 15, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.95, y: 15, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative w-full max-w-lg rounded-3xl glass-panel-glow border border-white/10 bg-slate-900/95 p-6 shadow-2xl text-left"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="flex justify-between items-center pb-4 border-b border-white/5 mb-6">
-                <div>
-                  <span className="text-[9px] font-mono tracking-widest text-blue-400 uppercase font-bold">
-                    SYSTEM MEDIA SETTINGS
-                  </span>
-                  <h3 className="font-display font-bold text-lg text-white">
-                    Customize Hero Portfolio Media
-                  </h3>
-                </div>
-                <button
-                  onClick={() => {
-                    setIsSetupOpen(false);
-                    setUploadStatus("idle");
-                    setUploadError("");
-                    setInfoMessage("");
-                  }}
-                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Status and Action alerts */}
-              {infoMessage && (
-                <div className="p-3.5 bg-emerald-500/15 border border-emerald-500/35 rounded-xl text-emerald-400 text-xs font-mono mb-6 flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-405 shrink-0" />
-                  <span>{infoMessage}</span>
-                </div>
-              )}
-
-              {uploadError && (
-                <div className="p-3.5 bg-red-500/15 border border-red-500/35 rounded-xl text-red-400 text-xs font-mono mb-6 flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-red-550 shrink-0" />
-                  <span>{uploadError}</span>
-                </div>
-              )}
-
-              <div className="space-y-6">
-                {/* 1. Background Video upload section */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-white uppercase tracking-wider block">
-                      1. Presentation Background Video (.mp4 / .mov)
-                    </label>
-                    {assets.videoUrl && (
-                      <button
-                        onClick={handleClearCustomVideo}
-                        className="text-[10px] font-mono text-red-400 hover:text-red-300 font-bold uppercase cursor-pointer"
-                      >
-                        Reset To Default
-                      </button>
-                    )}
-                  </div>
-                  <div className="relative p-5 rounded-2xl border border-dashed border-white/10 hover:border-blue-500/30 transition-all text-center group bg-black/20 flex flex-col items-center justify-center space-y-2 cursor-pointer">
-                    <input
-                      type="file"
-                      accept="video/*"
-                      onChange={handleVideoUpload}
-                      disabled={uploadStatus === "loading"}
-                      className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
-                    />
-                    <Upload className="w-6 h-6 text-slate-400 group-hover:text-blue-400 group-hover:scale-105 duration-200" />
-                    <p className="text-xs text-slate-300">
-                      {uploadStatus === "loading" ? "Uploading & Storing locally..." : "Select your Gayatri video introduction file"}
-                    </p>
-                    <p className="text-[10px] text-slate-500 font-mono">
-                      Stores locally in browser for quick, un-muted presentation audio stream.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 2. Profile photo upload section */}
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-white uppercase tracking-wider block">
-                      2. Optional Profile Photo (.png / .jpg)
-                    </label>
-                    {assets.profileUrl && (
-                      <button
-                        onClick={handleClearCustomProfile}
-                        className="text-[10px] font-mono text-red-400 hover:text-red-300 font-bold uppercase cursor-pointer"
-                      >
-                        Reset To Default
-                      </button>
-                    )}
-                  </div>
-                  <div className="relative p-5 rounded-2xl border border-dashed border-white/10 hover:border-violet-500/30 transition-all text-center group bg-black/20 flex flex-col items-center justify-center space-y-2 cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProfileUpload}
-                      disabled={uploadStatus === "loading"}
-                      className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
-                    />
-                    <Upload className="w-6 h-6 text-slate-400 group-hover:text-violet-400 group-hover:scale-105 duration-200" />
-                    <p className="text-xs text-slate-300">
-                      {uploadStatus === "loading" ? "Storing picture image blob..." : "Choose a custom professional profile photo"}
-                    </p>
-                    <p className="text-[10px] text-slate-500 font-mono">
-                      Immediate client-side rendering update.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Developer Instructions Guide banner */}
-                <div className="p-4 rounded-xl border border-blue-500/10 bg-blue-500/5 text-xs text-slate-400 leading-relaxed block shadow">
-                  <p className="font-bold text-blue-300 mb-1 flex items-center gap-1.5">
-                    <AlertTriangle className="w-3.5 h-3.5 text-blue-400 shrink-0" /> Codebase Permanent Persistence
-                  </p>
-                  <span>
-                    To permanently bake your video or profile image directly into the codebase repository (so other viewers see it immediately from GitHub), copy/paste your video into the project folder as <strong className="text-white">`public/video.mp4`</strong> (or <strong className="text-white">`assets/video.mp4`</strong>) and your profile photo as <strong className="text-white">`public/profile.jpg`</strong>!
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-t border-white/5 pt-4 mt-6 text-right">
-                <button
-                  onClick={() => {
-                    setIsSetupOpen(false);
-                    setUploadStatus("idle");
-                    setUploadError("");
-                    setInfoMessage("");
-                  }}
-                  className="px-5 py-2.5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 text-xs font-semibold text-white transition cursor-pointer"
-                >
-                  Done Customizing
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

@@ -157,28 +157,47 @@ export function useAssetDetection() {
         console.error("IndexedDB profile/video retrieval issue:", e);
       }
 
-      // 2. Probe Resume Options in parallel to ensure 0-delay load speed
+      // 2. Probe Options in parallel to ensure 0-delay load speed
       let resolvedResume: string | null = null;
+      let resolvedProfile: string | null = null;
+      let resolvedVideo: string | null = null;
+      
       try {
         const resumeOptions = ["/resume.pdf", "/assets/resume.pdf", "resume.pdf"];
-        const results = await Promise.all(
-          resumeOptions.map(opt => fileExists(opt).catch(() => false))
-        );
-        const firstValidIdx = results.indexOf(true);
-        if (firstValidIdx !== -1) {
-          resolvedResume = resumeOptions[firstValidIdx];
+        const profileOptions = ["/profile.jpg", "/profile.png", "/my_image.jpeg", "/profile.jpeg"];
+        const videoOptions = ["/video.mp4.mp4", "/video.mp4", "/video.mov"];
+        
+        const [resumeResults, profileResults, videoResults] = await Promise.all([
+          Promise.all(resumeOptions.map(opt => fileExists(opt).catch(() => false))),
+          Promise.all(profileOptions.map(opt => fileExists(opt).catch(() => false))),
+          Promise.all(videoOptions.map(opt => fileExists(opt).catch(() => false)))
+        ]);
+        
+        const firstResumeIdx = resumeResults.indexOf(true);
+        if (firstResumeIdx !== -1) {
+          resolvedResume = resumeOptions[firstResumeIdx];
+        }
+        
+        const firstProfileIdx = profileResults.indexOf(true);
+        if (firstProfileIdx !== -1) {
+          resolvedProfile = profileOptions[firstProfileIdx];
+        }
+        
+        const firstVideoIdx = videoResults.indexOf(true);
+        if (firstVideoIdx !== -1) {
+          resolvedVideo = videoOptions[firstVideoIdx];
         }
       } catch (err) {
-        console.warn("Could not check local resume paths:", err);
+        console.warn("Could not check local assets paths:", err);
       }
 
       if (!active) return;
 
-      // 3. Update State with discovered custom IndexedDB media or local PDF.
+      // 3. Update State with discovered custom IndexedDB media, static local assets, or local PDF.
       // Notice: we DO NOT run any slow sequential fetch probes for profile & video as they are matched synchronously.
       setAssets((prev) => {
-        const nextProfileUrl = customProfileBlobUrl || prev.profileUrl;
-        const nextVideoUrl = customVideoBlobUrl || prev.videoUrl;
+        const nextProfileUrl = resolvedProfile || customProfileBlobUrl || prev.profileUrl;
+        const nextVideoUrl = resolvedVideo || customVideoBlobUrl || prev.videoUrl;
         const nextResumeUrl = resolvedResume || prev.resumeUrl;
 
         if (
