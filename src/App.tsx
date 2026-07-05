@@ -106,11 +106,12 @@ export default function App() {
             <span>GAYATRI <span className="text-blue-400">CHEBOLU</span></span>
           </div>
 
-          <p className="text-xs text-slate-500 leading-relaxed max-w-md sm:text-right flex items-center gap-1.5 justify-center sm:justify-end font-mono">
-            <span>Handcrafted with</span>
-            <Heart className="w-3.5 h-3.5 text-pink-500 fill-pink-500/20 animate-pulse" />
-            <span>using React, Tailwind &amp; motion © 2026</span>
-          </p>
+          <div className="text-xs text-slate-400 leading-relaxed flex items-center gap-2 justify-center sm:justify-end font-mono italic bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300 px-4 py-1.5 rounded-full border border-white/5 shadow-inner">
+            <span className="text-blue-400 font-bold not-italic">“</span>
+            <span className="text-slate-200 tracking-wide font-medium">Learn passionately, grow continuously, and build the future</span>
+            <span className="text-blue-400 font-bold not-italic">”</span>
+            <Heart className="w-3.5 h-3.5 text-pink-500 fill-pink-500/20 animate-pulse ml-1" />
+          </div>
         </div>
 
         {/* Bottom Status Bar */}

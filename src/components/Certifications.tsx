@@ -279,7 +279,7 @@ export default function Certifications({ certs }: CertificationsProps) {
           </div>
         </div>
       `;
-    } else if (certName.includes("3skill") || certName.includes("aimi")) {
+    } else if (certName.includes("3skills") || certName.includes("3skill") || certName.includes("aimi")) {
       specificStyles = "border: 14px solid #1d4ed8; background-color: #fafbfc; color: #1e293b;";
       certLayoutHtml = `
         <div style="text-align: center; margin-bottom: 20px;">
@@ -296,12 +296,12 @@ export default function Certifications({ certs }: CertificationsProps) {
         <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: center; position: relative;">
           <div>
             <div style="border-bottom: 1px solid #94a3b8; width: 180px; font-style: italic; font-size: 18px;">S. Levin</div>
-            <div style="font-size: 11px; margin-top: 5px; color: #64748b;">CEO, 3Skill India</div>
+            <div style="font-size: 11px; margin-top: 5px; color: #64748b;">CEO, 3Skills India</div>
           </div>
           <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #dc2626; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; border: 2px solid #b91c1c; opacity: 0.85;">SEAL</div>
           <div>
             <div style="border-bottom: 1px solid #94a3b8; width: 180px; height: 18px; text-align: right;"></div>
-            <div style="font-size: 11px; margin-top: 5px; color: #64748b; text-align: right;">COO, 3Skill</div>
+            <div style="font-size: 11px; margin-top: 5px; color: #64748b; text-align: right;">COO, 3Skills</div>
           </div>
         </div>
       `;

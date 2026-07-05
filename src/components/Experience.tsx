@@ -1,5 +1,5 @@
 import React from "react";
-import { Briefcase, GraduationCap, Calendar, Compass, ChevronRight } from "lucide-react";
+import { Briefcase, GraduationCap, Calendar, Compass, ChevronRight, Github } from "lucide-react";
 import { motion } from "motion/react";
 import { Internship, Education } from "../data";
 
@@ -116,16 +116,29 @@ export default function Experience({ internships, educations }: ExperienceProps)
                       ))}
                     </div>
 
-                    {/* Micro skill tags */}
-                    <div className="flex flex-wrap gap-1.5 pt-4">
-                      {job.skillsLearned.map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-2.5 py-0.5 rounded text-[9px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/10 uppercase tracking-widest font-black"
+                    {/* Micro skill tags & Project Links */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 border-t border-white/5">
+                      <div className="flex flex-wrap gap-1.5">
+                        {job.skillsLearned.map((skill) => (
+                          <span
+                            key={skill}
+                            className="px-2.5 py-0.5 rounded text-[9px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/10 uppercase tracking-widest font-black"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                      {job.projectUrl && (
+                        <a
+                          href={job.projectUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-1.5 px-3 rounded-lg bg-slate-900/80 border border-white/5 text-[9.5px] font-mono font-bold text-slate-400 hover:text-white hover:bg-slate-950 hover:border-blue-500/40 flex items-center gap-1.5 cursor-pointer transition-all uppercase tracking-wider self-start sm:self-auto"
                         >
-                          {skill}
-                        </span>
-                      ))}
+                          <span>CODE</span>
+                          <Github className="w-3.5 h-3.5 text-blue-400" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </motion.div>

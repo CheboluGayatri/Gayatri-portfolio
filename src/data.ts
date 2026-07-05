@@ -16,6 +16,7 @@ export interface Internship {
   duration: string;
   highlights: string[];
   skillsLearned: string[];
+  projectUrl?: string;
 }
 
 export interface Education {
@@ -89,30 +90,30 @@ export const GAYATRI_DATA = {
   ] as Education[],
   internships: [
     {
-      company: "3Skill",
-      role: "AI/ML Intern",
+      company: "3SKILL AI/ML Internship",
+      role: "Project: Wine Quality Prediction",
       duration: "December 2025 – February 2026",
       highlights: [
-        "Processed and analyzed massive structured datasets using Python, NumPy, and Pandas to perform predictive modeling and regression validation.",
-        "Engineered Random Forest classification models and optimized hyperparameters.",
-        "Evaluated models using Precision, Recall, and AUC-ROC metrics.",
-        "Applied feature-selection techniques to improve prediction quality.",
-        "Built maintainable modular ML workflows.",
-        "Published Streamlit applications for real-time testing and evaluation."
+        "Developed a machine learning model to predict wine quality using the Wine Quality dataset through comprehensive data preprocessing and feature engineering.",
+        "Trained and optimized a Random Forest classifier to improve prediction accuracy and evaluate model performance using standard machine learning metrics.",
+        "Performed exploratory data analysis (EDA), handled data cleaning, and selected relevant features to enhance model reliability and generalization.",
+        "Implemented the complete machine learning pipeline using Python, Pandas, NumPy, Scikit-learn, and Matplotlib, from data preparation to model training and evaluation."
       ],
-      skillsLearned: ["Python", "NumPy", "Pandas", "Scikit-learn", "Random Forest", "Streamlit", "Feature Engineering"]
+      skillsLearned: ["Python", "Pandas", "NumPy", "Scikit-learn", "Random Forest", "Matplotlib", "Jupyter Notebook"],
+      projectUrl: "https://github.com/CheboluGayatri/Wine-Quality"
     },
     {
-      company: "Infosys Springboard",
-      role: "AI Intern",
+      company: "Infosys Springboard AI Internship",
+      role: "Project: CodeGen AI & AI Explainer",
       duration: "September 2025 – November 2025",
       highlights: [
-        "Engineered LLM-powered productivity tools.",
-        "Designed multi-stage Prompt Engineering pipelines.",
-        "Integrated OCR workflows with Gemini-based context processing.",
-        "Automated workflows using RPA and AI inference pipelines."
+        "Developed a ChatGPT-style AI web application using Streamlit, providing an intuitive conversational interface for AI-powered code generation and explanations.",
+        "Integrated OCR (Optical Recognition) to extract text from uploaded images and process it with the Ollama Llama 2B large language model for intelligent responses.",
+        "Built features for code generation, code explanation, and programming query resolution through effective prompt engineering and local LLM integration.",
+        "Designed and deployed an end-to-end AI solution by integrating Streamlit, Python, OCR, Ollama (Llama 2B), and prompt engineering for a responsive and user-friendly experience."
       ],
-      skillsLearned: ["Generative AI", "LLMs", "Prompt Engineering", "OCR Integration", "Streamlit", "Ollama", "RPA"]
+      skillsLearned: ["Python", "Streamlit", "Ollama", "Llama 2B", "OCR", "Prompt Engineering"],
+      projectUrl: "https://github.com/CheboluGayatri/CodeGenAiand_Explainer"
     },
     {
       company: "Continuous Professional Upskilling",
@@ -124,7 +125,8 @@ export const GAYATRI_DATA = {
         "Building projects using PyTorch, Scikit-learn, NumPy, Pandas, and Streamlit.",
         "Studying Agentic AI systems, prompt engineering techniques, and modern AI workflows."
       ],
-      skillsLearned: ["Neural Networks", "PyTorch", "Scikit-learn", "NumPy", "Pandas", "Streamlit", "Agentic AI"]
+      skillsLearned: ["Neural Networks", "PyTorch", "Scikit-learn", "NumPy", "Pandas", "Streamlit", "Agentic AI"],
+      projectUrl: "https://github.com/CheboluGayatri/AI_ML"
     }
   ] as Internship[],
   projects: [
@@ -162,7 +164,7 @@ export const GAYATRI_DATA = {
     {
       title: "Wine Quality Prediction",
       description: "Supervised machine learning scoring system predicting red wine grade tiers using chemical compounds.",
-      longDescription: "An advanced machine learning classification application developed during the 3Skill AI/ML internship. The system models physical and chemical measurements sourced from curated Kaggle open-source repositories to score and evaluate final Wine Quality ratings in real time.\n\nBuilt entirely with Python, NumPy, Pandas, Scikit-Learn, and Streamlit, this end-to-end data pipeline handles null values, performs hyperparameter tuning, and trains a highly precise Random Forest model. A customized dark glassmorphism user interface provides slider controllers to dynamically test chemical formulations and estimate wine grades.\n\nPhysicochemical Properties Modeled:\n• Fixed Acidity - Level of organic acids\n• Volatile Acidity - Volatile acid content representing spoilage indicators\n• Citric Acid - Freshness and flavor enhancement attributes\n• Residual Sugar - Post-fermentation sweetness scales\n• Chlorides & Sulphates - Chemical preservation benchmarks\n• Alcohol Content - Final volume concentration percentage",
+      longDescription: "An advanced machine learning classification application developed during the 3Skills AI/ML internship. The system models physical and chemical measurements sourced from curated Kaggle open-source repositories to score and evaluate final Wine Quality ratings in real time.\n\nBuilt entirely with Python, NumPy, Pandas, Scikit-Learn, and Streamlit, this end-to-end data pipeline handles null values, performs hyperparameter tuning, and trains a highly precise Random Forest model. A customized dark glassmorphism user interface provides slider controllers to dynamically test chemical formulations and estimate wine grades.\n\nPhysicochemical Properties Modeled:\n• Fixed Acidity - Level of organic acids\n• Volatile Acidity - Volatile acid content representing spoilage indicators\n• Citric Acid - Freshness and flavor enhancement attributes\n• Residual Sugar - Post-fermentation sweetness scales\n• Chlorides & Sulphates - Chemical preservation benchmarks\n• Alcohol Content - Final volume concentration percentage",
       tags: ["Python", "Pandas", "Scikit-Learn", "Random Forest", "Streamlit", "Feature Engineering", "Kaggle Dataset", "Custom CSS", "Streamlit Cloud"],
       liveUrl: "https://wine-quality-pdk.streamlit.app/",
       codeUrl: "https://github.com/CheboluGayatri/Wine-Quality",
@@ -217,7 +219,7 @@ export const GAYATRI_DATA = {
       ]
     },
     {
-      title: "AI-Quiz Generator",
+      title: "AI Quiz Generator",
       description: "A lightweight educational assessment application generating and evaluating quizzes.",
       longDescription: "A lightweight educational assessment application that generates and evaluates quizzes from structured question repositories.",
       tags: ["Python", "Streamlit", "Questions.txt", "Assessment Logic", "Interactive UI"],
@@ -355,16 +357,16 @@ export const GAYATRI_DATA = {
     },
     {
       name: "AIMI Internship (Ai & Machine Learning)",
-      issuer: "3Skill India",
+      issuer: "3Skills India",
       date: "December 2025 - February 2026",
       grade: "Two-Month Complete",
       iconType: "ml",
       type: "internship",
       verificationId: "INTERN260042",
       signature: "S. Levin \u270d",
-      signeeTitle: "CEO, 3Skill India Program Board",
+      signeeTitle: "CEO, 3Skills India Program Board",
       skills: ["Applied ML", "AIMI Interlink Applets", "Dataset Validation", "Predictive Classifiers"],
-      qrCodeText: "3Skill India - INTERN260042 - Gayatri Chebolu"
+      qrCodeText: "3Skills India - INTERN260042 - Gayatri Chebolu"
     },
     {
       name: "Internship 6.0 (B2) CodeGenie: AI Explainer and Code Generator",

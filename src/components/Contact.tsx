@@ -204,22 +204,22 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
 
   return (
     <section id="contact" className="relative py-28 bg-[#030712] border-t border-white/5 overflow-hidden">
-      {/* Decorative Sci-Fi Cyber Lights */}
-      <div className="absolute top-[10%] right-[3%] w-[38rem] h-[38rem] rounded-full bg-blue-500/5 blur-[160px] -z-10 pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[3%] w-[32rem] h-[32rem] rounded-full bg-indigo-650/4 blur-[140px] -z-10 pointer-events-none" />
+      {/* Premium Cyber Light Radial Glows */}
+      <div className="absolute top-[10%] right-[5%] w-[45rem] h-[45rem] rounded-full bg-gradient-to-br from-blue-500/5 to-indigo-500/0 blur-[180px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-[15%] left-[5%] w-[38rem] h-[38rem] rounded-full bg-gradient-to-tr from-indigo-500/5 to-purple-500/0 blur-[160px] -z-10 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-12 select-none">
+        <div className="flex flex-col items-center text-center mb-16 select-none">
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/20 border border-blue-500/15 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/5 border border-blue-500/15 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4"
           >
             <Send className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
-            <span>06 // TRANSMIT PIXELS</span>
+            <span>06 // LET'S CONNECT</span>
           </motion.div>
 
           {/* Contact Header */}
@@ -229,10 +229,10 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
             viewport={{ once: true }}
             className="font-display text-4xl sm:text-5xl font-black text-white tracking-tight"
           >
-            Contact <span className="text-blue-500">Me</span>
+            Contact <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Me</span>
           </motion.h2>
           
-          <div className="w-16 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-4" />
+          <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full mt-4 shadow-[0_0_12px_rgba(59,130,246,0.5)]" />
 
           {/* Subtitle */}
           <motion.p 
@@ -242,221 +242,231 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
             transition={{ delay: 0.1 }}
             className="text-slate-400 text-xs sm:text-sm max-w-xl mt-5 leading-relaxed font-sans"
           >
-            Open to internships, research affiliations, and professional network integrations. Send an encrypted signal directly to my inbox.
+            Have an exciting opportunity, a research collaboration, or just want to say hello? Send a direct message below. I am active and ready to collaborate.
           </motion.p>
         </div>
 
-        {/* SINGLE CENTRED COMPONENT: Highly impressive, premium futuristic layout */}
-        <div className="max-w-2xl mx-auto w-full">
+        {/* SINGLE CENTRED COMPONENT: Highly impressive, premium layout */}
+        <div className="max-w-2xl mx-auto w-full relative group">
+          {/* Ambient background aura that pulses slightly on hover */}
+          <div className="absolute -inset-2 rounded-[2rem] bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-purple-600/10 blur-2xl opacity-40 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-700 -z-10 pointer-events-none" />
+          <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-r from-blue-500/5 to-indigo-500/5 blur-sm opacity-80 -z-10 pointer-events-none" />
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="p-6 sm:p-10 rounded-3xl bg-[#090d16]/40 backdrop-blur-xl border border-white/10 shadow-[0_0_50px_rgba(59,130,246,0.035)] hover:border-blue-500/20 transition-all duration-300 w-full"
+            className="p-[1px] rounded-[24px] bg-gradient-to-b from-white/15 via-white/5 to-white/[0.02] hover:from-blue-500/40 hover:via-indigo-500/20 hover:to-transparent transition-all duration-500 w-full relative"
           >
-            <AnimatePresence mode="wait">
-              {isSubmitted ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex flex-col items-center text-center py-8"
-                >
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center mb-6 text-emerald-400">
-                    <CheckCircle className="w-8 h-8 animate-bounce" />
-                  </div>
-                  <h4 className="font-display text-2xl font-black text-white mb-2 uppercase tracking-wide">
-                    Transmission Dispatched
-                  </h4>
-                  <p className="text-slate-400 text-xs sm:text-sm max-w-sm mb-8 leading-relaxed">
-                    Secure channel update verified. Your message has been archived locally and sent to queue. I will reply through the specified return address within 24 hours.
-                  </p>
-                  <button
-                    onClick={() => setIsSubmitted(false)}
-                    className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-mono text-xs font-black uppercase tracking-wider transition-all duration-300 shadow-lg shadow-blue-600/20 cursor-pointer"
+            <div className="p-7 sm:p-10 rounded-[23px] bg-gradient-to-b from-[#090d16] to-[#04070d] backdrop-blur-2xl w-full">
+              {/* Top border ambient line glow */}
+              <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent opacity-70 group-hover:via-blue-400 group-hover:scale-110 transition-all duration-500" />
+
+              <AnimatePresence mode="wait">
+                {isSubmitted ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col items-center text-center py-10"
                   >
-                    Send Another Transmission
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="form"
-                  onSubmit={handleSubmit}
-                  className="space-y-4.5 text-left"
-                  noValidate
-                >
-                  {/* Grid Name & Email */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4.5">
-                    {/* Name field */}
-                    <div className="space-y-1.5 flex flex-col items-start">
-                      <label htmlFor="name-input" className="flex items-center gap-1.5 text-[9px] font-mono text-slate-400 uppercase tracking-widest font-black select-none">
-                        <User className="w-3 h-3 text-blue-500" />
-                        <span>Full Name</span>
-                      </label>
-                      <input
-                        id="name-input"
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Jane Doe"
-                        aria-invalid={!!errors.name}
-                        aria-describedby={errors.name ? "name-error" : undefined}
-                        className={`w-full px-4 py-3 rounded-xl bg-[#080d19]/80 border text-slate-200 placeholder-slate-600 text-sm font-sans focus:outline-none focus:bg-[#040811] focus:border-blue-500/60 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300 ${
-                          errors.name ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-blue-500"
-                        }`}
-                      />
-                      {errors.name && (
-                        <span id="name-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left">
-                          {errors.name}
-                        </span>
-                      )}
+                    <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center mb-6 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.15)] animate-pulse">
+                      <CheckCircle className="w-10 h-10" />
                     </div>
-
-                    {/* Email field */}
-                    <div className="space-y-1.5 flex flex-col items-start">
-                      <label htmlFor="email-input" className="flex items-center gap-1.5 text-[9px] font-mono text-slate-400 uppercase tracking-widest font-black select-none">
-                        <Mail className="w-3 h-3 text-blue-500" />
-                        <span>Email Address</span>
-                      </label>
-                      <input
-                        id="email-input"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="jane@example.com"
-                        aria-invalid={!!errors.email}
-                        aria-describedby={errors.email ? "email-error" : undefined}
-                        className={`w-full px-4 py-3 rounded-xl bg-[#080d19]/80 border text-slate-200 placeholder-slate-600 text-sm font-sans focus:outline-none focus:bg-[#040811] focus:border-blue-500/60 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300 ${
-                          errors.email ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-blue-500"
-                        }`}
-                      />
-                      {errors.email && (
-                        <span id="email-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left">
-                          {errors.email}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Subject field */}
-                  <div className="space-y-1.5 flex flex-col items-start">
-                    <label htmlFor="subject-input" className="flex items-center gap-1.5 text-[9px] font-mono text-slate-400 uppercase tracking-widest font-black select-none">
-                      <BookOpen className="w-3 h-3 text-blue-500" />
-                      <span>Subject</span>
-                    </label>
-                    <input
-                      id="subject-input"
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      placeholder="Inquiry regarding Internship / Project collaboration"
-                      aria-invalid={!!errors.subject}
-                      aria-describedby={errors.subject ? "subject-error" : undefined}
-                      className={`w-full px-4 py-3 rounded-xl bg-[#080d19]/80 border text-slate-200 placeholder-slate-600 text-sm font-sans focus:outline-none focus:bg-[#040811] focus:border-blue-500/60 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300 ${
-                        errors.subject ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-blue-500"
-                      }`}
-                    />
-                    {errors.subject && (
-                      <span id="subject-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left">
-                        {errors.subject}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Message body field */}
-                  <div className="space-y-1.5 flex flex-col items-start">
-                    <label htmlFor="message-input" className="flex items-center gap-1.5 text-[9px] font-mono text-slate-400 uppercase tracking-widest font-black select-none">
-                      <MessageSquare className="w-3 h-3 text-blue-500" />
-                      <span>Your Message</span>
-                    </label>
-                    <textarea
-                      id="message-input"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      rows={5}
-                      placeholder="Hi Gayatri, I'd love to discuss..."
-                      aria-invalid={!!errors.message}
-                      aria-describedby={errors.message ? "message-error" : undefined}
-                      className={`w-full px-4 py-3 rounded-xl bg-[#080d19]/80 border text-slate-200 placeholder-slate-600 text-sm font-sans resize-none focus:outline-none focus:bg-[#040811] focus:border-blue-500/60 focus:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition-all duration-300 ${
-                        errors.message ? "border-red-500/80 focus:border-red-500" : "border-white/10 focus:border-blue-500"
-                      }`}
-                    />
-                    {errors.message && (
-                      <span id="message-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left">
-                        {errors.message}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Submit level validation feedback block */}
-                  {submitError && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-3 rounded-xl bg-red-500/10 border border-red-500/25 text-red-400 text-xs text-left font-mono"
+                    <h4 className="font-display text-2xl font-black text-white mb-2 uppercase tracking-wide">
+                      Transmission Dispatched
+                    </h4>
+                    <p className="text-slate-400 text-xs sm:text-sm max-w-md mb-8 leading-relaxed">
+                      Thank you! Your message has been saved in your local outbox and queued. I will get back to you at your specified return address as soon as possible.
+                    </p>
+                    <button
+                      onClick={() => setIsSubmitted(false)}
+                      className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white font-mono text-xs font-black uppercase tracking-wider transition-all duration-300 shadow-lg shadow-blue-600/20 cursor-pointer"
                     >
-                      ⚠️ {submitError}
-                    </motion.div>
-                  )}
-
-                  {/* Submit Trigger with Dynamic Progress Step Messaging */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-mono text-xs font-black uppercase tracking-wider bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white disabled:bg-blue-900 disabled:text-blue-300 flex items-center justify-center gap-3 transition-all duration-300 shadow-lg cursor-pointer hover:shadow-[0_0_20px_rgba(59,130,246,0.25)]"
+                      Send Another Message
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    onSubmit={handleSubmit}
+                    className="space-y-6 text-left"
+                    noValidate
                   >
-                    {isSubmitting ? (
-                      <>
-                        <span>
-                          {submitStep === 1 && "Connecting crypt-link..."}
-                          {submitStep === 2 && "Authorizing envelope metadata..."}
-                          {submitStep === 3 && "Archiving signal locally..."}
-                        </span>
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
-                      </>
-                    ) : (
-                      <>
-                        <span>Transmit Secure Message</span>
-                        <Send className="w-4 h-4 text-white" />
-                      </>
-                    )}
-                  </button>
-                </motion.form>
-              )}
-            </AnimatePresence>
+                    {/* Grid Name & Email */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {/* Name field */}
+                      <div className="space-y-2 flex flex-col items-start group/input">
+                        <label htmlFor="name-input" className="flex items-center gap-1.5 text-[9.5px] font-mono text-slate-450 uppercase tracking-widest font-bold select-none group-focus-within/input:text-blue-400 transition-colors">
+                          <User className="w-3.5 h-3.5 text-blue-500/60 group-focus-within/input:text-blue-400 transition-colors" />
+                          <span>Full Name</span>
+                        </label>
+                        <input
+                          id="name-input"
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Jane Doe"
+                          aria-invalid={!!errors.name}
+                          aria-describedby={errors.name ? "name-error" : undefined}
+                          className={`w-full px-4.5 py-3.5 rounded-xl bg-[#03060c]/80 border text-slate-200 placeholder-slate-650 text-sm font-sans focus:outline-none focus:bg-[#020409] focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all duration-300 ${
+                            errors.name ? "border-red-500/50 focus:border-red-500" : "border-white/[0.06] hover:border-white/10 focus:border-blue-500/40"
+                          }`}
+                        />
+                        {errors.name && (
+                          <span id="name-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left flex items-center gap-1">
+                            <span>⚠️</span> {errors.name}
+                          </span>
+                        )}
+                      </div>
 
-            {/* Small active channels links row - mail, linkedin, github */}
-            <div className="flex items-center justify-center gap-4 mt-8 pt-7 border-t border-white/5 select-none">
-              <a
-                href={`mailto:${finalEmail}`}
-                className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/5 text-slate-400 hover:text-blue-400 flex items-center justify-center transition-all duration-300 hover:scale-105"
-                title="Email Gayatri"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-              <a
-                href={finalLinkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/5 text-slate-400 hover:text-blue-400 flex items-center justify-center transition-all duration-300 hover:scale-105"
-                title="LinkedIn Profile"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href={finalGithub}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white/[0.02] border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/5 text-slate-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 hover:scale-105"
-                title="GitHub Catalog"
-              >
-                <Github className="w-5 h-5" />
-              </a>
+                      {/* Email field */}
+                      <div className="space-y-2 flex flex-col items-start group/input">
+                        <label htmlFor="email-input" className="flex items-center gap-1.5 text-[9.5px] font-mono text-slate-455 uppercase tracking-widest font-bold select-none group-focus-within/input:text-blue-400 transition-colors">
+                          <Mail className="w-3.5 h-3.5 text-blue-500/60 group-focus-within/input:text-blue-400 transition-colors" />
+                          <span>Email Address</span>
+                        </label>
+                        <input
+                          id="email-input"
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="jane@example.com"
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? "email-error" : undefined}
+                          className={`w-full px-4.5 py-3.5 rounded-xl bg-[#03060c]/80 border text-slate-200 placeholder-slate-655 text-sm font-sans focus:outline-none focus:bg-[#020409] focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all duration-300 ${
+                            errors.email ? "border-red-500/50 focus:border-red-500" : "border-white/[0.06] hover:border-white/10 focus:border-blue-500/40"
+                          }`}
+                        />
+                        {errors.email && (
+                          <span id="email-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left flex items-center gap-1">
+                            <span>⚠️</span> {errors.email}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Subject field */}
+                    <div className="space-y-2 flex flex-col items-start group/input">
+                      <label htmlFor="subject-input" className="flex items-center gap-1.5 text-[9.5px] font-mono text-slate-455 uppercase tracking-widest font-bold select-none group-focus-within/input:text-blue-400 transition-colors">
+                        <BookOpen className="w-3.5 h-3.5 text-blue-500/60 group-focus-within/input:text-blue-400 transition-colors" />
+                        <span>Subject</span>
+                      </label>
+                      <input
+                        id="subject-input"
+                        type="text"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                        placeholder="Inquiry regarding Internship / Project collaboration"
+                        aria-invalid={!!errors.subject}
+                        aria-describedby={errors.subject ? "subject-error" : undefined}
+                        className={`w-full px-4.5 py-3.5 rounded-xl bg-[#03060c]/80 border text-slate-200 placeholder-slate-655 text-sm font-sans focus:outline-none focus:bg-[#020409] focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all duration-300 ${
+                          errors.subject ? "border-red-500/50 focus:border-red-500" : "border-white/[0.06] hover:border-white/10 focus:border-blue-500/40"
+                        }`}
+                      />
+                      {errors.subject && (
+                        <span id="subject-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left flex items-center gap-1">
+                          <span>⚠️</span> {errors.subject}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Message body field */}
+                    <div className="space-y-2 flex flex-col items-start group/input">
+                      <label htmlFor="message-input" className="flex items-center gap-1.5 text-[9.5px] font-mono text-slate-455 uppercase tracking-widest font-bold select-none group-focus-within/input:text-blue-400 transition-colors">
+                        <MessageSquare className="w-3.5 h-3.5 text-blue-500/60 group-focus-within/input:text-blue-400 transition-colors" />
+                        <span>Your Message</span>
+                      </label>
+                      <textarea
+                        id="message-input"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows={5}
+                        placeholder="Hi Gayatri, I'd love to discuss..."
+                        aria-invalid={!!errors.message}
+                        aria-describedby={errors.message ? "message-error" : undefined}
+                        className={`w-full px-4.5 py-3.5 rounded-xl bg-[#03060c]/80 border text-slate-200 placeholder-slate-655 text-sm font-sans resize-none focus:outline-none focus:bg-[#020409] focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all duration-300 ${
+                          errors.message ? "border-red-500/50 focus:border-red-500" : "border-white/[0.06] hover:border-white/10 focus:border-blue-500/40"
+                        }`}
+                      />
+                      {errors.message && (
+                        <span id="message-error" className="text-[10px] font-mono text-red-400 mt-1 pl-1 text-left flex items-center gap-1">
+                          <span>⚠️</span> {errors.message}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Submit level validation feedback block */}
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-left font-mono flex items-center gap-2"
+                      >
+                        <span className="shrink-0 text-sm">⚠️</span>
+                        <span>{submitError}</span>
+                      </motion.div>
+                    )}
+
+                    {/* Submit Trigger with Dynamic Progress Step Messaging */}
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full py-4 rounded-xl font-mono text-xs font-black uppercase tracking-wider bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 active:scale-[0.98] text-white disabled:from-blue-900 disabled:to-indigo-900 disabled:text-blue-300 flex items-center justify-center gap-3 transition-all duration-300 shadow-lg cursor-pointer hover:shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:scale-[1.01]"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="animate-pulse">
+                            {submitStep === 1 && "Connecting crypt-link..."}
+                            {submitStep === 2 && "Authorizing envelope metadata..."}
+                            {submitStep === 3 && "Archiving signal locally..."}
+                          </span>
+                          <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <Send className="w-4 h-4 text-white" />
+                        </>
+                      )}
+                    </button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+              {/* Small active channels links row - mail, linkedin, github */}
+              <div className="flex items-center justify-center gap-4 mt-8 pt-7 border-t border-white/5 select-none">
+                <a
+                  href={`mailto:${finalEmail}`}
+                  className="w-10.5 h-10.5 rounded-full bg-white/[0.02] border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/10 text-slate-400 hover:text-blue-400 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.15)]"
+                  title="Email Gayatri"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
+                <a
+                  href={finalLinkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10.5 h-10.5 rounded-full bg-white/[0.02] border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/10 text-slate-400 hover:text-blue-400 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.15)]"
+                  title="LinkedIn Profile"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a
+                  href={finalGithub}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10.5 h-10.5 rounded-full bg-white/[0.02] border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/10 text-slate-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                  title="GitHub Catalog"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -467,7 +477,7 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-2xl mx-auto mt-10 p-6 rounded-2xl bg-[#090d16]/30 border border-white/5 shadow-2xl relative"
+            className="max-w-2xl mx-auto mt-10 p-6 rounded-2xl bg-gradient-to-b from-[#090d16]/40 to-[#04070d]/60 border border-white/5 shadow-2xl relative"
           >
             <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-4 select-none">
               <span className="text-[10px] font-mono font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -476,15 +486,15 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
               </span>
               <button
                 onClick={handleClearHistory}
-                className="text-[9px] font-mono text-slate-550 hover:text-red-400 transition uppercase tracking-wider font-bold"
+                className="text-[9px] font-mono text-slate-400 hover:text-red-400 transition uppercase tracking-wider font-bold"
               >
                 Clear Outbox
               </button>
             </div>
 
-            <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1">
+            <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10">
               {sentLogs.map((log) => (
-                <div key={log.id} className="p-3.5 rounded-xl border border-white/[0.03] bg-[#030712]/50 text-left">
+                <div key={log.id} className="p-3.5 rounded-xl border border-white/[0.03] bg-[#030712]/50 text-left hover:border-blue-500/20 transition-all duration-300">
                   <div className="flex items-start justify-between gap-3 flex-wrap">
                     <span className="text-xs font-bold text-white max-w-[150px] truncate">{log.name}</span>
                     <span className="text-[9px] font-mono text-slate-500">{log.timestamp}</span>

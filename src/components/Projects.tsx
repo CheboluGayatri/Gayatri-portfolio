@@ -112,11 +112,15 @@ export default function Projects({ projects }: ProjectsProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
-  // Strictly segment: Featured projects are those with liveUrl demos
-  const featuredProjects = projects.filter((project) => project.liveUrl !== undefined);
-  
-  // Remaining projects are designated as System Logs / Other Repositories
-  const otherProjects = projects.filter((project) => project.liveUrl === undefined);
+  // Featured projects are those with liveUrl demos
+  const featuredProjects = projects.filter(
+    (project) => project.liveUrl !== undefined
+  );
+
+  // Other projects are those without liveUrl demos, excluding CodeGenAi & Explainer
+  const otherProjects = projects.filter(
+    (project) => project.liveUrl === undefined && project.title !== "CodeGenAi & Explainer"
+  );
 
   const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
     "House Price Prediction System": [housePriceScreenshot],
@@ -413,118 +417,118 @@ export default function Projects({ projects }: ProjectsProps) {
         {/* ================= SECTION 2: SYSTEM LOGS & OTHER REPOS ================= */}
         <div className="border border-white/5 bg-slate-900/15 backdrop-blur-md rounded-2xl p-6 sm:p-9 shadow-xl relative">
 
-          {/* Terminal Title Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/5 mb-8 gap-4 text-left">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center text-blue-400">
-                <Folder className="w-5 h-5" />
+          {/* Subsection B: Other Projects & Repositories */}
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/5 mb-8 gap-4 text-left">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center text-blue-400">
+                  <Folder className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-sans font-black text-lg sm:text-xl text-white tracking-tight leading-tight">
+                    Other Repositories
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono mt-1 uppercase tracking-wider">
+                    Utility applications, custom frontends, and dynamic web architectures
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-sans font-black text-lg sm:text-xl text-white tracking-tight leading-tight">
-                  Other Projects &amp; Repositories
-                </h3>
-                <p className="text-[11px] text-slate-400 font-mono mt-1 uppercase tracking-wider">
-                  Self-learning platforms, utility applications, and internship projects
-                </p>
+
+              <div className="flex items-center gap-2 bg-blue-500/5 border border-blue-500/10 px-3 py-1.5 rounded-lg text-[9.5px] font-mono font-bold text-blue-400 self-start sm:self-auto uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                <span>DEVELOPMENT ARCHIVE</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 bg-blue-500/5 border border-blue-500/10 px-3 py-1.5 rounded-lg text-[9.5px] font-mono font-bold text-blue-400 self-start sm:self-auto uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>DEPLOYMENT ARCHIVE</span>
-            </div>
-          </div>
+            {/* Logs Viewport List Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+              {otherProjects.map((repo, i) => {
+                const getRepoCategory = (proj: Project) => {
+                  const titleLower = proj.title.toLowerCase();
+                  if (titleLower.includes("codegenai")) return "INFOSYS SPRINGBOARD INTERNSHIP / AI";
+                  if (titleLower.includes("quiz")) return "AUTOMATED ASSESSMENT SYSTEM";
+                  if (titleLower.includes("chatbot")) return "ARTIFICIAL INTELLIGENCE / RESEARCH";
+                  return "SOFTWARE ENGINEERING REPOSITORY";
+                };
 
-          {/* Logs Viewport List Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-            {otherProjects.map((repo, i) => {
-              const getRepoCategory = (proj: Project) => {
-                const titleLower = proj.title.toLowerCase();
-                const descLower = proj.description.toLowerCase();
-                if (titleLower.includes("quiz")) return "AUTOMATED ASSESSMENT SYSTEM";
-                if (titleLower.includes("codegenai")) return "INFOSYS SPRINGBOARD / AI";
-                if (titleLower.includes("chatbot")) return "ARTIFICIAL INTELLIGENCE / RESEARCH";
-                if (descLower.includes("self-learning")) return "SELF-LEARNING UTILITY ARCHITECTURE";
-                return "SOFTWARE ENGINEERING REPOSITORY";
-              };
-
-              return (
-                <motion.div
-                  key={repo.title}
-                  initial={{ opacity: 0, y: 15 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                >
-                  <TiltCard
-                    onClick={() => handleOpenDetailedModal(repo)}
-                    className="group flex flex-col h-full p-6 bg-[#070c19] border border-white/5 hover:border-blue-500/30 hover:bg-[#0c142c] justify-between"
+                return (
+                  <motion.div
+                    key={repo.title}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
                   >
-                    <div>
-                      {/* Header bar of the repo card */}
-                      <div className="flex items-center justify-between mb-5">
-                        <div className="flex items-center gap-2">
-                          <Folder className="w-4 h-4 text-blue-450 group-hover:text-blue-400 transition-colors" />
-                          <span className="text-[9px] font-mono text-slate-450 group-hover:text-slate-400 tracking-wider uppercase">
-                            {getRepoCategory(repo)}
-                          </span>
+                    <TiltCard
+                      onClick={() => handleOpenDetailedModal(repo)}
+                      className="group flex flex-col h-full p-6 bg-[#070c19] border border-white/5 hover:border-blue-500/30 hover:bg-[#0c142c] justify-between"
+                    >
+                      <div>
+                        {/* Header bar of the repo card */}
+                        <div className="flex items-center justify-between mb-5">
+                          <div className="flex items-center gap-2">
+                            <Folder className="w-4 h-4 text-blue-450 group-hover:text-blue-400 transition-colors" />
+                            <span className="text-[9px] font-mono text-slate-450 group-hover:text-slate-400 tracking-wider uppercase">
+                              {getRepoCategory(repo)}
+                            </span>
+                          </div>
+                          <div className="px-2.5 py-0.5 rounded bg-black/40 border border-blue-500/10 text-[8px] font-mono font-bold text-blue-400/80 capitalize flex items-center gap-1">
+                            <GitBranch className="w-3 h-3 text-blue-400" />
+                            <span>{repo.codeUrl.includes("github.com") ? "github" : "source"}</span>
+                          </div>
                         </div>
-                        <div className="px-2.5 py-0.5 rounded bg-black/40 border border-blue-500/10 text-[8px] font-mono font-bold text-blue-400/80 capitalize flex items-center gap-1">
-                          <GitBranch className="w-3 h-3 text-blue-400" />
-                          <span>{repo.codeUrl.includes("github.com") ? "github" : "source"}</span>
-                        </div>
+
+                        <h3 className="font-display font-black text-base text-white group-hover:text-blue-400 transition-colors">
+                          {repo.title}
+                        </h3>
+                        
+                        <p className="text-slate-400 text-xs leading-relaxed mt-2 line-clamp-2">
+                          {repo.description}
+                        </p>
+
+                        {/* Key Features Block */}
+                        {repo.features && repo.features.length > 0 && (
+                          <div className="mt-4 space-y-1.5">
+                            <span className="text-[9px] font-mono text-slate-550 tracking-wider block uppercase font-bold">// KEY ARCHITECTURE &amp; OUTCOMES</span>
+                            <ul className="space-y-1">
+                              {repo.features.slice(0, 2).map((feat, fIdx) => (
+                                 <li key={fIdx} className="flex gap-2 text-xs text-slate-400 items-start">
+                                   <span className="w-1 h-1 rounded-full bg-blue-500 mt-2 shrink-0" />
+                                   <span className="line-clamp-1 text-slate-400 group-hover:text-slate-200 transition-colors">{feat}</span>
+                                 </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
 
-                      <h3 className="font-display font-black text-base text-white group-hover:text-blue-400 transition-colors">
-                        {repo.title}
-                      </h3>
-                      
-                      <p className="text-slate-400 text-xs leading-relaxed mt-2 line-clamp-2">
-                        {repo.description}
-                      </p>
-
-                      {/* Key Features Block */}
-                      {repo.features && repo.features.length > 0 && (
-                        <div className="mt-4 space-y-1.5">
-                          <span className="text-[9px] font-mono text-slate-550 tracking-wider block uppercase font-bold">// KEY ARCHITECTURE &amp; OUTCOMES</span>
-                          <ul className="space-y-1">
-                            {repo.features.slice(0, 2).map((feat, fIdx) => (
-                               <li key={fIdx} className="flex gap-2 text-xs text-slate-400 items-start">
-                                 <span className="w-1 h-1 rounded-full bg-blue-500 mt-2 shrink-0" />
-                                 <span className="line-clamp-1 text-slate-400 group-hover:text-slate-200 transition-colors">{feat}</span>
-                               </li>
-                            ))}
-                          </ul>
+                      <div className="mt-5 pt-3.5 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
+                        {/* Language and tag highlights */}
+                        <div className="flex flex-wrap gap-1 max-w-[75%]">
+                          {repo.tags.slice(0, 4).map((item) => (
+                            <span key={item} className="px-2.5 py-0.5 rounded text-[8px] font-mono bg-blue-500/5 border border-blue-500/15 text-blue-400 uppercase font-black tracking-wider">
+                              {item}
+                            </span>
+                          ))}
                         </div>
-                      )}
-                    </div>
 
-                    <div className="mt-5 pt-3.5 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
-                      {/* Language and tag highlights */}
-                      <div className="flex flex-wrap gap-1 max-w-[75%]">
-                        {repo.tags.slice(0, 4).map((item) => (
-                          <span key={item} className="px-2.5 py-0.5 rounded text-[8px] font-mono bg-blue-500/5 border border-blue-500/15 text-blue-400 uppercase font-black tracking-wider">
-                            {item}
-                          </span>
-                        ))}
+                        {/* Github direct pipeline log code link */}
+                        <a
+                          href={repo.codeUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="p-1.5 px-3 rounded-lg bg-slate-900/80 border border-white/5 text-[9.5px] font-mono font-bold text-slate-400 hover:text-white hover:bg-slate-950 hover:border-blue-500/40 flex items-center gap-1.5 cursor-pointer transition-all uppercase tracking-wider"
+                        >
+                          <span>CODE</span>
+                          <Github className="w-3.5 h-3.5" />
+                        </a>
                       </div>
-
-                      {/* Github direct pipeline log code link */}
-                      <a
-                        href={repo.codeUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="p-1.5 px-3 rounded-lg bg-slate-900/80 border border-white/5 text-[9.5px] font-mono font-bold text-slate-400 hover:text-white hover:bg-slate-950 hover:border-blue-500/40 flex items-center gap-1.5 cursor-pointer transition-all uppercase tracking-wider"
-                      >
-                        <span>CODE</span>
-                        <Github className="w-3 h-3 text-blue-400" />
-                      </a>
-                    </div>
-                  </TiltCard>
-                </motion.div>
-              );
-            })}
+                    </TiltCard>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
