@@ -2,7 +2,7 @@
 
 A modern and responsive portfolio website showcasing my journey as a **Computer Science & Artificial Intelligence Graduate**, featuring my projects, technical skills, internships, and achievements in Artificial Intelligence, Machine Learning, and Generative AI.
 
-🔗 **Live Portfolio:** gayatri-portfolio-flax.vercel.app
+🔗 **Live Portfolio:** *https://gayatri-portfolio-flax.vercel.app/*
 
 ---
 
