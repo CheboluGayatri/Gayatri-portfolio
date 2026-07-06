@@ -855,13 +855,25 @@ export default function Certifications({ certs }: CertificationsProps) {
           </div>
         </div>
 
-        <div className="pt-2 border-t border-white/5 z-10">
+        <div className="pt-2 border-t border-white/5 z-10 flex gap-2">
+          {cert.verificationUrl && (
+            <a
+              href={cert.verificationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 py-1.5 rounded-lg bg-blue-500/15 hover:bg-blue-500/25 active:scale-98 transition text-[8.5px] font-bold text-blue-400 border border-blue-500/25 shadow-md flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider font-sans"
+            >
+              <ShieldCheck className="w-3 h-3 text-blue-400" />
+              <span>Verify</span>
+            </a>
+          )}
           <button
             onClick={(e) => {
               e.stopPropagation();
               handlePrintCertificate(cert);
             }}
-            className="w-full py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-98 transition text-[8.5px] font-bold text-white shadow-md flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider font-sans border border-blue-500/30"
+            className={`py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-98 transition text-[8.5px] font-bold text-white shadow-md flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider font-sans border border-blue-500/30 ${cert.verificationUrl ? "flex-1" : "w-full"}`}
           >
             <Download className="w-3 h-3 text-white" />
             <span>Download Scan</span>

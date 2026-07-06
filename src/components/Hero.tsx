@@ -399,7 +399,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           >
             <button
               onClick={() => onNavigate("projects")}
-              className="px-8 py-3.5 bg-white text-black font-extrabold rounded-full text-xs sm:text-sm hover:bg-blue-600 hover:text-white hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-lg"
+              className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>View Projects</span>
               <ArrowRight className="w-4 h-4" />
@@ -407,7 +407,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
             <button
               onClick={() => onNavigate("contact")}
-              className="px-8 py-3.5 border border-white hover:border-blue-500 hover:bg-blue-500/10 font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer text-white shadow-sm"
+              className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>Contact Me</span>
             </button>
@@ -961,7 +961,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                           <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— iHub-Data, IIIT Hyderabad</span>
                         </div>
                       </div>
-                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                      <a href="https://drive.google.com/file/d/1iGUVEJz6pl39Ug2GzWrpSGSpacCbiZZw/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
                     </li>
                     <li className="flex justify-between items-baseline">
                       <div className="flex items-start gap-1.5">
@@ -971,7 +971,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                           <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— TechSaksham (Microsoft, SAP &amp; Edunet Foundation)</span>
                         </div>
                       </div>
-                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                      <a href="https://drive.google.com/file/d/1Og7zcvfagldAnBlaWHlVJPrHdzB-8txz/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
                     </li>
                     <li className="flex justify-between items-baseline">
                       <div className="flex items-start gap-1.5">
@@ -981,7 +981,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                           <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— Infosys Springboard</span>
                         </div>
                       </div>
-                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                      <a href="https://drive.google.com/file/d/14D5ENHYsdm2YQqhXIWJN-8Y-tUDLaWo0/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
                     </li>
                     <li className="flex justify-between items-baseline">
                       <div className="flex items-start gap-1.5">
@@ -991,7 +991,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                           <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— 3SKILL</span>
                         </div>
                       </div>
-                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                      <a href="https://drive.google.com/file/d/1VhMQzBz3jkgvswTlx3eonPn3M-UotHcg/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
                     </li>
                   </ul>
                 </div>
