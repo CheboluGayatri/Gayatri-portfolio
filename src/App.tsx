@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import { motion, useScroll, useSpring } from "motion/react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -18,6 +19,13 @@ import { GAYATRI_DATA } from "./data";
 import { Terminal, Heart } from "lucide-react";
 
 export default function App() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   const handleNavigateToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -33,6 +41,12 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-blue-500/30 selection:text-white">
+      {/* Thin Animated Scroll Progress Bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[3.5px] bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-600 origin-left z-[100] pointer-events-none no-print"
+        style={{ scaleX }}
+      />
+
       {/* Premium Glass Header Navigation */}
       <Header
         githubUrl={GAYATRI_DATA.github}
@@ -50,50 +64,106 @@ export default function App() {
         />
 
         {/* Profile and System manifest summary */}
-        <About
-          fullAbout={GAYATRI_DATA.fullAbout}
-          stats={GAYATRI_DATA.stats}
-          location={GAYATRI_DATA.location}
-          email={GAYATRI_DATA.email}
-          phone={GAYATRI_DATA.phone}
-          onNavigate={handleNavigateToSection}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <About
+            fullAbout={GAYATRI_DATA.fullAbout}
+            stats={GAYATRI_DATA.stats}
+            location={GAYATRI_DATA.location}
+            email={GAYATRI_DATA.email}
+            phone={GAYATRI_DATA.phone}
+            onNavigate={handleNavigateToSection}
+          />
+        </motion.div>
 
         {/* Graduate pipeline status card (experience check & skills track) */}
-        <GraduateStatus onNavigate={handleNavigateToSection} />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <GraduateStatus onNavigate={handleNavigateToSection} />
+        </motion.div>
 
         {/* Micro-meters skills specs catalog */}
-        <Skills />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <Skills />
+        </motion.div>
 
         {/* Timeline representation (Internships + Education) */}
-        <Experience
-          internships={GAYATRI_DATA.internships}
-          educations={GAYATRI_DATA.educationList}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <Experience
+            internships={GAYATRI_DATA.internships}
+            educations={GAYATRI_DATA.educationList}
+          />
+        </motion.div>
 
         {/* Interactive project cards and modal views */}
-        <Projects
-          projects={GAYATRI_DATA.projects}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <Projects
+            projects={GAYATRI_DATA.projects}
+          />
+        </motion.div>
 
         {/* Certified honors & verification badges */}
-        <Certifications
-          certs={GAYATRI_DATA.certificationsList}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <Certifications
+            certs={GAYATRI_DATA.certificationsList}
+          />
+        </motion.div>
 
         {/* Developer contribution activity registry dashboard */}
-        <GithubProfile
-          username="CheboluGayatri"
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <GithubProfile
+            username="CheboluGayatri"
+          />
+        </motion.div>
 
         {/* Connect & Direct message input pipelines */}
-        <Contact
-          email={GAYATRI_DATA.email}
-          phone={GAYATRI_DATA.phone}
-          location={GAYATRI_DATA.location}
-          linkedinUrl={GAYATRI_DATA.linkedin}
-          githubUrl={GAYATRI_DATA.github}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
+          <Contact
+            email={GAYATRI_DATA.email}
+            phone={GAYATRI_DATA.phone}
+            location={GAYATRI_DATA.location}
+            linkedinUrl={GAYATRI_DATA.linkedin}
+            githubUrl={GAYATRI_DATA.github}
+          />
+        </motion.div>
       </main>
 
       {/* Handcrafted Footer */}

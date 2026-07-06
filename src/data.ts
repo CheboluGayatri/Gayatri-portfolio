@@ -50,8 +50,8 @@ export interface SkillsGroup {
 
 export const GAYATRI_DATA = {
   name: "Gayatri Chebolu",
-  role: "Aspiring AI/ML Engineer",
-  tagline: "Passionate about Artificial Intelligence and Machine Learning and committed to continuous learning, exploring emerging technologies, and building intelligent solutions through hands-on projects that solve real-world problems.",
+  role: "Building AI-powered applications with Python, Machine Learning, and Generative AI.",
+  tagline: "Turning ideas into practical, real-world AI solutions.",
   shortAbout: "Hi, I'm Gayatri. Passionate about Artificial Intelligence and Machine Learning and committed to continuous learning, exploring emerging technologies, and building intelligent solutions through hands-on projects that solve real-world problems.",
   fullAbout: "Hi, I'm Gayatri. Passionate about Artificial Intelligence and Machine Learning and committed to continuous learning, exploring emerging technologies, and building intelligent solutions through hands-on projects that solve real-world problems.",
   email: "gayathrichebolu6@gmail.com",

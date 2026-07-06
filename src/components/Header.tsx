@@ -147,7 +147,7 @@ export default function Header({ githubUrl, linkedinUrl }: HeaderProps) {
             onClick={() => scrollToSection("contact")}
             className="relative px-6 py-2.5 rounded-full text-xs font-bold tracking-wide bg-gradient-to-tr from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/10 overflow-hidden group transition-all duration-300 hover:scale-105 hover:shadow-blue-500/20 cursor-pointer"
           >
-            <span className="relative z-10">Hire Me</span>
+            <span className="relative z-10">Let's Connect</span>
           </button>
         </div>
 

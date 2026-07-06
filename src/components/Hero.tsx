@@ -29,6 +29,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
   // Settings Panel States
   const [isSetupOpen, setIsSetupOpen] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [videoUrlInput, setVideoUrlInput] = useState(() => localStorage.getItem("custom_video_url") || "");
   const [imageUrlInput, setImageUrlInput] = useState(() => localStorage.getItem("custom_profile_url") || "");
   const [uploadStatus, setUploadStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -358,17 +359,26 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             className="flex items-center gap-2 text-blue-400 font-mono text-xs tracking-widest uppercase mb-4"
           >
             <Cpu className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
-            <span>AI &amp; COMPUTER SCIENCE GRADUATE</span>
+            <span>COMPUTER SCIENCE &amp; AI GRADUATE</span>
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
           </motion.div>
 
           {/* Premium display typewriter header matching Sushmita Style */}
-          <h1 className="font-display text-5xl sm:text-7.5xl font-black text-white leading-[1.05] tracking-tight mb-5">
-            Hi, I'm Gayatri <br />
-            <span className="text-blue-400 hover:scale-101 duration-350 bg-clip-text text-3xl sm:text-5xl font-extrabold tracking-normal">
-              {role}
+          <div className="mb-6">
+            <span className="text-slate-400 font-display text-lg sm:text-2xl font-semibold tracking-wide block mb-1">
+              Hi, I'm
             </span>
-          </h1>
+            <h1 className="font-display text-4xl sm:text-6xl font-black text-white leading-none tracking-tight mb-4">
+              Gayatri
+            </h1>
+            <h2 className="text-blue-400 font-sans text-lg sm:text-2xl font-bold tracking-normal leading-relaxed max-w-2xl">
+              {role.includes("with") ? (
+                <>
+                  {role.split("with")[0].trim()} with <br className="block" /> {role.split("with")[1].trim()}
+                </>
+              ) : role}
+            </h2>
+          </div>
 
           {/* Core Introduction / Tagline */}
           <motion.p
@@ -391,7 +401,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               onClick={() => onNavigate("projects")}
               className="px-8 py-3.5 bg-white text-black font-extrabold rounded-full text-xs sm:text-sm hover:bg-blue-600 hover:text-white hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-lg"
             >
-              <span>View My Work</span>
+              <span>View Projects</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
@@ -400,6 +410,13 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               className="px-8 py-3.5 border border-white hover:border-blue-500 hover:bg-blue-500/10 font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer text-white shadow-sm"
             >
               <span>Contact Me</span>
+            </button>
+
+            <button
+              onClick={() => setIsResumeOpen(true)}
+              className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
+            >
+              <span>📄 Download Resume</span>
             </button>
           </motion.div>
         </div>
@@ -689,6 +706,305 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                   className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition cursor-pointer flex items-center gap-1.5 shadow"
                 >
                   <Check className="w-3.5 h-3.5" /> Save Links
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {isResumeOpen && (
+          <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto no-print">
+            <motion.div
+              initial={{ scale: 0.95, y: 15, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.95, y: 15, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-4xl rounded-3xl border border-white/10 bg-slate-900 shadow-2xl text-left overflow-hidden my-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex justify-between items-center px-6 py-4 border-b border-white/5 bg-slate-900/80 sticky top-0 z-10 backdrop-blur">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-mono tracking-widest text-blue-400 uppercase font-bold">
+                    PORTFOLIO ATS-OPTIMIZED RESUME
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => window.print()}
+                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/20"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Print / Save PDF</span>
+                  </button>
+                  <button
+                    onClick={() => setIsResumeOpen(false)}
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Printable Area */}
+              <div className="p-8 sm:p-12 bg-white text-slate-900 max-h-[75vh] overflow-y-auto custom-scrollbar" id="printable-resume">
+                {/* Resume Header */}
+                <div className="text-center pb-5 border-b border-slate-300">
+                  <h2 className="text-3xl sm:text-4xl font-serif font-black tracking-tight text-slate-900 uppercase">
+                    GAYATRI CHEBOLU
+                  </h2>
+                  <p className="text-sm font-sans font-bold text-slate-600 mt-1 uppercase tracking-wide">
+                    Computer Science &amp; Artificial Intelligence Graduate
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-500 mt-2 font-mono">
+                    <span>📍 Andhra Pradesh, India</span>
+                    <span>•</span>
+                    <a href="mailto:gayathrichebolu6@gmail.com" className="hover:text-blue-600 underline">gayathrichebolu6@gmail.com</a>
+                    <span>•</span>
+                    <span>📞 +91 9154605089</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-4 text-xs text-slate-600 mt-2 font-mono">
+                    <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline font-semibold">LinkedIn</a>
+                    <span>|</span>
+                    <a href="https://github.com/CheboluGayatri" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline font-semibold">GitHub</a>
+                    <span>|</span>
+                    <a href={typeof window !== 'undefined' ? window.location.origin : '#'} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 underline font-semibold">Portfolio</a>
+                  </div>
+                </div>
+
+                {/* Professional Summary */}
+                <div className="mt-6">
+                  <h3 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2">
+                    Professional Summary
+                  </h3>
+                  <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify font-sans">
+                    Computer Science and Artificial Intelligence graduate with hands-on experience in machine learning, AI-powered application development, and Python programming through internships and academic projects. Proficient in Python, Scikit-learn, Streamlit, Flask, and Hugging Face Transformers. Seeking an entry-level opportunity to apply my technical skills, contribute to innovative software solutions, and grow as a technology professional in a collaborative environment.
+                  </p>
+                </div>
+
+                {/* Technical Skills */}
+                <div className="mt-6">
+                  <h3 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2">
+                    Technical Skills
+                  </h3>
+                  <div className="grid grid-cols-1 gap-y-1 text-xs sm:text-[13px] font-sans">
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Programming</span>
+                      <span className="col-span-9 text-slate-700">: Python</span>
+                    </div>
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Machine Learning</span>
+                      <span className="col-span-9 text-slate-700">: Classification, Regression, Feature Engineering, Model Evaluation, Natural Language Processing (NLP)</span>
+                    </div>
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Generative AI</span>
+                      <span className="col-span-9 text-slate-700">: Prompt Engineering, Hugging Face Transformers, Ollama, T5</span>
+                    </div>
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Libraries</span>
+                      <span className="col-span-9 text-slate-700">: Scikit-learn, Pandas, NumPy, Matplotlib</span>
+                    </div>
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Frameworks</span>
+                      <span className="col-span-9 text-slate-700">: Streamlit, Flask</span>
+                    </div>
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Tools</span>
+                      <span className="col-span-9 text-slate-700">: Git, GitHub, Jupyter Notebook, SQLite</span>
+                    </div>
+                    <div className="grid grid-cols-12 gap-2">
+                      <span className="col-span-3 font-bold text-slate-800">Deployment</span>
+                      <span className="col-span-9 text-slate-700">: Streamlit Community Cloud, Render</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Professional Experience */}
+                <div className="mt-6">
+                  <h3 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3">
+                    Professional Experience
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">AI Intern — Infosys Springboard</span>
+                        <span className="font-bold text-slate-700 text-xs">Sep 2025 – Nov 2025</span>
+                      </div>
+                      <div className="flex justify-between items-baseline font-sans text-[11px] sm:text-xs text-slate-600 italic">
+                        <span>Internship 6.0 (B2): CodeGenie – AI Explainer and Code Generator</span>
+                        <span>Remote</span>
+                      </div>
+                      <ul className="list-disc list-inside mt-1.5 text-xs text-slate-700 space-y-1 font-sans pl-2 text-justify">
+                        <li>Developed an offline AI coding assistant using Python, Streamlit, and Ollama to generate, explain, debug, and review source code.</li>
+                        <li>Integrated OCR with Tesseract and document parsing using pdfplumber and python-docx to analyze images and documents.</li>
+                        <li>Designed prompt engineering workflows to improve response quality and reduce hallucinations in LLM-generated outputs.</li>
+                        <li>Implemented backend logic, local LLM integration, and multi-turn chat functionality for an interactive AI application.</li>
+                        <li className="list-none mt-1 font-mono text-[11px] text-blue-800">
+                          🔗 GitHub: <a href="https://github.com/CheboluGayatri/CodeGenAiand_Explainer" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold">github.com/CheboluGayatri/CodeGenAiand_Explainer</a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">AI/ML Intern — 3SKILL</span>
+                        <span className="font-bold text-slate-700 text-xs">Dec 2025 – Feb 2026</span>
+                      </div>
+                      <div className="flex justify-between items-baseline font-sans text-[11px] sm:text-xs text-slate-600 italic">
+                        <span>AiMI – Artificial Intelligence &amp; Machine Intelligence</span>
+                        <span>Remote</span>
+                      </div>
+                      <ul className="list-disc list-inside mt-1.5 text-xs text-slate-700 space-y-1 font-sans pl-2 text-justify">
+                        <li>Developed a machine learning model using Random Forest to classify wine quality into Low, Average, and High categories.</li>
+                        <li>Performed exploratory data analysis, feature engineering, preprocessing, model training, and evaluation, achieving 87% prediction accuracy.</li>
+                        <li>Serialized the trained model using Pickle and deployed it as an interactive Streamlit web application.</li>
+                        <li>Strengthened practical skills in machine learning, predictive analytics, and model deployment through end-to-end implementation.</li>
+                        <li className="list-none mt-1 font-mono text-[11px] text-blue-800">
+                          🔗 GitHub: <a href="https://github.com/CheboluGayatri/Wine-Quality" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold">github.com/CheboluGayatri/Wine-Quality</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Projects */}
+                <div className="mt-6">
+                  <h3 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3">
+                    Projects
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">House Price Prediction System</span>
+                        <span className="font-semibold text-slate-600 text-xs italic">Python — Streamlit — Scikit-learn</span>
+                      </div>
+                      <ul className="list-disc list-inside mt-1.5 text-xs text-slate-700 space-y-1 font-sans pl-2 text-justify">
+                        <li>Developed a machine learning application using Linear Regression to estimate residential property prices based on user-provided features.</li>
+                        <li>Performed data preprocessing, feature engineering, one-hot encoding, and evaluated model performance using R², RMSE, MAE, and MAPE.</li>
+                        <li>Built and deployed an interactive Streamlit web application for real-time house price prediction.</li>
+                        <li className="list-none mt-1 font-mono text-[11px] text-blue-800">
+                          🔗 GitHub: <a href="https://github.com/CheboluGayatri/HousePrice" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold">github.com/CheboluGayatri/HousePrice</a> — Live: <a href="https://houseprice-kcvnxs5sxgawny4wzehj52.streamlit.app/" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold text-indigo-600">Demo</a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">AI Health Symptom Checker</span>
+                        <span className="font-semibold text-slate-600 text-xs italic">Python — Flask — Machine Learning — SQLite</span>
+                      </div>
+                      <ul className="list-disc list-inside mt-1.5 text-xs text-slate-700 space-y-1 font-sans pl-2 text-justify">
+                        <li>Developed a full-stack healthcare application that predicts probable diseases using a Random Forest Classifier based on user-selected symptoms.</li>
+                        <li>Integrated a Hugging Face Transformer-powered medical chatbot, secure authentication, SQLite database, and browser-based voice input.</li>
+                        <li>Implemented automated PDF medical report generation and deployed the application on Render using a responsive Bootstrap interface.</li>
+                        <li className="list-none mt-1 font-mono text-[11px] text-blue-800">
+                          🔗 GitHub: <a href="https://github.com/CheboluGayatri/AI_HEALTH_SYMPTOM_CHECK" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold">github.com/CheboluGayatri/AI_HEALTH_SYMPTOM_CHECK</a> — Live: <a href="https://ai-health-symptom-check.onrender.com/" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold text-indigo-600">Demo</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Education */}
+                <div className="mt-6">
+                  <h3 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3">
+                    Education
+                  </h3>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">B.Tech in Computer Science &amp; Artificial Intelligence</span>
+                        <span className="font-semibold text-slate-700 text-xs">2022 – 2026</span>
+                      </div>
+                      <div className="flex justify-between items-baseline font-sans text-[11px] sm:text-xs text-slate-600">
+                        <span>Kakinada Institute of Engineering and Technology for Women</span>
+                        <span className="font-bold">CGPA: 7.78 / 10</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">Intermediate (MPC)</span>
+                        <span className="font-semibold text-slate-700 text-xs">2020 – 2022</span>
+                      </div>
+                      <div className="flex justify-between items-baseline font-sans text-[11px] sm:text-xs text-slate-600">
+                        <span>Triveni Junior College</span>
+                        <span className="font-bold">GPA: 9.07 / 10</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between items-baseline font-sans text-xs sm:text-sm">
+                        <span className="font-bold text-slate-900">Secondary School (SSC)</span>
+                        <span className="font-semibold text-slate-700 text-xs">2019 – 2020</span>
+                      </div>
+                      <div className="flex justify-between items-baseline font-sans text-[11px] sm:text-xs text-slate-600">
+                        <span>Triveni Educational Academy</span>
+                        <span className="font-bold">GPA: 10.0 / 10</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Certifications */}
+                <div className="mt-6">
+                  <h3 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3">
+                    Certifications
+                  </h3>
+                  <ul className="space-y-2 text-xs text-slate-700 font-sans pl-2">
+                    <li className="flex justify-between items-baseline">
+                      <div className="flex items-start gap-1.5">
+                        <span className="text-slate-400 select-none">•</span>
+                        <div>
+                          <strong>Foundations of Modern Machine Learning (Grade A)</strong>
+                          <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— iHub-Data, IIIT Hyderabad</span>
+                        </div>
+                      </div>
+                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                    </li>
+                    <li className="flex justify-between items-baseline">
+                      <div className="flex items-start gap-1.5">
+                        <span className="text-slate-400 select-none">•</span>
+                        <div>
+                          <strong>Applied Artificial Intelligence: Practical Implementations</strong>
+                          <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— TechSaksham (Microsoft, SAP &amp; Edunet Foundation)</span>
+                        </div>
+                      </div>
+                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                    </li>
+                    <li className="flex justify-between items-baseline">
+                      <div className="flex items-start gap-1.5">
+                        <span className="text-slate-400 select-none">•</span>
+                        <div>
+                          <strong>Internship 6.0 (B2): CodeGenie – AI Explainer and Code Generator</strong>
+                          <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— Infosys Springboard</span>
+                        </div>
+                      </div>
+                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                    </li>
+                    <li className="flex justify-between items-baseline">
+                      <div className="flex items-start gap-1.5">
+                        <span className="text-slate-400 select-none">•</span>
+                        <div>
+                          <strong>AI &amp; Machine Intelligence Internship</strong>
+                          <span className="text-slate-500 text-[11px] block sm:inline sm:ml-2">— 3SKILL</span>
+                        </div>
+                      </div>
+                      <a href="https://www.linkedin.com/in/gayatri-chebolu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold font-mono text-[11px] shrink-0 ml-4 no-print">Credential</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 bg-slate-950 border-t border-white/5 flex justify-between items-center text-xs text-slate-400 font-mono">
+                <span>💡 Designed to print beautifully on standard A4 paper size</span>
+                <button
+                  onClick={() => setIsResumeOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold transition cursor-pointer"
+                >
+                  Close
                 </button>
               </div>
             </motion.div>

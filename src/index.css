@@ -165,3 +165,57 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Professional Print Stylesheet for CV */
+@media print {
+  html, body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Hide all regular web app components entirely */
+  #root, 
+  header, 
+  nav, 
+  footer, 
+  section, 
+  div:not(#printable-resume):not(#printable-resume-container), 
+  button {
+    display: none !important;
+  }
+
+  /* Ensure the printable resume container takes up the entire page */
+  #printable-resume-container {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #printable-resume {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* Underline link destinations or format print targets nicely */
+  a {
+    text-decoration: underline !important;
+    color: #0f172a !important;
+  }
+}
