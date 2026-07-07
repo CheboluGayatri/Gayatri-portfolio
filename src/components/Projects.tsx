@@ -14,6 +14,7 @@ import thinkChampQuizScreenshot from "../assets/images/think_champ_quiz_17815878
 import thinkChampGenScreenshot from "../assets/images/think_champ_generator_1781587881537.jpg";
 import movieVerseScreenshot from "../assets/images/movie_verse_1781587898014.jpg";
 import travelTalesScreenshot from "../assets/images/travel_tales_1781587914134.jpg";
+import symptomCheckerScreenshot from "../assets/images/symptom_checker_mockup_1783096655183.jpg";
 
 interface TiltCardProps {
   children: React.ReactNode;
@@ -130,7 +131,8 @@ export default function Projects({ projects }: ProjectsProps) {
     "AI Chatbot Web Application": [aiChatbotScreenshot],
     "AI Quiz Generator": [thinkChampQuizScreenshot, thinkChampGenScreenshot],
     "Movie-versa": [movieVerseScreenshot],
-    "Travel-Tales": [travelTalesScreenshot]
+    "Travel-Tales": [travelTalesScreenshot],
+    "AI Health Symptom Checker": [symptomCheckerScreenshot]
   };
 
   // Fetch screenshots using assets helper

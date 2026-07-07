@@ -144,13 +144,25 @@ export const getLocalVideoUrl = () => {
   return null;
 };
 
+// Sanitize and validate URL inputs
+function sanitizeUrl(url: any): string | null {
+  if (!url) return null;
+  if (typeof url !== "string") return null;
+  const trimmed = url.trim();
+  if (trimmed === "" || trimmed === "null" || trimmed === "undefined" || trimmed === "#" || trimmed === "null/") {
+    return null;
+  }
+  return trimmed;
+}
+
 // Low latency file validity checker
 async function fileExists(url: string, expectedMimePrefix?: string): Promise<boolean> {
   try {
-    if (!url || url.trim() === "" || url === "#") {
+    const sanitized = sanitizeUrl(url);
+    if (!sanitized) {
       return false;
     }
-    const response = await fetch(url, { method: "HEAD" });
+    const response = await fetch(sanitized, { method: "HEAD" });
     if (!response.ok) return false;
     if (response.status !== 200) return false;
     
@@ -178,8 +190,8 @@ async function fileExists(url: string, expectedMimePrefix?: string): Promise<boo
 
 export function useAssetDetection() {
   const [assets, setAssets] = useState<DetectedAssets>({
-    profileUrl: localStorage.getItem("custom_profile_url") || getLocalProfileImage() || defaultProfile,
-    videoUrl: localStorage.getItem("custom_video_url") || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl,
+    profileUrl: sanitizeUrl(localStorage.getItem("custom_profile_url")) || getLocalProfileImage() || defaultProfile,
+    videoUrl: sanitizeUrl(localStorage.getItem("custom_video_url")) || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl,
     resumeUrl: null,
     projectScreenshots: STATIC_PROJECT_SCREENSHOTS,
     certificateImages: {},
@@ -201,10 +213,10 @@ export function useAssetDetection() {
         ]);
 
         if (localProf && active) {
-          customProfileBase64 = localProf;
+          customProfileBase64 = sanitizeUrl(localProf);
         }
         if (localVid && active) {
-          customVideoBase64 = localVid;
+          customVideoBase64 = sanitizeUrl(localVid);
         }
       } catch (e) {
         console.error("IndexedDB profile/video retrieval issue:", e);
@@ -232,13 +244,13 @@ export function useAssetDetection() {
 
       if (!active) return;
 
-      const pastedProfileUrl = localStorage.getItem("custom_profile_url");
-      const pastedVideoUrl = localStorage.getItem("custom_video_url");
+      const pastedProfileUrl = sanitizeUrl(localStorage.getItem("custom_profile_url"));
+      const pastedVideoUrl = sanitizeUrl(localStorage.getItem("custom_video_url"));
 
       // 3. Update State with discovered custom IndexedDB media, static local assets, or local PDF.
       setAssets((prev) => {
-        const nextProfileUrl = pastedProfileUrl || customProfileBase64 || resolvedProfile || prev.profileUrl;
-        const nextVideoUrl = pastedVideoUrl || customVideoBase64 || resolvedVideo || prev.videoUrl;
+        const nextProfileUrl = pastedProfileUrl || customProfileBase64 || resolvedProfile || prev.profileUrl || defaultProfile;
+        const nextVideoUrl = pastedVideoUrl || customVideoBase64 || resolvedVideo || prev.videoUrl || FALLBACK_ASSETS.videoUrl;
         const nextResumeUrl = resolvedResume || prev.resumeUrl;
 
         if (
