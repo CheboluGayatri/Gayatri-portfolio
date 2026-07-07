@@ -18,8 +18,7 @@ import Contact from "./components/Contact";
 import { GAYATRI_DATA } from "./data";
 import { Terminal, Heart } from "lucide-react";
 import { useImageLoader } from "./hooks/useImageLoader";
-import homeVideo from "./assets/videos/home-video.mp4";
-import profilePic from "./assets/images/profile.jpg";
+import { FALLBACK_ASSETS } from "./utils/assetDetector";
 
 export default function App() {
   const { scrollYProgress } = useScroll();
@@ -29,7 +28,7 @@ export default function App() {
     restDelta: 0.001
   });
 
-  const { isLoaded } = useImageLoader([profilePic], [homeVideo]);
+  const { isLoaded } = useImageLoader([FALLBACK_ASSETS.profileUrl], [FALLBACK_ASSETS.videoUrl]);
 
   const handleNavigateToSection = (id: string) => {
     const element = document.getElementById(id);

@@ -113,7 +113,7 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
     setSubmitError(null);
     setSubmitStep(1); // Establishing encryption link
 
-    // Chain of fun high-fidelity network-themed steps
+    // Chain of responsive step transitions (reduced delay for premium snappiness)
     setTimeout(() => {
       setSubmitStep(2); // Authorizing payload structures
       setTimeout(() => {
@@ -141,11 +141,19 @@ export default function Contact({ email, phone, location, linkedinUrl, githubUrl
             console.warn(storageErr);
           }
 
+          // Automatically launch mailto flow pre-filled so they send it directly to her email
+          const mailtoSubject = encodeURIComponent(`Portfolio Inquiry: ${formData.subject}`);
+          const mailtoBody = encodeURIComponent(
+            `Hi Gayatri,\n\nI came across your portfolio and wanted to reach out:\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+          );
+          
+          window.location.href = `mailto:${finalEmail}?subject=${mailtoSubject}&body=${mailtoBody}`;
+
           // Reset inputs
           setFormData({ name: "", email: "", subject: "", message: "" });
-        }, 800);
-      }, 800);
-    }, 800);
+        }, 200);
+      }, 200);
+    }, 200);
   };
 
   const handleClearHistory = () => {

@@ -98,8 +98,8 @@ export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vime
 // 2. To set your vocal video permanently, place your video (.mp4) inside "/src/assets/images/" 
 //    and rename it to contain "video" (e.g. "vocal_video.mp4"). The code will automatically load it!
 export const FALLBACK_ASSETS = {
-  profileUrl: defaultProfile,
-  videoUrl: defaultVideo,
+  profileUrl: "https://github.com/CheboluGayatri.png",
+  videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-futuristic-technology-background-loop-42289-large.mp4",
   resumeUrl: "#print", // Fallback trigger for print view
 };
 
@@ -196,7 +196,7 @@ async function fileExists(url: string, expectedMimePrefix?: string): Promise<boo
 
 export function useAssetDetection() {
   const [assets, setAssets] = useState<DetectedAssets>({
-    profileUrl: sanitizeUrl(localStorage.getItem("custom_profile_url")) || getLocalProfileImage() || defaultProfile,
+    profileUrl: sanitizeUrl(localStorage.getItem("custom_profile_url")) || getLocalProfileImage() || FALLBACK_ASSETS.profileUrl,
     videoUrl: sanitizeUrl(localStorage.getItem("custom_video_url")) || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl,
     resumeUrl: null,
     projectScreenshots: STATIC_PROJECT_SCREENSHOTS,
@@ -262,8 +262,8 @@ export function useAssetDetection() {
 
       // 3. Update State with discovered custom IndexedDB media, static local assets, or local PDF.
       setAssets((prev) => {
-        const nextProfileUrl = pastedProfileUrl || customProfileBase64 || resolvedProfile || prev.profileUrl || defaultProfile;
-        const nextVideoUrl = pastedVideoUrl || customVideoBase64 || resolvedVideo || prev.videoUrl || FALLBACK_ASSETS.videoUrl;
+        const nextProfileUrl = pastedProfileUrl || customProfileBase64 || resolvedProfile || (prev.profileUrl && prev.profileUrl.length > 30 ? prev.profileUrl : null) || FALLBACK_ASSETS.profileUrl;
+        const nextVideoUrl = pastedVideoUrl || customVideoBase64 || resolvedVideo || (prev.videoUrl && prev.videoUrl.length > 30 ? prev.videoUrl : null) || FALLBACK_ASSETS.videoUrl;
         const nextResumeUrl = resolvedResume || prev.resumeUrl;
 
         if (
