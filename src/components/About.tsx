@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useAssetDetection } from "../utils/assetDetector";
+import { useImageLoader } from "../hooks/useImageLoader";
 import defaultProfilePic from "../assets/images/default_profile_image_1781969359775.jpg";
 
 interface StatusItem {
@@ -22,6 +23,8 @@ interface AboutProps {
 
 export default function About({ fullAbout, stats, location, email, phone, onNavigate }: AboutProps) {
   const assets = useAssetDetection();
+  const profileSrc = assets.profileUrl || defaultProfilePic;
+  const { isLoaded: isImageLoaded } = useImageLoader([profileSrc]);
 
   const technologies = [
     { name: "Python", icon: <Code2 className="w-3.5 h-3.5 text-emerald-400" /> },
@@ -86,9 +89,18 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
               <div className="absolute inset-3 border border-white/5 rounded-2xl pointer-events-none z-30" />
 
               {/* Picture Screen Frame */}
-              <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-slate-950 select-none z-10 shadow-2xl">
-                <img
-                  src={assets.profileUrl || defaultProfilePic || undefined}
+              <div className="relative w-full h-full rounded-[20px] overflow-hidden bg-slate-950 select-none z-10 shadow-2xl flex items-center justify-center">
+                {!isImageLoaded && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/90 z-20">
+                    <div className="w-8 h-8 rounded-full border-2 border-blue-500/10 border-t-blue-500/70 animate-spin mb-2" />
+                    <span className="text-[9px] font-mono text-blue-500/65 tracking-widest uppercase animate-pulse">Preloading...</span>
+                  </div>
+                )}
+                <motion.img
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isImageLoaded ? 1 : 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  src={profileSrc || undefined}
                   alt="Gayatri Chebolu Portrait"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover group-hover:scale-105 duration-700 transition-transform brightness-[0.9] contrast-[1.05]"

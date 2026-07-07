@@ -3,6 +3,7 @@ import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Cod
 import { motion, AnimatePresence } from "motion/react";
 import { useAssetDetection, FALLBACK_ASSETS, getEmbedVideoUrl } from "../utils/assetDetector";
 import { saveLocalMedia, clearLocalMedia } from "../utils/db";
+import { useImageLoader } from "../hooks/useImageLoader";
 
 interface HeroProps {
   name: string;
@@ -14,6 +15,8 @@ interface HeroProps {
 
 export default function Hero({ name, role, tagline, email, onNavigate }: HeroProps) {
   const assets = useAssetDetection();
+  const heroBgUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920";
+  const { isLoaded: isHeroBgLoaded } = useImageLoader([heroBgUrl]);
   const [isPlaying, setIsPlaying] = useState(true);
   
   // 💡 VS CODE TIP: To make the video voice play out loud automatically by default in your local setup,
@@ -278,9 +281,12 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       className="relative min-h-[92vh] xl:min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden bg-slate-950"
     >
       {/* 1. Cinematic Autoplay Fullscreen Background Video & Soundtrack */}
-      <div 
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHeroBgLoaded ? 1 : 0 }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
         className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920')" }}
+        style={{ backgroundImage: `url('${heroBgUrl}')` }}
       >
         {/* Background Video element (HD clearly visible format) */}
         {activeVideoUrl ? (
@@ -319,7 +325,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
         {/* Grid Overlay with a subtle blue glow feel */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.005)_1px,transparent_1px)] bg-[size:42px_42px] opacity-10 z-10 pointer-events-none" />
-      </div>
+      </motion.div>
 
       {/* 2. Floating Unmute Action Notification */}
       {isMuted && showVolumePrompt && (
