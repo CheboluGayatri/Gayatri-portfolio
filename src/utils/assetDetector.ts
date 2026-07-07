@@ -71,15 +71,20 @@ export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vime
     };
   }
   
-  // Vimeo patterns
-  const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-8a-zA-Z._-]+)/i;
-  const vimeoMatch = urlStr.match(vimeoRegex);
-  if (vimeoMatch) {
-    const videoId = vimeoMatch[1];
-    return {
-      type: "vimeo",
-      embedUrl: `https://player.vimeo.com/video/${videoId}?autoplay=1&loop=1&muted=1&background=1&autoplay=true`
-    };
+  // Vimeo patterns (avoid matching direct mp4 files under vimeo's external CDN or urls ending in standard video formats)
+  const isDirectFile = /\.(mp4|webm|mov|ogg|m4v)(?:\?|$)/i.test(urlStr) || urlStr.includes("/external/");
+  if (!isDirectFile) {
+    const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-8a-zA-Z._-]+)/i;
+    const vimeoMatch = urlStr.match(vimeoRegex);
+    if (vimeoMatch) {
+      const videoId = vimeoMatch[1];
+      if (videoId && videoId.toLowerCase() !== "external") {
+        return {
+          type: "vimeo",
+          embedUrl: `https://player.vimeo.com/video/${videoId}?autoplay=1&loop=1&muted=1&background=1&autoplay=true`
+        };
+      }
+    }
   }
   
   return { type: "direct", embedUrl: urlStr };

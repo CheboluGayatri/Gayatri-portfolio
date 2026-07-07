@@ -285,6 +285,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             <video
               ref={videoRef}
               src={activeVideoUrl || undefined}
+              poster={assets.profileUrl || undefined}
               preload="auto"
               muted={isMuted}
               playsInline
