@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getLocalMedia } from "./db";
-import defaultProfile from "../assets/images/default_profile_image_1781969359775.jpg";
+import defaultProfile from "../assets/images/profile.jpg";
+import defaultVideo from "../assets/videos/home-video.mp4";
 
 // Import all static project screenshots so Vite bundles them properly
 import housePriceScreenshot from "../assets/images/house_price_dashboard_1781588924241.jpg";
@@ -98,7 +99,7 @@ export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vime
 //    and rename it to contain "video" (e.g. "vocal_video.mp4"). The code will automatically load it!
 export const FALLBACK_ASSETS = {
   profileUrl: defaultProfile,
-  videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-stream-of-binary-code-32865-large.mp4", // Reliable high-quality binary coding stream
+  videoUrl: defaultVideo,
   resumeUrl: "#print", // Fallback trigger for print view
 };
 

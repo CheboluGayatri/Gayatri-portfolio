@@ -5,7 +5,7 @@ import {
 import { motion } from "motion/react";
 import { useAssetDetection } from "../utils/assetDetector";
 import { useImageLoader } from "../hooks/useImageLoader";
-import defaultProfilePic from "../assets/images/default_profile_image_1781969359775.jpg";
+import defaultProfilePic from "../assets/images/profile.jpg";
 
 interface StatusItem {
   label: string;

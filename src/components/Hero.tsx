@@ -15,9 +15,8 @@ interface HeroProps {
 
 export default function Hero({ name, role, tagline, email, onNavigate }: HeroProps) {
   const assets = useAssetDetection();
-  const heroBgUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920";
-  const { isLoaded: isHeroBgLoaded } = useImageLoader([heroBgUrl]);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isVideoReady, setIsVideoReady] = useState(false);
   
   // 💡 VS CODE TIP: To make the video voice play out loud automatically by default in your local setup,
   // change the initial state below from `true` to `false`.
@@ -281,51 +280,45 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       className="relative min-h-[92vh] xl:min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden bg-slate-950"
     >
       {/* 1. Cinematic Autoplay Fullscreen Background Video & Soundtrack */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHeroBgLoaded ? 1 : 0 }}
-        transition={{ duration: 1.0, ease: "easeOut" }}
-        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url('${heroBgUrl}')` }}
+      <div 
+        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950"
       >
         {/* Background Video element (HD clearly visible format) */}
-        {activeVideoUrl ? (
-          videoDetails.type === "direct" ? (
-            <video
-              ref={videoRef}
-              src={activeVideoUrl || undefined}
-              poster="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920"
-              preload="auto"
-              muted={isMuted}
-              playsInline
-              loop
-              autoPlay
-              className="absolute inset-0 w-full h-full object-cover opacity-100"
-            />
-          ) : (
-            <iframe
-              src={videoDetails.embedUrl || undefined}
-              className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none scale-105"
-              frameBorder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-            />
-          )
-        ) : null}
+        {activeVideoUrl && (
+          <motion.video
+            id="hero-video"
+            ref={videoRef}
+            src={activeVideoUrl}
+            preload="metadata"
+            muted={isMuted}
+            playsInline
+            loop
+            autoPlay
+            onLoadedData={() => setIsVideoReady(true)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVideoReady ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectFit: "cover", filter: "contrast(1.1) brightness(0.9)", width: "100%", height: "100%" }}
+          />
+        )}
+
+        {/* Dark overlay for better text readability with no blur to keep the video clear and premium */}
+        <div className="absolute inset-0 bg-slate-950/25 z-10 pointer-events-none" />
 
         {/* Subtle left gradient overlay only to ensure text legibility while keeping her video extremely clear and bright */}
-        <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-15 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent z-15 pointer-events-none" />
 
         {/* Cinematic Glowing Background blobs constantly active underneath the video */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-5">
           <div className="absolute top-[15%] left-[5%] w-[35rem] h-[35rem] rounded-full bg-blue-600/5 blur-[130px]" />
           <div className="absolute bottom-[15%] right-[5%] w-[40rem] h-[40rem] rounded-full bg-blue-800/5 blur-[150px]" />
         </div>
 
         {/* Grid Overlay with a subtle blue glow feel */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.005)_1px,transparent_1px)] bg-[size:42px_42px] opacity-10 z-10 pointer-events-none" />
-      </motion.div>
+      </div>
 
       {/* 2. Floating Unmute Action Notification */}
       {isMuted && showVolumePrompt && (
