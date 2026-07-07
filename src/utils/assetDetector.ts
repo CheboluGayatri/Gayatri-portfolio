@@ -145,14 +145,31 @@ export const getLocalVideoUrl = () => {
 };
 
 // Low latency file validity checker
-async function fileExists(url: string): Promise<boolean> {
+async function fileExists(url: string, expectedMimePrefix?: string): Promise<boolean> {
   try {
-    const response = await fetch(url, { method: "HEAD" });
-    if (!response.ok) return false;
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.toLowerCase().includes("text/html")) {
+    if (!url || url.trim() === "" || url === "#") {
       return false;
     }
+    const response = await fetch(url, { method: "HEAD" });
+    if (!response.ok) return false;
+    if (response.status !== 200) return false;
+    
+    const contentType = response.headers.get("content-type");
+    if (!contentType) {
+      // In a single-page app host like Vercel, if the content-type is missing on a HEAD request,
+      // it's highly likely to be a fallback route for a non-existent file. Returning false is safest.
+      return false;
+    }
+    
+    const lowerContentType = contentType.toLowerCase();
+    if (lowerContentType.includes("text/html") || lowerContentType.includes("application/xhtml+xml")) {
+      return false;
+    }
+    
+    if (expectedMimePrefix && !lowerContentType.includes(expectedMimePrefix.toLowerCase())) {
+      return false;
+    }
+    
     return true;
   } catch (error) {
     return false;
@@ -200,28 +217,14 @@ export function useAssetDetection() {
       
       try {
         const resumeOptions = ["/resume.pdf", "/assets/resume.pdf", "resume.pdf"];
-        const profileOptions = ["/profile.jpg", "/profile.png", "/my_image.jpeg", "/profile.jpeg"];
-        const videoOptions = ["/video.mp4.mp4", "/video.mp4", "/video.mov"];
         
-        const [resumeResults, profileResults, videoResults] = await Promise.all([
-          Promise.all(resumeOptions.map(opt => fileExists(opt).catch(() => false))),
-          Promise.all(profileOptions.map(opt => fileExists(opt).catch(() => false))),
-          Promise.all(videoOptions.map(opt => fileExists(opt).catch(() => false)))
-        ]);
+        const resumeResults = await Promise.all(
+          resumeOptions.map(opt => fileExists(opt, "application/pdf").catch(() => false))
+        );
         
         const firstResumeIdx = resumeResults.indexOf(true);
         if (firstResumeIdx !== -1) {
           resolvedResume = resumeOptions[firstResumeIdx];
-        }
-        
-        const firstProfileIdx = profileResults.indexOf(true);
-        if (firstProfileIdx !== -1) {
-          resolvedProfile = profileOptions[firstProfileIdx];
-        }
-        
-        const firstVideoIdx = videoResults.indexOf(true);
-        if (firstVideoIdx !== -1) {
-          resolvedVideo = videoOptions[firstVideoIdx];
         }
       } catch (err) {
         console.warn("Could not check local assets paths:", err);
