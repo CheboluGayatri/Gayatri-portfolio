@@ -98,7 +98,7 @@ export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vime
 //    and rename it to contain "video" (e.g. "vocal_video.mp4"). The code will automatically load it!
 export const FALLBACK_ASSETS = {
   profileUrl: defaultProfile,
-  videoUrl: "https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c054273b9e4a3ecee03028fbcc7e7252&profile_id=165&oauth2_token_id=57447761", // Premium dark grid coding b-roll
+  videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-stream-of-binary-code-32865-large.mp4", // Reliable high-quality binary coding stream
   resumeUrl: "#print", // Fallback trigger for print view
 };
 
@@ -112,7 +112,7 @@ export const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
   "AI Quiz Generator": [thinkChampQuizScreenshot, thinkChampGenScreenshot],
   "Movie-versa": [movieVerseScreenshot],
   "Travel-Tales": [travelTalesScreenshot],
-  "AI Health Symptom Checker": [symptomCheckerScreenshot]
+  "AI Health Symptom Checker": ["https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800"] // Professional medical dashboard to prevent duplicate AI person pictures
 };
 
 // Vite build-time assets glob discovery mapping - restricted to specific types to prevent FS watcher issues with Windows locks
@@ -205,6 +205,13 @@ export function useAssetDetection() {
 
   useEffect(() => {
     let active = true;
+
+    // Clean up stale or broken Vimeo URLs from local storage to ensure the new working fallback loads
+    const storedVid = localStorage.getItem("custom_video_url");
+    if (storedVid && (storedVid.includes("371433846") || storedVid.includes("vimeo") || storedVid.includes("external"))) {
+      localStorage.removeItem("custom_video_url");
+      setAssets(prev => ({ ...prev, videoUrl: FALLBACK_ASSETS.videoUrl }));
+    }
 
     async function scan() {
       // 1. Check IndexedDB first for user-uploaded custom pictures or videos (from UI settings)

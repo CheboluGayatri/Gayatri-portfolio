@@ -278,14 +278,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       className="relative min-h-[92vh] xl:min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden bg-slate-950"
     >
       {/* 1. Cinematic Autoplay Fullscreen Background Video & Soundtrack */}
-      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+      <div 
+        className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920')" }}
+      >
         {/* Background Video element (HD clearly visible format) */}
         {activeVideoUrl ? (
           videoDetails.type === "direct" ? (
             <video
               ref={videoRef}
               src={activeVideoUrl || undefined}
-              poster={assets.profileUrl || undefined}
+              poster="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920"
               preload="auto"
               muted={isMuted}
               playsInline
