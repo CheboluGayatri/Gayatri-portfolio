@@ -307,6 +307,18 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       <div 
         className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950"
       >
+        {/* Dynamic Background Poster image fallback while video loads */}
+        {activeProfileUrl && (
+          <div 
+            className="absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 z-1 pointer-events-none"
+            style={{ 
+              backgroundImage: `url(${activeProfileUrl})`, 
+              opacity: isVideoReady ? 0.08 : 0.45,
+              filter: "blur(6px) brightness(0.65)"
+            }}
+          />
+        )}
+
         {/* Background Video element (HD clearly visible format) */}
         {activeVideoUrl && (
           <motion.video
