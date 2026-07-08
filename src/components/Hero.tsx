@@ -53,16 +53,14 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     setResolvedProfileUrl(initialProfileUrl);
   }, [initialVideoUrl, initialProfileUrl]);
 
-  // Robust client-side validation: if custom image fails to load, fallback to default profile pic
+  // Robust client-side validation: if custom image fails to load, fallback to local default profile pic
   useEffect(() => {
     if (!resolvedProfileUrl) return;
     const img = new Image();
     img.src = resolvedProfileUrl;
     img.onerror = () => {
       console.warn("Hero poster image failed to load, falling back to local default image.");
-      const fallback = typeof FALLBACK_ASSETS.profileUrl === "string" 
-        ? FALLBACK_ASSETS.profileUrl 
-        : (FALLBACK_ASSETS.profileUrl as any)?.default || (FALLBACK_ASSETS.profileUrl as any)?.src || "";
+      const fallback = FALLBACK_ASSETS.localProfileUrl || "";
       if (resolvedProfileUrl !== fallback) {
         setResolvedProfileUrl(fallback);
       }
@@ -71,9 +69,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
   const handleVideoError = () => {
     console.warn("Hero background video failed to load, falling back to local default video.");
-    const fallback = typeof FALLBACK_ASSETS.videoUrl === "string" 
-      ? FALLBACK_ASSETS.videoUrl 
-      : (FALLBACK_ASSETS.videoUrl as any)?.default || (FALLBACK_ASSETS.videoUrl as any)?.src || "";
+    const fallback = FALLBACK_ASSETS.localVideoUrl || "";
     if (resolvedVideoUrl !== fallback) {
       setResolvedVideoUrl(fallback);
     }
@@ -325,11 +321,11 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         {/* Dynamic Background Poster image fallback while video loads */}
         {resolvedProfileUrl && (
           <div 
-            className="absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 z-1 pointer-events-none"
+            className="absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-700 z-1 pointer-events-none"
             style={{ 
               backgroundImage: `url(${resolvedProfileUrl})`, 
-              opacity: isVideoReady ? 0.08 : 0.45,
-              filter: "blur(6px) brightness(0.65)"
+              opacity: isVideoReady ? 0.12 : 0.85,
+              filter: "brightness(1.0) contrast(1.0)"
             }}
           />
         )}
@@ -351,19 +347,19 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             onCanPlay={() => setIsVideoReady(true)}
             onError={handleVideoError}
             initial={{ opacity: 0 }}
-            animate={{ opacity: isVideoReady ? 1 : 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectFit: "cover", filter: "contrast(1.1) brightness(0.9)", width: "100%", height: "100%" }}
+            animate={{ opacity: isVideoReady ? 1 : 0.6 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+            style={{ objectFit: "cover", filter: "brightness(1.05) contrast(1.05)", width: "100%", height: "100%" }}
           />
         )}
 
-        {/* Dark overlay for better text readability with no blur to keep the video clear and premium */}
-        <div className="absolute inset-0 bg-slate-950/20 md:bg-slate-950/25 z-10 pointer-events-none" />
+        {/* Crisp subtle overlay to keep text extremely readable without darkening the background video */}
+        <div className="absolute inset-0 bg-slate-950/10 md:bg-slate-950/15 z-10 pointer-events-none" />
 
-        {/* Subtle left gradient overlay only to ensure text legibility while keeping her video extremely clear and bright */}
-        <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-15 pointer-events-none opacity-40 md:opacity-100" />
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent z-15 pointer-events-none" />
+        {/* Elegant side gradients for text contrast while keeping Gayatri's video bright and fully visible */}
+        <div className="absolute inset-y-0 left-0 w-full md:w-3/5 bg-gradient-to-r from-slate-950/70 via-slate-950/20 to-transparent z-15 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#030712] via-transparent to-transparent z-15 pointer-events-none" />
 
         {/* Cinematic Glowing Background blobs constantly active underneath the video */}
         <div className="absolute inset-0 z-5">

@@ -101,13 +101,9 @@ export function getDirectDriveUrl(url: string | null | undefined): string | null
   if (match && match[1]) {
     const fileId = match[1];
     
-    // For images (like profile.jpg), lh3.googleusercontent.com/d/ID is incredibly fast, bypassing CORS and download warning prompts.
-    if (fileId === "1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz" || trimmed.toLowerCase().includes("profile") || trimmed.toLowerCase().includes(".jpg") || trimmed.toLowerCase().includes(".png") || trimmed.toLowerCase().includes(".jpeg")) {
-      return `https://lh3.googleusercontent.com/d/${fileId}`;
-    }
-    
-    // For large files/videos, direct download format is best
-    return `https://docs.google.com/uc?export=download&id=${fileId}`;
+    // Using lh3.googleusercontent.com/d/ID is incredibly fast, bypassing CORS, anti-abuse warnings, and download warning prompts.
+    // It works perfectly for both high-resolution profile pictures and high-definition background videos!
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
   return trimmed;
 }
@@ -115,7 +111,9 @@ export function getDirectDriveUrl(url: string | null | undefined): string | null
 // Fallback high-quality design assets if local files are missing
 export const FALLBACK_ASSETS = {
   profileUrl: "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz",
-  videoUrl: "https://docs.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj",
+  videoUrl: "https://lh3.googleusercontent.com/d/1aT36BBrCKUY1pEPm1d0sFljNucPviRTj",
+  localProfileUrl: defaultProfile,
+  localVideoUrl: defaultVideo,
   resumeUrl: "#print", // Fallback trigger for print view
 };
 
@@ -143,7 +141,7 @@ export const getLocalProfileImage = () => {
 
 export const getLocalVideoUrl = () => {
   // Prioritize Gayatri's direct high-speed Google Drive video URL
-  return "https://docs.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj";
+  return "https://lh3.googleusercontent.com/d/1aT36BBrCKUY1pEPm1d0sFljNucPviRTj";
 };
 
 // Sanitize and validate URL inputs

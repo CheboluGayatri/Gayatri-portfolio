@@ -116,17 +116,16 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
                 <motion.img
                   initial={{ opacity: 0 }}
                   animate={{ opacity: isImageLoaded ? 1 : 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   src={profileImage || undefined}
                   alt="Gayatri Chebolu Portrait"
                   onError={handleImageError}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 duration-700 transition-transform brightness-[0.9] contrast-[1.05]"
+                  className="w-full h-full object-cover group-hover:scale-105 duration-700 transition-transform brightness-100 contrast-100"
                 />
                 
-                {/* Tech scanline / glass reflection sheen */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/40 via-transparent to-white/[0.03] pointer-events-none z-20" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none z-20" />
+                {/* Tech glass reflection sheen (very subtle and clean, no heavy dimming overlays) */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-white/[0.05] pointer-events-none z-20" />
               </div>
             </div>
           </motion.div>
