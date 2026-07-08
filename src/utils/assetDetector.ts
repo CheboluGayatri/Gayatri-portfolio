@@ -95,11 +95,11 @@ export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vime
 // 💡 VS CODE TIP FOR YOUR PORTFOLIO:
 // 1. To set your profile photo permanently, place your image inside the folder "/src/assets/images/" 
 //    and rename it to contain "profile" (e.g. "profile.jpg"), OR replace the asset imported at the top.
-// 2. To set your vocal video permanently, place your video (.mp4) inside "/src/assets/images/" 
+// 2. To set your vocal video permanently, place your video (.mp4) inside "/src/assets/videos/" 
 //    and rename it to contain "video" (e.g. "vocal_video.mp4"). The code will automatically load it!
 export const FALLBACK_ASSETS = {
-  profileUrl: "https://github.com/CheboluGayatri.png",
-  videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-futuristic-technology-background-loop-42289-large.mp4",
+  profileUrl: defaultProfile,
+  videoUrl: defaultVideo,
   resumeUrl: "#print", // Fallback trigger for print view
 };
 
@@ -118,7 +118,7 @@ export const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
 
 // Vite build-time assets glob discovery mapping - restricted to specific types to prevent FS watcher issues with Windows locks
 const localImages = import.meta.glob('../assets/images/*.{jpg,jpeg,png,webp,svg,JPG,JPEG,PNG,WEBP,SVG}', { eager: true, import: 'default' }) as Record<string, string>;
-const localVideos = import.meta.glob('../assets/images/*.{mp4,mov,MP4,MOV}', { eager: true, import: 'default' }) as Record<string, string>;
+const localVideos = import.meta.glob('../assets/videos/*.{mp4,mov,MP4,MOV}', { eager: true, import: 'default' }) as Record<string, string>;
 
 export const getLocalProfileImage = () => {
   const keys = Object.keys(localImages);
@@ -132,22 +132,22 @@ export const getLocalProfileImage = () => {
   if (foundKey) {
     return localImages[foundKey];
   }
-  return null;
+  return defaultProfile;
 };
 
 export const getLocalVideoUrl = () => {
   const keys = Object.keys(localVideos);
-  // Matches file names containing 'video' (e.g. video.mp4, video.mp4.mp4, profile_video.mp4)
+  // Matches file names containing 'video' or 'home'
   const foundKey = keys.find(key => {
     const lower = key.toLowerCase();
     const parts = lower.split('/');
     const filename = parts[parts.length - 1];
-    return filename.includes('video');
+    return filename.includes('video') || filename.includes('home');
   });
   if (foundKey) {
     return localVideos[foundKey];
   }
-  return null;
+  return defaultVideo;
 };
 
 // Sanitize and validate URL inputs

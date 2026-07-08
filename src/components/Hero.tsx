@@ -17,6 +17,13 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const assets = useAssetDetection();
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVideoReady, setIsVideoReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVideoReady(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
   
   // 💡 VS CODE TIP: To make the video voice play out loud automatically by default in your local setup,
   // change the initial state below from `true` to `false`.
@@ -48,52 +55,69 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   // Resolve embed details if using YouTube/Vimeo
   const videoDetails = getEmbedVideoUrl(activeVideoUrl);
 
-  // Sync video audio/playback state
+  // Sync video audio/playback state safely
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = isMuted;
-      if (isPlaying) {
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch((err) => {
-            console.log("Unmuted video autoplay restricted by browser policies. Falling back to muted playback.", err);
-            // ONLY fallback to auto-muted loop if user hasn't active-interacted with the layout yet
-            if (!hasInteractedRef.current) {
-              setIsAutoplayBlocked(true);
-              setIsMuted(true); // Sync state so unmute prompt shows
-              if (videoRef.current) {
-                videoRef.current.muted = true;
-                videoRef.current.play().catch(e => console.log("Muted autoplay fallback failed too:", e));
-              }
-            } else {
-              console.log("User has active engagement, bypassing programmatic muted fallback.");
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Directly set muted property
+    video.muted = isMuted;
+
+    let isSubscribed = true;
+
+    const playVideo = async () => {
+      try {
+        if (isPlaying) {
+          if (video.paused) {
+            // Wait until the video has enough data to start playing safely
+            if (video.readyState < 2) {
+              await new Promise<void>((resolve) => {
+                const handleCanPlay = () => {
+                  video.removeEventListener("canplay", handleCanPlay);
+                  resolve();
+                };
+                video.addEventListener("canplay", handleCanPlay);
+              });
             }
-          });
+            if (isSubscribed) {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                await playPromise;
+              }
+            }
+          }
+        } else {
+          if (!video.paused) {
+            video.pause();
+          }
         }
-      } else {
-        videoRef.current.pause();
+      } catch (err: any) {
+        if (err.name !== "AbortError" && isSubscribed) {
+          console.warn("Video autoplay block:", err.message || err);
+          // Fallback to muted autoplay on block
+          if (!hasInteractedRef.current) {
+            setIsAutoplayBlocked(true);
+            setIsMuted(true);
+            video.muted = true;
+            if (video.paused) {
+              video.play().catch(() => {});
+            }
+          }
+        }
       }
-    }
+    };
+
+    playVideo();
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [isPlaying, isMuted, activeVideoUrl]);
 
-  // Handle smart general interaction detection to auto-unmute and play background video
+  // Handle first user gesture detection to mark interaction
   useEffect(() => {
     const handleFirstGesture = () => {
-      // Set interaction status permanently
       hasInteractedRef.current = true;
-      
-      // Upon the very first user interaction with the page, try to unmute/activate audio for Gayatri's voiced video
-      setIsMuted(false);
-      setIsAutoplayBlocked(false);
-
-      if (videoRef.current) {
-        videoRef.current.muted = false;
-        videoRef.current.volume = 1.0;
-        videoRef.current.play().catch((err) => {
-          console.log("Auto-unmute play gesture errored:", err);
-        });
-      }
-
       cleanup();
     };
 
@@ -289,12 +313,15 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             id="hero-video"
             ref={videoRef}
             src={activeVideoUrl}
-            preload="metadata"
-            muted={isMuted}
+            poster={activeProfileUrl}
+            preload="auto"
+            muted
             playsInline
             loop
             autoPlay
             onLoadedData={() => setIsVideoReady(true)}
+            onLoadedMetadata={() => setIsVideoReady(true)}
+            onCanPlay={() => setIsVideoReady(true)}
             initial={{ opacity: 0 }}
             animate={{ opacity: isVideoReady ? 1 : 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -402,6 +429,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           >
             <button
               onClick={() => onNavigate("projects")}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                onNavigate("projects");
+              }}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>View Projects</span>
@@ -410,6 +441,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
             <button
               onClick={() => onNavigate("contact")}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                onNavigate("contact");
+              }}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>Contact Me</span>
@@ -417,6 +452,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
             <button
               onClick={() => setIsResumeOpen(true)}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                setIsResumeOpen(true);
+              }}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>📄 Download Resume</span>
@@ -496,10 +535,14 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       </div>
 
       {/* Floating Scroll Down button indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity duration-300">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-auto">
         <button
           onClick={() => onNavigate("about")}
-          className="w-5 h-9 rounded-full border border-slate-700 p-1 flex justify-center cursor-pointer"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            onNavigate("about");
+          }}
+          className="w-5 h-9 rounded-full border border-slate-700 p-1 flex justify-center cursor-pointer z-30 pointer-events-auto"
           aria-label="Scroll to About section"
         >
           <div className="w-1 h-2 rounded-full bg-blue-400 animate-scroll" />

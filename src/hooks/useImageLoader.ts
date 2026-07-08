@@ -135,6 +135,15 @@ export function useImageLoader(
 
   const isLoaded = imagesLoaded && videosLoaded;
 
+  // Safety fallback: force load completion after 1200ms max to prevent any network/CDN lag from stalling the user
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setImagesLoaded(true);
+      setVideosLoaded(true);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return { isLoaded, imagesLoaded, videosLoaded };
 }
 
