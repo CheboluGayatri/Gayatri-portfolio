@@ -1,20 +1,139 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 🌐 Gayatri's AI Portfolio
 
-# Run and deploy your AI Studio app
+A modern, responsive, and interactive portfolio showcasing my journey as an **AI & Computer Science Graduate**. This portfolio highlights my projects, technical skills, internships, certifications, and passion for building intelligent AI-powered applications.
 
-This contains everything you need to run your app locally.
+## 🚀 Live Demo
 
-View your app in AI Studio: https://ai.studio/apps/79172c54-4617-473e-a470-eb9173ffc13a
+**🔗 Portfolio:** https://gayatri-portfolio-flax.vercel.app/
 
-## Run Locally
+---
 
-**Prerequisites:**  Node.js
+## ✨ Features
 
+* 🎨 Modern and responsive design
+* 🌌 Animated hero background
+* 📱 Fully mobile-friendly layout
+* 💻 Smooth animations and transitions
+* 📂 AI project showcase with live demos
+* 🛠️ Technical skills section
+* 🎓 Education, internships, and certifications
+* 📞 Contact section with social links
+* ⚡ Fast deployment using Vercel
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+---
+
+## 🛠️ Built With
+
+### Frontend
+
+* React
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+* Vite
+
+### Development Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+
+---
+
+## 🤖 AI-Assisted Development
+
+This portfolio was developed with the help of modern AI tools to improve productivity, design quality, and development speed.
+
+| Tool               | Purpose                                                                                        |
+| ------------------ | ---------------------------------------------------------------------------------------------- |
+| Google Flow        | Created the cinematic animated background video                                                |
+| ChatGPT            | Generated and refined images, content, UI ideas, code assistance, debugging, and documentation |
+| Visual Studio Code | Development environment                                                                        |
+| Vercel             | Deployment and hosting                                                                         |
+
+> **Note:** The project architecture, customization, integration, testing, and deployment were completed by me, while AI tools were used as development assistants throughout the process.
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+├── components/
+├── sections/
+├── assets/
+├── hooks/
+├── lib/
+├── styles/
+├── App.tsx
+└── main.tsx
+
+public/
+```
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/yourusername/gayatri-portfolio.git
+
+cd gayatri-portfolio
+
+npm install
+
+npm run dev
+```
+
+---
+
+## 📦 Build
+
+```bash
+npm run build
+```
+
+---
+
+## 🚀 Deployment
+
+This portfolio is deployed on **Vercel** for fast, reliable, and seamless hosting.
+
+---
+
+## 📸 Media Credits
+
+* 🎥 Animated background video created using **Google Flow**
+* 🖼️ Images generated and enhanced using **ChatGPT**
+* 💻 Code developed with **Visual Studio Code** using AI-assisted development
+* ☁️ Hosted on **Vercel**
+
+---
+
+## 📬 Connect With Me
+
+* LinkedIn
+* GitHub
+* Portfolio Website
+* Email
+
+---
+
+## ⭐ Acknowledgements
+
+Special thanks to the AI-powered tools that accelerated the development process while allowing me to focus on design, implementation, and problem-solving.
+
+* Google Flow
+* ChatGPT
+* React
+* Tailwind CSS
+* Framer Motion
+* Vercel
+
+---
+
+## 📄 License
+
+This project is intended for educational and portfolio purposes.
+
+© 2026 Gayatri. All Rights Reserved.
