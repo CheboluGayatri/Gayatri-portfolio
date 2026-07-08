@@ -17,13 +17,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const assets = useAssetDetection();
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVideoReady, setIsVideoReady] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVideoReady(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
   
   // 💡 VS CODE TIP: To make the video voice play out loud automatically by default in your local setup,
   // change the initial state below from `true` to `false`.
@@ -49,11 +42,45 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
   const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl;
 
-  const activeVideoUrl = typeof activeVideoRaw === "string" ? activeVideoRaw : (activeVideoRaw as any)?.default || (activeVideoRaw as any)?.src || "";
-  const activeProfileUrl = typeof activeProfileRaw === "string" ? activeProfileRaw : (activeProfileRaw as any)?.default || (activeProfileRaw as any)?.src || "";
+  const initialVideoUrl = typeof activeVideoRaw === "string" ? activeVideoRaw : (activeVideoRaw as any)?.default || (activeVideoRaw as any)?.src || "";
+  const initialProfileUrl = typeof activeProfileRaw === "string" ? activeProfileRaw : (activeProfileRaw as any)?.default || (activeProfileRaw as any)?.src || "";
+
+  const [resolvedVideoUrl, setResolvedVideoUrl] = useState(initialVideoUrl);
+  const [resolvedProfileUrl, setResolvedProfileUrl] = useState(initialProfileUrl);
+
+  useEffect(() => {
+    setResolvedVideoUrl(initialVideoUrl);
+    setResolvedProfileUrl(initialProfileUrl);
+  }, [initialVideoUrl, initialProfileUrl]);
+
+  // Robust client-side validation: if custom image fails to load, fallback to default profile pic
+  useEffect(() => {
+    if (!resolvedProfileUrl) return;
+    const img = new Image();
+    img.src = resolvedProfileUrl;
+    img.onerror = () => {
+      console.warn("Hero poster image failed to load, falling back to local default image.");
+      const fallback = typeof FALLBACK_ASSETS.profileUrl === "string" 
+        ? FALLBACK_ASSETS.profileUrl 
+        : (FALLBACK_ASSETS.profileUrl as any)?.default || (FALLBACK_ASSETS.profileUrl as any)?.src || "";
+      if (resolvedProfileUrl !== fallback) {
+        setResolvedProfileUrl(fallback);
+      }
+    };
+  }, [resolvedProfileUrl]);
+
+  const handleVideoError = () => {
+    console.warn("Hero background video failed to load, falling back to local default video.");
+    const fallback = typeof FALLBACK_ASSETS.videoUrl === "string" 
+      ? FALLBACK_ASSETS.videoUrl 
+      : (FALLBACK_ASSETS.videoUrl as any)?.default || (FALLBACK_ASSETS.videoUrl as any)?.src || "";
+    if (resolvedVideoUrl !== fallback) {
+      setResolvedVideoUrl(fallback);
+    }
+  };
   
   // Resolve embed details if using YouTube/Vimeo
-  const videoDetails = getEmbedVideoUrl(activeVideoUrl);
+  const videoDetails = getEmbedVideoUrl(resolvedVideoUrl);
 
   // Sync video audio/playback state safely
   useEffect(() => {
@@ -68,22 +95,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     const playVideo = async () => {
       try {
         if (isPlaying) {
-          if (video.paused) {
-            // Wait until the video has enough data to start playing safely
-            if (video.readyState < 2) {
-              await new Promise<void>((resolve) => {
-                const handleCanPlay = () => {
-                  video.removeEventListener("canplay", handleCanPlay);
-                  resolve();
-                };
-                video.addEventListener("canplay", handleCanPlay);
-              });
-            }
-            if (isSubscribed) {
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                await playPromise;
-              }
+          if (video.paused && isSubscribed) {
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              await playPromise;
             }
           }
         } else {
@@ -112,7 +127,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     return () => {
       isSubscribed = false;
     };
-  }, [isPlaying, isMuted, activeVideoUrl]);
+  }, [isPlaying, isMuted, resolvedVideoUrl]);
 
   // Handle first user gesture detection to mark interaction
   useEffect(() => {
@@ -308,11 +323,11 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950"
       >
         {/* Dynamic Background Poster image fallback while video loads */}
-        {activeProfileUrl && (
+        {resolvedProfileUrl && (
           <div 
             className="absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-1000 z-1 pointer-events-none"
             style={{ 
-              backgroundImage: `url(${activeProfileUrl})`, 
+              backgroundImage: `url(${resolvedProfileUrl})`, 
               opacity: isVideoReady ? 0.08 : 0.45,
               filter: "blur(6px) brightness(0.65)"
             }}
@@ -320,12 +335,12 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         )}
 
         {/* Background Video element (HD clearly visible format) */}
-        {activeVideoUrl && (
+        {resolvedVideoUrl && (
           <motion.video
             id="hero-video"
             ref={videoRef}
-            src={activeVideoUrl}
-            poster={activeProfileUrl}
+            src={resolvedVideoUrl}
+            poster={resolvedProfileUrl}
             preload="auto"
             muted
             playsInline
@@ -334,6 +349,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             onLoadedData={() => setIsVideoReady(true)}
             onLoadedMetadata={() => setIsVideoReady(true)}
             onCanPlay={() => setIsVideoReady(true)}
+            onError={handleVideoError}
             initial={{ opacity: 0 }}
             animate={{ opacity: isVideoReady ? 1 : 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -343,10 +359,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         )}
 
         {/* Dark overlay for better text readability with no blur to keep the video clear and premium */}
-        <div className="absolute inset-0 bg-slate-950/25 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-slate-950/20 md:bg-slate-950/25 z-10 pointer-events-none" />
 
         {/* Subtle left gradient overlay only to ensure text legibility while keeping her video extremely clear and bright */}
-        <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-15 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-full md:w-3/4 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent z-15 pointer-events-none opacity-40 md:opacity-100" />
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent z-15 pointer-events-none" />
 
         {/* Cinematic Glowing Background blobs constantly active underneath the video */}
@@ -441,10 +457,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           >
             <button
               onClick={() => onNavigate("projects")}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                onNavigate("projects");
-              }}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>View Projects</span>
@@ -453,10 +465,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
             <button
               onClick={() => onNavigate("contact")}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                onNavigate("contact");
-              }}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>Contact Me</span>
@@ -464,10 +472,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
             <button
               onClick={() => setIsResumeOpen(true)}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                setIsResumeOpen(true);
-              }}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
               <span>📄 Download Resume</span>
@@ -550,10 +554,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-auto">
         <button
           onClick={() => onNavigate("about")}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            onNavigate("about");
-          }}
           className="w-5 h-9 rounded-full border border-slate-700 p-1 flex justify-center cursor-pointer z-30 pointer-events-auto"
           aria-label="Scroll to About section"
         >

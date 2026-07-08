@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Code2, Database, Table, Cpu, Network, LineChart, Monitor, GitBranch, FileCode2, Bot, GraduationCap, Briefcase
 } from "lucide-react";
@@ -23,8 +23,24 @@ interface AboutProps {
 
 export default function About({ fullAbout, stats, location, email, phone, onNavigate }: AboutProps) {
   const assets = useAssetDetection();
-  const profileSrc = assets.profileUrl || defaultProfilePic;
-  const { isLoaded: isImageLoaded } = useImageLoader([profileSrc]);
+  
+  const rawProfileSrc = assets.profileUrl || defaultProfilePic;
+
+  const [profileImage, setProfileImage] = useState(rawProfileSrc);
+
+  useEffect(() => {
+    setProfileImage(rawProfileSrc);
+  }, [rawProfileSrc]);
+
+  // Handle broken images gracefully: fall back to pre-packaged local profile image
+  const handleImageError = () => {
+    console.warn("About section profile image failed to load, falling back to local default.");
+    if (profileImage !== defaultProfilePic) {
+      setProfileImage(defaultProfilePic);
+    }
+  };
+
+  const { isLoaded: isImageLoaded } = useImageLoader([profileImage]);
 
   const technologies = [
     { name: "Python", icon: <Code2 className="w-3.5 h-3.5 text-emerald-400" /> },
@@ -96,12 +112,14 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
                     <span className="text-[9px] font-mono text-blue-500/65 tracking-widest uppercase animate-pulse">Preloading...</span>
                   </div>
                 )}
+                
                 <motion.img
                   initial={{ opacity: 0 }}
                   animate={{ opacity: isImageLoaded ? 1 : 0 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  src={profileSrc || undefined}
+                  src={profileImage || undefined}
                   alt="Gayatri Chebolu Portrait"
+                  onError={handleImageError}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover group-hover:scale-105 duration-700 transition-transform brightness-[0.9] contrast-[1.05]"
                 />

@@ -34,8 +34,7 @@ export default function App() {
     const element = document.getElementById(id);
     if (element) {
       const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
+      const offsetPosition = element.offsetTop - offset;
       try {
         window.scrollTo({
           top: offsetPosition,

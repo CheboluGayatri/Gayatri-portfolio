@@ -91,15 +91,31 @@ export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vime
   return { type: "direct", embedUrl: urlStr };
 }
 
+export function getDirectDriveUrl(url: string | null | undefined): string | null {
+  if (!url || typeof url !== "string") return url || null;
+  const trimmed = url.trim();
+  
+  // Extract file ID from standard Google Drive share links
+  const driveRegex = /(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:file\/d\/|open\?id=))([a-zA-Z0-9_-]+)/i;
+  const match = trimmed.match(driveRegex);
+  if (match && match[1]) {
+    const fileId = match[1];
+    
+    // For images (like profile.jpg), lh3.googleusercontent.com/d/ID is incredibly fast, bypassing CORS and download warning prompts.
+    if (fileId === "1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz" || trimmed.toLowerCase().includes("profile") || trimmed.toLowerCase().includes(".jpg") || trimmed.toLowerCase().includes(".png") || trimmed.toLowerCase().includes(".jpeg")) {
+      return `https://lh3.googleusercontent.com/d/${fileId}`;
+    }
+    
+    // For large files/videos, direct download format is best
+    return `https://docs.google.com/uc?export=download&id=${fileId}`;
+  }
+  return trimmed;
+}
+
 // Fallback high-quality design assets if local files are missing
-// 💡 VS CODE TIP FOR YOUR PORTFOLIO:
-// 1. To set your profile photo permanently, place your image inside the folder "/src/assets/images/" 
-//    and rename it to contain "profile" (e.g. "profile.jpg"), OR replace the asset imported at the top.
-// 2. To set your vocal video permanently, place your video (.mp4) inside "/src/assets/videos/" 
-//    and rename it to contain "video" (e.g. "vocal_video.mp4"). The code will automatically load it!
 export const FALLBACK_ASSETS = {
-  profileUrl: defaultProfile,
-  videoUrl: defaultVideo,
+  profileUrl: "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz",
+  videoUrl: "https://docs.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj",
   resumeUrl: "#print", // Fallback trigger for print view
 };
 
@@ -121,33 +137,13 @@ const localImages = import.meta.glob('../assets/images/*.{jpg,jpeg,png,webp,svg,
 const localVideos = import.meta.glob('../assets/videos/*.{mp4,mov,MP4,MOV}', { eager: true, import: 'default' }) as Record<string, string>;
 
 export const getLocalProfileImage = () => {
-  const keys = Object.keys(localImages);
-  // Matches file names containing 'profile' (e.g. profile.jpg, profile_pic.jpg, profile.jpg.png)
-  const foundKey = keys.find(key => {
-    const lower = key.toLowerCase();
-    const parts = lower.split('/');
-    const filename = parts[parts.length - 1];
-    return filename.includes('profile');
-  });
-  if (foundKey) {
-    return localImages[foundKey];
-  }
-  return defaultProfile;
+  // Prioritize Gayatri's direct high-speed Google Drive image URL
+  return "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz";
 };
 
 export const getLocalVideoUrl = () => {
-  const keys = Object.keys(localVideos);
-  // Matches file names containing 'video' or 'home'
-  const foundKey = keys.find(key => {
-    const lower = key.toLowerCase();
-    const parts = lower.split('/');
-    const filename = parts[parts.length - 1];
-    return filename.includes('video') || filename.includes('home');
-  });
-  if (foundKey) {
-    return localVideos[foundKey];
-  }
-  return defaultVideo;
+  // Prioritize Gayatri's direct high-speed Google Drive video URL
+  return "https://docs.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj";
 };
 
 // Sanitize and validate URL inputs
@@ -196,8 +192,8 @@ async function fileExists(url: string, expectedMimePrefix?: string): Promise<boo
 
 export function useAssetDetection() {
   const [assets, setAssets] = useState<DetectedAssets>({
-    profileUrl: sanitizeUrl(localStorage.getItem("custom_profile_url")) || getLocalProfileImage() || FALLBACK_ASSETS.profileUrl,
-    videoUrl: sanitizeUrl(localStorage.getItem("custom_video_url")) || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl,
+    profileUrl: getDirectDriveUrl(sanitizeUrl(localStorage.getItem("custom_profile_url")) || getLocalProfileImage() || FALLBACK_ASSETS.profileUrl),
+    videoUrl: getDirectDriveUrl(sanitizeUrl(localStorage.getItem("custom_video_url")) || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl),
     resumeUrl: null,
     projectScreenshots: STATIC_PROJECT_SCREENSHOTS,
     certificateImages: {},
@@ -262,8 +258,8 @@ export function useAssetDetection() {
 
       // 3. Update State with discovered custom IndexedDB media, static local assets, or local PDF.
       setAssets((prev) => {
-        const nextProfileUrl = pastedProfileUrl || customProfileBase64 || resolvedProfile || (prev.profileUrl && prev.profileUrl.length > 30 ? prev.profileUrl : null) || FALLBACK_ASSETS.profileUrl;
-        const nextVideoUrl = pastedVideoUrl || customVideoBase64 || resolvedVideo || (prev.videoUrl && prev.videoUrl.length > 30 ? prev.videoUrl : null) || FALLBACK_ASSETS.videoUrl;
+        const nextProfileUrl = getDirectDriveUrl(pastedProfileUrl || customProfileBase64 || resolvedProfile || prev.profileUrl || FALLBACK_ASSETS.profileUrl);
+        const nextVideoUrl = getDirectDriveUrl(pastedVideoUrl || customVideoBase64 || resolvedVideo || prev.videoUrl || FALLBACK_ASSETS.videoUrl);
         const nextResumeUrl = resolvedResume || prev.resumeUrl;
 
         if (

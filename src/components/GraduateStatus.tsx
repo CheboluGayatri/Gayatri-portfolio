@@ -134,10 +134,6 @@ export default function GraduateStatus({ onNavigate }: GraduateStatusProps) {
               {/* Router 1: Experience Timeline */}
               <button
                 onClick={() => onNavigate("experience")}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  onNavigate("experience");
-                }}
                 id="btn-switch-timeline"
                 className="w-full p-4 rounded-xl border border-blue-500/10 bg-[#070f20]/50 hover:bg-[#0c1630]/80 hover:border-blue-500/35 text-left transition-all duration-300 relative group/btn cursor-pointer overflow-hidden shadow-lg active:scale-[0.98]"
               >
@@ -171,10 +167,6 @@ export default function GraduateStatus({ onNavigate }: GraduateStatusProps) {
               {/* Router 2: Skills Matrix */}
               <button
                 onClick={() => onNavigate("skills")}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  onNavigate("skills");
-                }}
                 id="btn-switch-skills"
                 className="w-full p-4 rounded-xl border border-blue-500/10 bg-[#070f20]/50 hover:bg-[#0c1630]/80 hover:border-blue-500/35 text-left transition-all duration-300 relative group/btn cursor-pointer overflow-hidden shadow-lg active:scale-[0.98]"
               >
