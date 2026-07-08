@@ -90,43 +90,28 @@ export const GAYATRI_DATA = {
   ] as Education[],
   internships: [
     {
-      company: "3SKILL AI/ML Internship",
-      role: "Project: Wine Quality Prediction",
-      duration: "December 2025 – February 2026",
+      company: "Infosys Springboard",
+      role: "AI Intern – CodeGenie: AI Explainer and Code Generator",
+      duration: "Sep 2025 – Nov 2025",
       highlights: [
-        "Developed a machine learning model to predict wine quality using the Wine Quality dataset through comprehensive data preprocessing and feature engineering.",
-        "Trained and optimized a Random Forest classifier to improve prediction accuracy and evaluate model performance using standard machine learning metrics.",
-        "Performed exploratory data analysis (EDA), handled data cleaning, and selected relevant features to enhance model reliability and generalization.",
-        "Implemented the complete machine learning pipeline using Python, Pandas, NumPy, Scikit-learn, and Matplotlib, from data preparation to model training and evaluation."
+        "Built a ChatGPT-style AI coding assistant using Python, Streamlit, and Ollama for offline code generation, debugging, explanation, and review.",
+        "Integrated OCR using Tesseract with pdfplumber and python-docx to analyze code from images, PDFs, and Word documents.",
+        "Designed prompt engineering workflows and deployed the application on Render with local LLM inference using Ollama."
       ],
-      skillsLearned: ["Python", "Pandas", "NumPy", "Scikit-learn", "Random Forest", "Matplotlib", "Jupyter Notebook"],
-      projectUrl: "https://github.com/CheboluGayatri/Wine-Quality"
-    },
-    {
-      company: "Infosys Springboard AI Internship",
-      role: "Project: CodeGen AI & AI Explainer",
-      duration: "September 2025 – November 2025",
-      highlights: [
-        "Developed a ChatGPT-style AI web application using Streamlit, providing an intuitive conversational interface for AI-powered code generation and explanations.",
-        "Integrated OCR (Optical Recognition) to extract text from uploaded images and process it with the Ollama Llama 2B large language model for intelligent responses.",
-        "Built features for code generation, code explanation, and programming query resolution through effective prompt engineering and local LLM integration.",
-        "Designed and deployed an end-to-end AI solution by integrating Streamlit, Python, OCR, Ollama (Llama 2B), and prompt engineering for a responsive and user-friendly experience."
-      ],
-      skillsLearned: ["Python", "Streamlit", "Ollama", "Llama 2B", "OCR", "Prompt Engineering"],
+      skillsLearned: ["Python", "Streamlit", "Ollama", "OCR", "Prompt Engineering"],
       projectUrl: "https://github.com/CheboluGayatri/CodeGenAiand_Explainer"
     },
     {
-      company: "Continuous Professional Upskilling",
-      role: "Self-Learning",
-      duration: "June 2026 – Present",
+      company: "3SKILL",
+      role: "AI/ML Intern – AI & Machine Intelligence Internship",
+      duration: "Dec 2025 – Feb 2026",
       highlights: [
-        "Continuously strengthening knowledge in Machine Learning and Artificial Intelligence.",
-        "Exploring Neural Networks, CNNs, Transformers, and LLM concepts.",
-        "Building projects using PyTorch, Scikit-learn, NumPy, Pandas, and Streamlit.",
-        "Studying Agentic AI systems, prompt engineering techniques, and modern AI workflows."
+        "Developed a Random Forest model for wine quality classification, achieving 87% prediction accuracy.",
+        "Performed data preprocessing, exploratory data analysis, feature engineering, and model evaluation.",
+        "Built and deployed an interactive Streamlit application for real-time wine quality prediction."
       ],
-      skillsLearned: ["Neural Networks", "PyTorch", "Scikit-learn", "NumPy", "Pandas", "Streamlit", "Agentic AI"],
-      projectUrl: "https://github.com/CheboluGayatri/AI_ML"
+      skillsLearned: ["Python", "Pandas", "NumPy", "Scikit-learn", "Random Forest", "Matplotlib", "Jupyter Notebook"],
+      projectUrl: "https://github.com/CheboluGayatri/Wine-Quality"
     }
   ] as Internship[],
   projects: [
@@ -280,46 +265,8 @@ export const GAYATRI_DATA = {
       qrCodeText: "IIIT Hyderabad FMML - Grade A - Gayatri Chebolu"
     },
     {
-      name: "Edunet-Artificial Intelligence",
-      issuer: "IBM SkillsBuild (Edunet Foundation)",
-      date: "17 Dec 2025",
-      iconType: "ai",
-      type: "course",
-      verificationId: "PLAN-8A48645196FA",
-      signature: "IBM SkillsBuild Team \u270d",
-      signeeTitle: "Education Lead, IBM & Edunet Partner",
-      skills: ["Artificial Intelligence", "Cognitive Workloads", "Machine Learning Foundations", "AI Applications"],
-      qrCodeText: "IBM SkillsBuild - PLAN-8A48645196FA - Gayatri Chebolu"
-    },
-    {
-      name: "GenAI Job Simulation",
-      issuer: "BCG X (Forage)",
-      date: "August 13th, 2025",
-      iconType: "genai",
-      type: "internship",
-      verificationId: "ooi7JDahHtGKnPhe3",
-      signature: "Tom Brunskill \u270d",
-      signeeTitle: "CEO & Co-Founder, Forage (BCG X)",
-      tasks: ["Data extraction and initial analysis", "Developing an AI-powered financial chatbot"],
-      skills: ["Generative AI Pipelines", "Chatbot Development", "Financial Analysis", "Large Language Models"],
-      qrCodeText: "Forage BCG X - ooi7JDahHtGKnPhe3 - Gayatri Chebolu"
-    },
-    {
-      name: "JobReady: Employability Skills",
-      issuer: "Wadhwani Foundation (Eduskills Foundation)",
-      date: "September 09, 2025",
-      grade: "Basic Level (79 Hours)",
-      iconType: "skills",
-      type: "course",
-      verificationId: "WF-BASIC-2025-09",
-      signature: "Ajay Kela ✍",
-      signeeTitle: "CEO, Wadhwani Foundation",
-      skills: ["Employability Skills", "79 Hours Training", "Professional Communications", "Teamwork & Collaboration"],
-      qrCodeText: "Wadhwani Foundation - JobReady Basic - Gayatri Chebolu"
-    },
-    {
       name: "Applied Artificial Intelligence: Practical Implementations",
-      issuer: "Microsoft & SAP (TechSaksham Program)",
+      issuer: "Microsoft | SAP | Edunet Foundation",
       date: "Year 2024-25",
       grade: "Achievement Certified",
       iconType: "ai",
@@ -330,46 +277,6 @@ export const GAYATRI_DATA = {
       signeeTitle: "CSR Team Lead, Microsoft & SAP Initiative",
       skills: ["Applied Artificial Intelligence", "Practical ML Implementations", "Cognitive Apps", "Cloud Integration"],
       qrCodeText: "TechSaksham Applied AI - TSPIN25_590292 - Gayatri Chebolu"
-    },
-    {
-      name: "Career Management Essentials",
-      issuer: "IBM SkillsBuild",
-      date: "Year 2025",
-      grade: "Certified Complete",
-      iconType: "skills",
-      type: "course",
-      verificationId: "IBM-CME-2025",
-      signature: "IBM Team ✍",
-      signeeTitle: "IBM SkillsBuild Learning Facilitator",
-      skills: ["Career Planning", "Professional Communication", "Employability Pathports"],
-      qrCodeText: "IBM SkillsBuild - Career Management Essentials - Gayatri Chebolu"
-    },
-    {
-      name: "Web Development with HTML, CSS, and JavaScript Internship",
-      issuer: "ApexPlanet Software Pvt. Ltd.",
-      date: "01 August, 2025 - 15 September, 2025",
-      grade: "High Distinction",
-      iconType: "web",
-      type: "internship",
-      verificationId: "APSPL2513808",
-      signature: "Kundan Kumar \u270d",
-      signeeTitle: "Founder & CEO, ApexPlanet Software Pvt. Ltd.",
-      skills: ["HTML5", "CSS3 Animation", "JavaScript ES6+", "Responsive UI", "Web Engineering"],
-      qrCodeText: "ApexPlanet Internship - APSPL2513808 - Gayatri Chebolu"
-    },
-    {
-      name: "AIMI Internship (Ai & Machine Learning)",
-      issuer: "3Skills India",
-      date: "December 2025 - February 2026",
-      grade: "Two-Month Complete",
-      iconType: "ml",
-      type: "internship",
-      verificationId: "INTERN260042",
-      verificationUrl: "https://drive.google.com/file/d/1VhMQzBz3jkgvswTlx3eonPn3M-UotHcg/view?usp=sharing",
-      signature: "S. Levin \u270d",
-      signeeTitle: "CEO, 3Skills India Program Board",
-      skills: ["Applied ML", "AIMI Interlink Applets", "Dataset Validation", "Predictive Classifiers"],
-      qrCodeText: "3Skills India - INTERN260042 - Gayatri Chebolu"
     },
     {
       name: "Internship 6.0 (B2) CodeGenie: AI Explainer and Code Generator",
@@ -384,6 +291,20 @@ export const GAYATRI_DATA = {
       signeeTitle: "Senior VP & Head, Education, Training & Assessment, Infosys",
       skills: ["CodeGenie AI Generator", "Ollama Integrations", "Mandatory RPA Workflows", "Prompt Engineering"],
       qrCodeText: "Infosys Springboard - CodeGenie 6.0 - Gayatri Chebolu"
+    },
+    {
+      name: "AI & Machine Intelligence Internship",
+      issuer: "3 SKILL",
+      date: "December 2025 - February 2026",
+      grade: "Two-Month Complete",
+      iconType: "ml",
+      type: "internship",
+      verificationId: "INTERN260042",
+      verificationUrl: "https://drive.google.com/file/d/1VhMQzBz3jkgvswTlx3eonPn3M-UotHcg/view?usp=sharing",
+      signature: "S. Levin \u270d",
+      signeeTitle: "CEO, 3Skills India Program Board",
+      skills: ["Applied ML", "AIMI Interlink Applets", "Dataset Validation", "Predictive Classifiers"],
+      qrCodeText: "3Skills India - INTERN260042 - Gayatri Chebolu"
     }
   ] as Certification[],
   skillsData: [

@@ -318,25 +318,12 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       <div 
         className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950"
       >
-        {/* Dynamic Background Poster image fallback while video loads */}
-        {resolvedProfileUrl && (
-          <div 
-            className="absolute inset-0 w-full h-full bg-cover bg-center transition-opacity duration-700 z-1 pointer-events-none"
-            style={{ 
-              backgroundImage: `url(${resolvedProfileUrl})`, 
-              opacity: isVideoReady ? 0.12 : 0.85,
-              filter: "brightness(1.0) contrast(1.0)"
-            }}
-          />
-        )}
-
         {/* Background Video element (HD clearly visible format) */}
         {resolvedVideoUrl && (
           <motion.video
             id="hero-video"
             ref={videoRef}
             src={resolvedVideoUrl}
-            poster={resolvedProfileUrl}
             preload="auto"
             muted
             playsInline
@@ -346,10 +333,9 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             onLoadedMetadata={() => setIsVideoReady(true)}
             onCanPlay={() => setIsVideoReady(true)}
             onError={handleVideoError}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVideoReady ? 1 : 0.6 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 w-full h-full object-cover"
             style={{ objectFit: "cover", filter: "brightness(1.05) contrast(1.05)", width: "100%", height: "100%" }}
           />
         )}
@@ -767,7 +753,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         )}
 
         {isResumeOpen && (
-          <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto no-print">
+          <div 
+            id="printable-resume-container"
+            className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+          >
             <motion.div
               initial={{ scale: 0.95, y: 15, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}

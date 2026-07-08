@@ -75,7 +75,7 @@ export default function Header({ githubUrl, linkedinUrl }: HeaderProps) {
     
     // Calculate stable scroll target offset
     const offset = 80;
-    const offsetPosition = element.offsetTop - offset;
+    const offsetPosition = window.scrollY + element.getBoundingClientRect().top - offset;
     
     // Small timeout to allow active mobile menu event loops to process, ensuring smooth scrolling triggers properly
     setTimeout(() => {
