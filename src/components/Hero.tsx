@@ -13,6 +13,19 @@ interface HeroProps {
   onNavigate: (id: string) => void;
 }
 
+// --- Default Media Assets ---
+// These are Gayatri's official default background video & profile photo.
+// Converted from Google Drive "share" links to direct-access links so the
+// browser can load them immediately as <video>/<img> sources instead of
+// hitting Drive's HTML preview page (which caused the black/blank delay).
+// This is used as the guaranteed final fallback layer, so the home page
+// background and profile photo always render instantly for every visitor,
+// even before local/custom asset detection finishes resolving.
+const DEFAULT_BACKGROUND_VIDEO_URL =
+  "https://drive.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj";
+const DEFAULT_PROFILE_IMAGE_URL =
+  "https://drive.google.com/uc?export=view&id=1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz";
+
 export default function Hero({ name, role, tagline, email, onNavigate }: HeroProps) {
   const assets = useAssetDetection();
   const [isPlaying, setIsPlaying] = useState(true);
@@ -38,9 +51,9 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const [uploadError, setUploadError] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
 
-  // Determine active video source (dynamic local or premium cloud tech b-roll fallback)
-  const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
-  const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl;
+  // Determine active video source (dynamic local/custom override -> bundled fallback -> guaranteed Drive default)
+  const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl || DEFAULT_BACKGROUND_VIDEO_URL;
+  const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl || DEFAULT_PROFILE_IMAGE_URL;
 
   const initialVideoUrl = typeof activeVideoRaw === "string" ? activeVideoRaw : (activeVideoRaw as any)?.default || (activeVideoRaw as any)?.src || "";
   const initialProfileUrl = typeof activeProfileRaw === "string" ? activeProfileRaw : (activeProfileRaw as any)?.default || (activeProfileRaw as any)?.src || "";
@@ -53,25 +66,46 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     setResolvedProfileUrl(initialProfileUrl);
   }, [initialVideoUrl, initialProfileUrl]);
 
+  // Seed site-wide defaults once: if no custom link has ever been saved, store our
+  // default Drive-based video/photo as the baseline so every section (Home, About, etc.)
+  // that reads these same localStorage keys resolves the exact same media instantly,
+  // with no first-load delay or blank state.
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem("custom_video_url")) {
+        localStorage.setItem("custom_video_url", DEFAULT_BACKGROUND_VIDEO_URL);
+      }
+      if (!localStorage.getItem("custom_profile_url")) {
+        localStorage.setItem("custom_profile_url", DEFAULT_PROFILE_IMAGE_URL);
+      }
+    } catch (err) {
+      console.warn("Could not seed default media URLs:", err);
+    }
+  }, []);
+
   // Robust client-side validation: if custom image fails to load, fallback to local default profile pic
   useEffect(() => {
     if (!resolvedProfileUrl) return;
     const img = new Image();
     img.src = resolvedProfileUrl;
     img.onerror = () => {
-      console.warn("Hero poster image failed to load, falling back to local default image.");
-      const fallback = FALLBACK_ASSETS.localProfileUrl || "";
+      console.warn("Hero profile image failed to load, falling back to local default, then Drive default.");
+      const fallback = FALLBACK_ASSETS.localProfileUrl || DEFAULT_PROFILE_IMAGE_URL;
       if (resolvedProfileUrl !== fallback) {
         setResolvedProfileUrl(fallback);
+      } else if (resolvedProfileUrl !== DEFAULT_PROFILE_IMAGE_URL) {
+        setResolvedProfileUrl(DEFAULT_PROFILE_IMAGE_URL);
       }
     };
   }, [resolvedProfileUrl]);
 
   const handleVideoError = () => {
-    console.warn("Hero background video failed to load, falling back to local default video.");
-    const fallback = FALLBACK_ASSETS.localVideoUrl || "";
+    console.warn("Hero background video failed to load, falling back to local default, then Drive default.");
+    const fallback = FALLBACK_ASSETS.localVideoUrl || DEFAULT_BACKGROUND_VIDEO_URL;
     if (resolvedVideoUrl !== fallback) {
       setResolvedVideoUrl(fallback);
+    } else if (resolvedVideoUrl !== DEFAULT_BACKGROUND_VIDEO_URL) {
+      setResolvedVideoUrl(DEFAULT_BACKGROUND_VIDEO_URL);
     }
   };
 
@@ -299,7 +333,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const handleResetVideo = async () => {
     try {
       await clearLocalMedia("custom_video");
-      localStorage.removeItem("custom_video_url");
+      localStorage.setItem("custom_video_url", DEFAULT_BACKGROUND_VIDEO_URL);
       setInfoMessage("Restoring Gayatri's default background video...");
       setTimeout(() => {
         window.location.reload();
@@ -312,7 +346,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const handleResetProfile = async () => {
     try {
       await clearLocalMedia("custom_profile");
-      localStorage.removeItem("custom_profile_url");
+      localStorage.setItem("custom_profile_url", DEFAULT_PROFILE_IMAGE_URL);
       setInfoMessage("Restoring default Gayatri profile photo...");
       setTimeout(() => {
         window.location.reload();
@@ -337,6 +371,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             id="hero-video"
             ref={videoRef}
             src={resolvedVideoUrl}
+            poster={resolvedProfileUrl || DEFAULT_PROFILE_IMAGE_URL}
             preload="auto"
             muted
             playsInline
