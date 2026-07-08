@@ -116,7 +116,7 @@ export function getDirectDriveUrl(url: string | null | undefined, isVideo = fals
 // Fallback high-quality design assets if local files are missing
 export const FALLBACK_ASSETS = {
   profileUrl: "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz",
-  videoUrl: "https://docs.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj",
+  videoUrl: defaultVideo,
   localProfileUrl: defaultProfile,
   localVideoUrl: defaultVideo,
   resumeUrl: "#print", // Fallback trigger for print view
@@ -145,8 +145,8 @@ export const getLocalProfileImage = () => {
 };
 
 export const getLocalVideoUrl = () => {
-  // Prioritize Gayatri's direct high-speed Google Drive video URL
-  return "https://docs.google.com/uc?export=download&id=1aT36BBrCKUY1pEPm1d0sFljNucPviRTj";
+  // Prioritize local bundled video for 100% reliable local/Vercel streaming (bypasses Google Drive range & CORS limits)
+  return defaultVideo;
 };
 
 // Sanitize and validate URL inputs

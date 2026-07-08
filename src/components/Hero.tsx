@@ -74,6 +74,19 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       setResolvedVideoUrl(fallback);
     }
   };
+
+  // Synchronize dynamic video loading and playback when the source URL changes
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.load();
+      if (isPlaying) {
+        video.play().catch((err) => {
+          console.warn("Autoplay of reloaded video was blocked:", err);
+        });
+      }
+    }
+  }, [resolvedVideoUrl]);
   
   // Resolve embed details if using YouTube/Vimeo
   const videoDetails = getEmbedVideoUrl(resolvedVideoUrl);
