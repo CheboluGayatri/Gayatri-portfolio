@@ -5,6 +5,9 @@ import { useAssetDetection, FALLBACK_ASSETS, getEmbedVideoUrl } from "../utils/a
 import { saveLocalMedia, clearLocalMedia } from "../utils/db";
 import { useImageLoader } from "../hooks/useImageLoader";
 
+import defaultProfile from "../assets/images/profile.jpg";
+import defaultVideo from "../assets/videos/home-video.mp4";
+
 interface HeroProps {
   name: string;
   role: string;
@@ -14,43 +17,20 @@ interface HeroProps {
 }
 
 // --- Default Media Assets ---
-// These are Gayatri's official default background video & profile photo,
-// sourced from Google Drive share links:
-//   Video: https://drive.google.com/file/d/1aT36BBrCKUY1pEPm1d0sFljNucPviRTj/view
-//   Photo: https://drive.google.com/file/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz/view
+// FIX: this used to be a pair of Google Drive URLs, and there was a separate
+// effect below that WROTE those Drive URLs into localStorage on every visitor's
+// first-ever page load. Since localStorage("custom_video_url"/"custom_profile_url")
+// is treated as the highest-priority "user override" by useAssetDetection(), that
+// meant every fresh visitor got permanently pinned to the fragile Drive links —
+// which is exactly why the video/photo were unreliable (black video / blank photo).
 //
-// IMPORTANT — why the old "uc?export=download" / "uc?export=view" links were broken:
-// Google Drive shows an HTML "can't scan this file for viruses" interstitial for
-// any file that isn't tiny (basically all videos, and many images). The <video>/
-// <img> tag receives that HTML page instead of real media bytes and fails silently
-// — which is exactly the black video / blank photo box seen on the live site.
-//
-// Fix applied below:
-//   1. Images now use the "lh3.googleusercontent.com/d/{id}" thumbnail-host format,
-//      which Google serves as a real, hotlink-safe image (no interstitial, no CORS
-//      issues). This reliably fixes the About section photo.
-//   2. Video uses the direct-download URL with "&confirm=t" appended, which skips
-//      the virus-scan warning for files under Drive's scan threshold. This works
-//      for small/medium clips, but Drive still has no guarantee for larger files
-//      or long-term hotlinking — see the note at the bottom of this file for the
-//      100%-reliable fix (self-hosting the .mp4 in /public).
-const DRIVE_VIDEO_FILE_ID = "1aT36BBrCKUY1pEPm1d0sFljNucPviRTj";
-const DRIVE_PROFILE_FILE_ID = "1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz";
-
-const DEFAULT_BACKGROUND_VIDEO_URL = `https://drive.google.com/uc?export=download&id=${DRIVE_VIDEO_FILE_ID}&confirm=t`;
-// Secondary Drive video attempt (some accounts/files respond better to this form)
-const DEFAULT_BACKGROUND_VIDEO_URL_ALT = `https://drive.google.com/uc?id=${DRIVE_VIDEO_FILE_ID}&export=download&confirm=t`;
-
-const DEFAULT_PROFILE_IMAGE_URL = `https://lh3.googleusercontent.com/d/${DRIVE_PROFILE_FILE_ID}=w1000`;
-// Secondary image attempt if the googleusercontent host is ever blocked
-const DEFAULT_PROFILE_IMAGE_URL_ALT = `https://drive.google.com/thumbnail?id=${DRIVE_PROFILE_FILE_ID}&sz=w1000`;
-
-// BEST FIX (recommended): download the two Drive files once and commit them
-// into your project's /public folder as /public/video.mp4 and /public/profile.jpg,
-// then set FALLBACK_ASSETS.localVideoUrl = "/video.mp4" and
-// FALLBACK_ASSETS.localProfileUrl = "/profile.jpg" in utils/assetDetector.ts.
-// Local files are checked FIRST in the fallback chain below and are 100%
-// reliable — they never depend on Google Drive being reachable or cooperative.
+// The actual video and photo files are already bundled directly into this project
+// (src/assets/videos/home-video.mp4, src/assets/images/profile.jpg) and imported
+// above via Vite, so they're 100% reliable — no network round-trip to a third
+// party, no permissions/hotlink issues, ever. We use those as the guaranteed
+// final fallback layer instead of Drive.
+const DEFAULT_BACKGROUND_VIDEO_URL = defaultVideo;
+const DEFAULT_PROFILE_IMAGE_URL = defaultProfile;
 
 export default function Hero({ name, role, tagline, email, onNavigate }: HeroProps) {
   const assets = useAssetDetection();
@@ -77,7 +57,8 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const [uploadError, setUploadError] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
 
-  // Determine active video source (dynamic local/custom override -> bundled fallback -> fixed Drive default)
+  // Determine active video source (dynamic local/custom override from useAssetDetection,
+  // which already resolves to the bundled local files by default -> guaranteed local fallback)
   const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl || DEFAULT_BACKGROUND_VIDEO_URL;
   const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl || DEFAULT_PROFILE_IMAGE_URL;
 
@@ -92,79 +73,33 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     setResolvedProfileUrl(initialProfileUrl);
   }, [initialVideoUrl, initialProfileUrl]);
 
-  // Seed site-wide defaults once: if no custom link has ever been saved, store our
-  // default Drive-based video/photo as the baseline so every section (Home, About, etc.)
-  // that reads these same localStorage keys resolves the exact same media instantly,
-  // with no first-load delay or blank state.
-  useEffect(() => {
-    try {
-      const storedVideo = localStorage.getItem("custom_video_url");
-      const storedProfile = localStorage.getItem("custom_profile_url");
+  // NOTE: the old localStorage-seeding effect that used to live here has been
+  // removed on purpose. It was writing the (broken) Drive URLs into
+  // "custom_video_url"/"custom_profile_url" on every visitor's first load,
+  // which permanently overrode the reliable bundled defaults. Defaults now
+  // come from useAssetDetection()/FALLBACK_ASSETS, which already resolve to
+  // the bundled local files unless the visitor has explicitly set a custom
+  // URL in the Settings panel.
 
-      // MIGRATION: browsers that visited before this fix have the OLD broken
-      // "uc?export=download" / "uc?export=view" URLs (without &confirm=t, or
-      // using the googleusercontent-incompatible view format) saved locally.
-      // Without this check, those returning visitors would keep loading the
-      // broken URL forever even after this code fix ships. Detect the stale
-      // pattern and overwrite it with the corrected default.
-      const isStaleVideoUrl = storedVideo && storedVideo.includes(DRIVE_VIDEO_FILE_ID) && !storedVideo.includes("confirm=t");
-      const isStaleProfileUrl = storedProfile && storedProfile.includes(DRIVE_PROFILE_FILE_ID) && !storedProfile.includes("lh3.googleusercontent.com") && !storedProfile.includes("thumbnail?id=");
-
-      if (!storedVideo || isStaleVideoUrl) {
-        localStorage.setItem("custom_video_url", DEFAULT_BACKGROUND_VIDEO_URL);
-      }
-      if (!storedProfile || isStaleProfileUrl) {
-        localStorage.setItem("custom_profile_url", DEFAULT_PROFILE_IMAGE_URL);
-      }
-    } catch (err) {
-      console.warn("Could not seed default media URLs:", err);
-    }
-  }, []);
-
-  // Ordered list of candidate profile image sources to try, in priority order.
-  // We only fall through to the NEXT one when the current one actually fails,
-  // instead of bouncing between two URLs that are both broken.
-  const profileCandidates = [
-    FALLBACK_ASSETS.localProfileUrl,
-    DEFAULT_PROFILE_IMAGE_URL,       // lh3.googleusercontent.com thumbnail host
-    DEFAULT_PROFILE_IMAGE_URL_ALT,   // drive.google.com/thumbnail
-  ].filter(Boolean) as string[];
-
-  // Robust client-side validation: if the current image fails to load, advance
-  // to the next candidate in the chain instead of retrying the same broken URL.
+  // Robust client-side validation: if the resolved image ever fails to load
+  // (e.g. a visitor pasted a bad custom URL), fall straight back to the
+  // bundled local photo — a single, always-reliable hop.
   useEffect(() => {
     if (!resolvedProfileUrl) return;
     const img = new Image();
     img.src = resolvedProfileUrl;
     img.onerror = () => {
-      console.warn(`Hero profile image failed to load: ${resolvedProfileUrl}`);
-      const currentIndex = profileCandidates.indexOf(resolvedProfileUrl);
-      const next = profileCandidates[currentIndex + 1];
-      if (next && next !== resolvedProfileUrl) {
-        console.warn(`Falling back to next profile image candidate: ${next}`);
-        setResolvedProfileUrl(next);
-      } else {
-        console.error("All profile image candidates failed. Please self-host profile.jpg in /public — see note at bottom of Hero.tsx.");
+      console.warn("Hero profile image failed to load, falling back to bundled local photo.");
+      if (resolvedProfileUrl !== DEFAULT_PROFILE_IMAGE_URL) {
+        setResolvedProfileUrl(DEFAULT_PROFILE_IMAGE_URL);
       }
     };
   }, [resolvedProfileUrl]);
 
-  // Ordered list of candidate video sources, same idea as above.
-  const videoCandidates = [
-    FALLBACK_ASSETS.localVideoUrl,
-    DEFAULT_BACKGROUND_VIDEO_URL,      // uc?export=download&confirm=t
-    DEFAULT_BACKGROUND_VIDEO_URL_ALT,  // uc?id=...&export=download&confirm=t
-  ].filter(Boolean) as string[];
-
   const handleVideoError = () => {
-    console.warn(`Hero background video failed to load: ${resolvedVideoUrl}`);
-    const currentIndex = videoCandidates.indexOf(resolvedVideoUrl);
-    const next = videoCandidates[currentIndex + 1];
-    if (next && next !== resolvedVideoUrl) {
-      console.warn(`Falling back to next video candidate: ${next}`);
-      setResolvedVideoUrl(next);
-    } else {
-      console.error("All video candidates failed. Google Drive cannot reliably serve this video to a <video> tag — please self-host video.mp4 in /public. See note at bottom of Hero.tsx.");
+    console.warn("Hero background video failed to load, falling back to bundled local video.");
+    if (resolvedVideoUrl !== DEFAULT_BACKGROUND_VIDEO_URL) {
+      setResolvedVideoUrl(DEFAULT_BACKGROUND_VIDEO_URL);
     }
   };
 
