@@ -359,6 +359,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             id="hero-video"
             ref={videoRef}
             src={resolvedVideoUrl}
+            poster={resolvedProfileUrl || FALLBACK_ASSETS.profileUrl}
             preload="auto"
             muted
             playsInline
@@ -368,9 +369,8 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             onLoadedMetadata={() => setIsVideoReady(true)}
             onCanPlay={() => setIsVideoReady(true)}
             onError={handleVideoError}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVideoReady ? 1 : 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
             className="absolute inset-0 w-full h-full object-cover z-10"
             style={{
               objectFit: "cover",
