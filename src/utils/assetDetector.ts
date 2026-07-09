@@ -1,19 +1,42 @@
 import { useState, useEffect } from "react";
 import { getLocalMedia } from "./db";
-import defaultProfile from "../assets/images/profile.jpg";
-import defaultVideo from "../assets/videos/home-video.mp4";
 
-// Import all static project screenshots so Vite bundles them properly
-import housePriceScreenshot from "../assets/images/house_price_dashboard_1781588924241.jpg";
-import wineQualityScreenshot from "../assets/images/wine_quality_dashboard_1781588938539.jpg";
-import irisClassifierScreenshot from "../assets/images/iris_classifier_dashboard_1781588952509.jpg";
-import codegenaiScreenshot from "../assets/images/codegenai_explainer_1781587930430.jpg";
-import aiChatbotScreenshot from "../assets/images/ai_chatbot_1781587946547.jpg";
-import thinkChampQuizScreenshot from "../assets/images/think_champ_quiz_1781587864651.jpg";
-import thinkChampGenScreenshot from "../assets/images/think_champ_generator_1781587881537.jpg";
-import movieVerseScreenshot from "../assets/images/movie_verse_1781587898014.jpg";
-import travelTalesScreenshot from "../assets/images/travel_tales_1781587914134.jpg";
-import symptomCheckerScreenshot from "../assets/images/symptom_checker_mockup_1783096655183.jpg";
+// Vite build-time assets glob discovery mapping - restricted to specific types to prevent FS watcher issues with Windows locks
+export const localImages = import.meta.glob('../assets/images/*.{jpg,jpeg,png,webp,svg,JPG,JPEG,PNG,WEBP,SVG}', { eager: true, import: 'default' }) as Record<string, string>;
+export const localVideos = import.meta.glob('../assets/videos/*.{mp4,mov,MP4,MOV}', { eager: true, import: 'default' }) as Record<string, string>;
+
+// Dynamically resolve defaultProfile to support any file format the user replaced it with (profile.jpg or profile.png)
+const profileKey = Object.keys(localImages).find(key => 
+  key.toLowerCase().endsWith('/profile.jpg') || 
+  key.toLowerCase().endsWith('/profile.jpeg') || 
+  key.toLowerCase().endsWith('/profile.png') ||
+  key.toLowerCase().endsWith('/profile.webp')
+);
+export const defaultProfile = profileKey ? localImages[profileKey] : "";
+
+// Dynamically resolve defaultVideo to support home-video.mp4 or other extensions gracefully
+const videoKey = Object.keys(localVideos).find(key =>
+  key.toLowerCase().endsWith('/home-video.mp4') ||
+  key.toLowerCase().endsWith('/home-video.mov')
+);
+export const defaultVideo = videoKey ? localVideos[videoKey] : "";
+
+// Dynamically resolve static project screenshots using the globbed localImages to prevent any missing file build errors if files are moved/deleted
+const findLocalImage = (keyword: string): string => {
+  const key = Object.keys(localImages).find(k => k.toLowerCase().includes(keyword.toLowerCase()));
+  return key ? localImages[key] : "";
+};
+
+export const housePriceScreenshot = findLocalImage("house_price_dashboard") || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800";
+export const wineQualityScreenshot = findLocalImage("wine_quality_dashboard") || "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800";
+export const irisClassifierScreenshot = findLocalImage("iris_classifier_dashboard") || "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=800";
+export const codegenaiScreenshot = findLocalImage("codegenai_explainer") || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800";
+export const aiChatbotScreenshot = findLocalImage("ai_chatbot") || "https://images.unsplash.com/photo-1531746790731-6c087fecd77a?q=80&w=800";
+export const thinkChampQuizScreenshot = findLocalImage("think_champ_quiz") || "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=800";
+export const thinkChampGenScreenshot = findLocalImage("think_champ_generator") || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800";
+export const movieVerseScreenshot = findLocalImage("movie_verse") || "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=800";
+export const travelTalesScreenshot = findLocalImage("travel_tales") || "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800";
+export const symptomCheckerScreenshot = findLocalImage("symptom_checker_mockup") || "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800";
 
 // Project Slugs mapping
 export const PROJECT_SLUGS = {
@@ -132,12 +155,10 @@ export const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
   "AI Quiz Generator": [thinkChampQuizScreenshot, thinkChampGenScreenshot],
   "Movie-versa": [movieVerseScreenshot],
   "Travel-Tales": [travelTalesScreenshot],
-  "AI Health Symptom Checker": ["https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800"] // Professional medical dashboard to prevent duplicate AI person pictures
+  "AI Health Symptom Checker": [symptomCheckerScreenshot]
 };
 
-// Vite build-time assets glob discovery mapping - restricted to specific types to prevent FS watcher issues with Windows locks
-const localImages = import.meta.glob('../assets/images/*.{jpg,jpeg,png,webp,svg,JPG,JPEG,PNG,WEBP,SVG}', { eager: true, import: 'default' }) as Record<string, string>;
-const localVideos = import.meta.glob('../assets/videos/*.{mp4,mov,MP4,MOV}', { eager: true, import: 'default' }) as Record<string, string>;
+// Dynamic assets are loaded and resolved at the top of the file to support flexible extensions.
 
 export const getLocalProfileImage = () => {
   // Prioritize Gayatri's direct high-speed Google Drive image URL

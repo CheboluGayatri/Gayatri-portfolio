@@ -3,9 +3,8 @@ import {
   Code2, Database, Table, Cpu, Network, LineChart, Monitor, GitBranch, FileCode2, Bot, GraduationCap, Briefcase
 } from "lucide-react";
 import { motion } from "motion/react";
-import { useAssetDetection } from "../utils/assetDetector";
+import { useAssetDetection, defaultProfile as defaultProfilePic } from "../utils/assetDetector";
 import { useImageLoader } from "../hooks/useImageLoader";
-import defaultProfilePic from "../assets/images/profile.jpg";
 
 interface StatusItem {
   label: string;

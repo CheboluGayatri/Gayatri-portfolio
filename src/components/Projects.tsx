@@ -2,19 +2,19 @@ import React, { useState, useRef } from "react";
 import { ExternalLink, Github, BookOpen, X, ChevronLeft, ChevronRight, Sparkles, Terminal, Shield, ListCollapse, Folder, GitBranch } from "lucide-react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "motion/react";
 import { Project } from "../data";
-import { useAssetDetection } from "../utils/assetDetector";
-
-// Import all static project screenshots so Vite bundles them properly
-import housePriceScreenshot from "../assets/images/house_price_dashboard_1781588924241.jpg";
-import wineQualityScreenshot from "../assets/images/wine_quality_dashboard_1781588938539.jpg";
-import irisClassifierScreenshot from "../assets/images/iris_classifier_dashboard_1781588952509.jpg";
-import codegenaiScreenshot from "../assets/images/codegenai_explainer_1781587930430.jpg";
-import aiChatbotScreenshot from "../assets/images/ai_chatbot_1781587946547.jpg";
-import thinkChampQuizScreenshot from "../assets/images/think_champ_quiz_1781587864651.jpg";
-import thinkChampGenScreenshot from "../assets/images/think_champ_generator_1781587881537.jpg";
-import movieVerseScreenshot from "../assets/images/movie_verse_1781587898014.jpg";
-import travelTalesScreenshot from "../assets/images/travel_tales_1781587914134.jpg";
-import symptomCheckerScreenshot from "../assets/images/symptom_checker_mockup_1783096655183.jpg";
+import {
+  useAssetDetection,
+  housePriceScreenshot,
+  wineQualityScreenshot,
+  irisClassifierScreenshot,
+  codegenaiScreenshot,
+  aiChatbotScreenshot,
+  thinkChampQuizScreenshot,
+  thinkChampGenScreenshot,
+  movieVerseScreenshot,
+  travelTalesScreenshot,
+  symptomCheckerScreenshot
+} from "../utils/assetDetector";
 
 interface TiltCardProps {
   children: React.ReactNode;
