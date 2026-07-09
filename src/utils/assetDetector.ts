@@ -138,7 +138,7 @@ export function getDirectDriveUrl(url: string | null | undefined, isVideo = fals
 
 // Fallback high-quality design assets if local files are missing
 export const FALLBACK_ASSETS = {
-  profileUrl: "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz",
+  profileUrl: defaultProfile || "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz",
   videoUrl: defaultVideo,
   localProfileUrl: defaultProfile,
   localVideoUrl: defaultVideo,
@@ -161,8 +161,8 @@ export const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
 // Dynamic assets are loaded and resolved at the top of the file to support flexible extensions.
 
 export const getLocalProfileImage = () => {
-  // Prioritize Gayatri's direct high-speed Google Drive image URL
-  return "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz";
+  // Prioritize the local bundled profile image for instant 0ms local load
+  return defaultProfile || "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz";
 };
 
 export const getLocalVideoUrl = () => {

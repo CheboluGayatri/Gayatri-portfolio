@@ -49,6 +49,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const [resolvedProfileUrl, setResolvedProfileUrl] = useState(initialProfileUrl);
 
   useEffect(() => {
+    setIsVideoReady(false);
     setResolvedVideoUrl(initialVideoUrl);
     setResolvedProfileUrl(initialProfileUrl);
   }, [initialVideoUrl, initialProfileUrl]);
@@ -337,13 +338,27 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       <div 
         className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950"
       >
-        {/* Background Video element (HD clearly visible format) */}
+        {/* Static high-resolution poster image loaded instantly in background to prevent blank/black screens on any device */}
+        {(resolvedProfileUrl || FALLBACK_ASSETS.profileUrl) && (
+          <img
+            src={resolvedProfileUrl || FALLBACK_ASSETS.profileUrl}
+            alt="Gayatri Portrait Poster"
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+            style={{
+              objectFit: "cover",
+              filter: "brightness(1.05) contrast(1.05)",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        )}
+
+        {/* Background Video element (HD clearly visible format with smooth fade-in) */}
         {resolvedVideoUrl && (
           <motion.video
             id="hero-video"
             ref={videoRef}
             src={resolvedVideoUrl}
-            poster={resolvedProfileUrl || FALLBACK_ASSETS.profileUrl}
             preload="auto"
             muted
             playsInline
@@ -353,10 +368,16 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             onLoadedMetadata={() => setIsVideoReady(true)}
             onCanPlay={() => setIsVideoReady(true)}
             onError={handleVideoError}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectFit: "cover", filter: "brightness(1.05) contrast(1.05)", width: "100%", height: "100%" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVideoReady ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="absolute inset-0 w-full h-full object-cover z-10"
+            style={{
+              objectFit: "cover",
+              filter: "brightness(1.05) contrast(1.05)",
+              width: "100%",
+              height: "100%",
+            }}
           />
         )}
 
