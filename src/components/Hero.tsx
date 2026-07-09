@@ -2,9 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Code2, Database, X, Settings, Upload, RotateCcw, AlertTriangle, Check, Link, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAssetDetection, FALLBACK_ASSETS, getEmbedVideoUrl } from "../utils/assetDetector";
-import { saveLocalMedia, clearLocalMedia } from "../utils/db";
-import { useImageLoader } from "../hooks/useImageLoader";
-
+import { saveLocalMedia, clearLocalMedia } from "../utils/db"
 interface HeroProps {
   name: string;
   role: string;
