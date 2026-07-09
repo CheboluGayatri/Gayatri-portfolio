@@ -76,17 +76,23 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   };
 
   // Synchronize dynamic video loading and playback when the source URL changes
+  const lastVideoUrlRef = useRef<string>("");
+
   useEffect(() => {
     const video = videoRef.current;
-    if (video) {
-      video.load();
-      if (isPlaying) {
-        video.play().catch((err) => {
-          console.warn("Autoplay of reloaded video was blocked:", err);
-        });
+    if (video && resolvedVideoUrl) {
+      // Only call video.load() if the URL actually changed and it's not the initial mount
+      if (lastVideoUrlRef.current && lastVideoUrlRef.current !== resolvedVideoUrl) {
+        video.load();
+        if (isPlaying) {
+          video.play().catch((err) => {
+            console.warn("Autoplay of reloaded video was blocked:", err);
+          });
+        }
       }
+      lastVideoUrlRef.current = resolvedVideoUrl;
     }
-  }, [resolvedVideoUrl]);
+  }, [resolvedVideoUrl, isPlaying]);
   
   // Resolve embed details if using YouTube/Vimeo
   const videoDetails = getEmbedVideoUrl(resolvedVideoUrl);
@@ -337,6 +343,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             id="hero-video"
             ref={videoRef}
             src={resolvedVideoUrl}
+            poster={resolvedProfileUrl || FALLBACK_ASSETS.profileUrl}
             preload="auto"
             muted
             playsInline
