@@ -218,4 +218,8 @@ body {
     text-decoration: underline !important;
     color: #0f172a !important;
   }
+
+  .no-print {
+    display: none !important;
+  }
 }

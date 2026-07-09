@@ -115,7 +115,7 @@ export function getDirectDriveUrl(url: string | null | undefined, isVideo = fals
 
 // Fallback high-quality design assets if local files are missing
 export const FALLBACK_ASSETS = {
-  profileUrl: defaultProfile,
+  profileUrl: "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz",
   videoUrl: defaultVideo,
   localProfileUrl: defaultProfile,
   localVideoUrl: defaultVideo,
@@ -140,12 +140,8 @@ const localImages = import.meta.glob('../assets/images/*.{jpg,jpeg,png,webp,svg,
 const localVideos = import.meta.glob('../assets/videos/*.{mp4,mov,MP4,MOV}', { eager: true, import: 'default' }) as Record<string, string>;
 
 export const getLocalProfileImage = () => {
-  // FIX: this used to return a remote Google Drive URL, which is why the About
-  // section photo kept breaking (Drive hotlink/permission issues). We already
-  // bundle the real photo at build time via Vite import at the top of this file
-  // (`defaultProfile`), so just use that — it's local, instant, and never depends
-  // on any third-party service being reachable.
-  return defaultProfile;
+  // Prioritize Gayatri's direct high-speed Google Drive image URL
+  return "https://lh3.googleusercontent.com/d/1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz";
 };
 
 export const getLocalVideoUrl = () => {
@@ -210,29 +206,11 @@ export function useAssetDetection() {
   useEffect(() => {
     let active = true;
 
-    // Clean up stale or broken URLs from local storage (old Vimeo links, old broken
-    // Drive links from earlier testing) so the reliable bundled local defaults load
-    // instead of a dead link that was cached in this browser before this fix shipped.
+    // Clean up stale or broken Vimeo URLs from local storage to ensure the new working fallback loads
     const storedVid = localStorage.getItem("custom_video_url");
-    const isStaleVideo = storedVid && (
-      storedVid.includes("371433846") ||
-      storedVid.includes("vimeo") ||
-      storedVid.includes("external") ||
-      (storedVid.includes("drive.google.com") && !storedVid.includes("confirm=t"))
-    );
-    if (isStaleVideo) {
+    if (storedVid && (storedVid.includes("371433846") || storedVid.includes("vimeo") || storedVid.includes("external"))) {
       localStorage.removeItem("custom_video_url");
       setAssets(prev => ({ ...prev, videoUrl: FALLBACK_ASSETS.videoUrl }));
-    }
-
-    const storedProfile = localStorage.getItem("custom_profile_url");
-    const isStaleProfile = storedProfile && (
-      storedProfile.includes("drive.google.com/uc") ||
-      (storedProfile.includes("lh3.googleusercontent.com") && storedProfile.includes("1OSLWS1FLOWb3WQRx27_pnlMxtNxz2Ocz"))
-    );
-    if (isStaleProfile) {
-      localStorage.removeItem("custom_profile_url");
-      setAssets(prev => ({ ...prev, profileUrl: FALLBACK_ASSETS.profileUrl }));
     }
 
     async function scan() {

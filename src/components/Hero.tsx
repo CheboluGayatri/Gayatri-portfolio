@@ -5,9 +5,6 @@ import { useAssetDetection, FALLBACK_ASSETS, getEmbedVideoUrl } from "../utils/a
 import { saveLocalMedia, clearLocalMedia } from "../utils/db";
 import { useImageLoader } from "../hooks/useImageLoader";
 
-import defaultProfile from "../assets/images/profile.jpg";
-import defaultVideo from "../assets/videos/home-video.mp4";
-
 interface HeroProps {
   name: string;
   role: string;
@@ -15,22 +12,6 @@ interface HeroProps {
   email: string;
   onNavigate: (id: string) => void;
 }
-
-// --- Default Media Assets ---
-// FIX: this used to be a pair of Google Drive URLs, and there was a separate
-// effect below that WROTE those Drive URLs into localStorage on every visitor's
-// first-ever page load. Since localStorage("custom_video_url"/"custom_profile_url")
-// is treated as the highest-priority "user override" by useAssetDetection(), that
-// meant every fresh visitor got permanently pinned to the fragile Drive links —
-// which is exactly why the video/photo were unreliable (black video / blank photo).
-//
-// The actual video and photo files are already bundled directly into this project
-// (src/assets/videos/home-video.mp4, src/assets/images/profile.jpg) and imported
-// above via Vite, so they're 100% reliable — no network round-trip to a third
-// party, no permissions/hotlink issues, ever. We use those as the guaranteed
-// final fallback layer instead of Drive.
-const DEFAULT_BACKGROUND_VIDEO_URL = defaultVideo;
-const DEFAULT_PROFILE_IMAGE_URL = defaultProfile;
 
 export default function Hero({ name, role, tagline, email, onNavigate }: HeroProps) {
   const assets = useAssetDetection();
@@ -57,10 +38,9 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const [uploadError, setUploadError] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
 
-  // Determine active video source (dynamic local/custom override from useAssetDetection,
-  // which already resolves to the bundled local files by default -> guaranteed local fallback)
-  const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl || DEFAULT_BACKGROUND_VIDEO_URL;
-  const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl || DEFAULT_PROFILE_IMAGE_URL;
+  // Determine active video source (dynamic local or premium cloud tech b-roll fallback)
+  const activeVideoRaw = assets.videoUrl || FALLBACK_ASSETS.videoUrl;
+  const activeProfileRaw = assets.profileUrl || FALLBACK_ASSETS.profileUrl;
 
   const initialVideoUrl = typeof activeVideoRaw === "string" ? activeVideoRaw : (activeVideoRaw as any)?.default || (activeVideoRaw as any)?.src || "";
   const initialProfileUrl = typeof activeProfileRaw === "string" ? activeProfileRaw : (activeProfileRaw as any)?.default || (activeProfileRaw as any)?.src || "";
@@ -73,33 +53,25 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     setResolvedProfileUrl(initialProfileUrl);
   }, [initialVideoUrl, initialProfileUrl]);
 
-  // NOTE: the old localStorage-seeding effect that used to live here has been
-  // removed on purpose. It was writing the (broken) Drive URLs into
-  // "custom_video_url"/"custom_profile_url" on every visitor's first load,
-  // which permanently overrode the reliable bundled defaults. Defaults now
-  // come from useAssetDetection()/FALLBACK_ASSETS, which already resolve to
-  // the bundled local files unless the visitor has explicitly set a custom
-  // URL in the Settings panel.
-
-  // Robust client-side validation: if the resolved image ever fails to load
-  // (e.g. a visitor pasted a bad custom URL), fall straight back to the
-  // bundled local photo — a single, always-reliable hop.
+  // Robust client-side validation: if custom image fails to load, fallback to local default profile pic
   useEffect(() => {
     if (!resolvedProfileUrl) return;
     const img = new Image();
     img.src = resolvedProfileUrl;
     img.onerror = () => {
-      console.warn("Hero profile image failed to load, falling back to bundled local photo.");
-      if (resolvedProfileUrl !== DEFAULT_PROFILE_IMAGE_URL) {
-        setResolvedProfileUrl(DEFAULT_PROFILE_IMAGE_URL);
+      console.warn("Hero poster image failed to load, falling back to local default image.");
+      const fallback = FALLBACK_ASSETS.localProfileUrl || "";
+      if (resolvedProfileUrl !== fallback) {
+        setResolvedProfileUrl(fallback);
       }
     };
   }, [resolvedProfileUrl]);
 
   const handleVideoError = () => {
-    console.warn("Hero background video failed to load, falling back to bundled local video.");
-    if (resolvedVideoUrl !== DEFAULT_BACKGROUND_VIDEO_URL) {
-      setResolvedVideoUrl(DEFAULT_BACKGROUND_VIDEO_URL);
+    console.warn("Hero background video failed to load, falling back to local default video.");
+    const fallback = FALLBACK_ASSETS.localVideoUrl || "";
+    if (resolvedVideoUrl !== fallback) {
+      setResolvedVideoUrl(fallback);
     }
   };
 
@@ -327,7 +299,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const handleResetVideo = async () => {
     try {
       await clearLocalMedia("custom_video");
-      localStorage.setItem("custom_video_url", DEFAULT_BACKGROUND_VIDEO_URL);
+      localStorage.removeItem("custom_video_url");
       setInfoMessage("Restoring Gayatri's default background video...");
       setTimeout(() => {
         window.location.reload();
@@ -340,7 +312,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const handleResetProfile = async () => {
     try {
       await clearLocalMedia("custom_profile");
-      localStorage.setItem("custom_profile_url", DEFAULT_PROFILE_IMAGE_URL);
+      localStorage.removeItem("custom_profile_url");
       setInfoMessage("Restoring default Gayatri profile photo...");
       setTimeout(() => {
         window.location.reload();
@@ -365,7 +337,6 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             id="hero-video"
             ref={videoRef}
             src={resolvedVideoUrl}
-            poster={resolvedProfileUrl || DEFAULT_PROFILE_IMAGE_URL}
             preload="auto"
             muted
             playsInline
@@ -815,14 +786,35 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                     PORTFOLIO ATS-OPTIMIZED RESUME
                   </span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => window.print()}
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/20"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Print / Save PDF</span>
-                  </button>
+                <div className="flex items-center gap-3 no-print">
+                  {assets.resumeUrl && assets.resumeUrl !== "#print" ? (
+                    <>
+                      <a
+                        href={assets.resumeUrl}
+                        download="Gayatri_Chebolu_Resume.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-600/20"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Download PDF</span>
+                      </a>
+                      <button
+                        onClick={() => window.print()}
+                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/20"
+                      >
+                        <span>Print Web Version</span>
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => window.print()}
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/20"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Print / Save PDF</span>
+                    </button>
+                  )}
                   <button
                     onClick={() => setIsResumeOpen(false)}
                     className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer"
@@ -1083,8 +1075,11 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               </div>
 
               {/* Modal Footer */}
-              <div className="px-6 py-4 bg-slate-950 border-t border-white/5 flex justify-between items-center text-xs text-slate-400 font-mono">
-                <span>💡 Designed to print beautifully on standard A4 paper size</span>
+              <div className="px-6 py-4 bg-slate-950 border-t border-white/5 flex flex-wrap justify-between items-center gap-3 text-xs text-slate-400 font-mono no-print">
+                <div className="flex flex-col gap-0.5 text-[11px] text-slate-400">
+                  <span>💡 Designed to print beautifully on standard A4 paper size.</span>
+                  <span className="text-blue-450 font-bold">📂 To update with your custom PDF: simply replace "public/resume.pdf" in your downloaded ZIP folder!</span>
+                </div>
                 <button
                   onClick={() => setIsResumeOpen(false)}
                   className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white font-bold transition cursor-pointer"
