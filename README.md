@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🌐 Gayatri Chebolu — AI Portfolio
 
 <div align="center">
