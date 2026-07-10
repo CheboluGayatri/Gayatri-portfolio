@@ -330,3 +330,5 @@ Feel free to fork and customize it for learning purposes.
 
 *"Continuously learning, exploring emerging technologies, and building AI solutions that solve real-world problems."*
 
+</div>
+
