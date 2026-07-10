@@ -1,77 +1,86 @@
-# 🌐 Gayatri Chebolu — AI Portfolio
+# 🌐 Gayatri Chebolu | AI & Software Developer Portfolio
 
 <div align="center">
 
-# Computer Science & Artificial Intelligence Graduate
+### Computer Science & Artificial Intelligence Graduate
 
-Building intelligent applications with **Machine Learning, Generative AI, and Full-Stack Development**.
+Building intelligent, scalable, and user-centric applications using **Machine Learning**, **Generative AI**, and **Modern Web Technologies**.
 
-[🌍 Live Portfolio](https://gayatri-portfolio-flax.vercel.app/) •
-[💼 LinkedIn](https://www.linkedin.com/in/gayatri-chebolu) •
-[🐙 GitHub](https://github.com/CheboluGayatri)
-
-<br>
+<p>
+<a href="https://gayatri-portfolio-flax.vercel.app/" target="_blank">🌍 Live Portfolio</a> •
+<a href="https://github.com/CheboluGayatri" target="_blank">GitHub</a> •
+<a href="https://www.linkedin.com/in/gayatri-chebolu" target="_blank">LinkedIn</a>
+</p>
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
-![Vite](https://img.shields.io/badge/Vite-Latest-646CFF?logo=vite)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38BDF8?logo=tailwindcss)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-Animation-black?logo=framer)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38BDF8?logo=tailwindcss)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript)
+![Framer Motion](https://img.shields.io/badge/FramerMotion-Latest-black?logo=framer)
 ![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)
 
 </div>
 
 ---
 
-# 👋 About
+# 📖 About
 
-Welcome to my personal portfolio repository.
+This repository contains the source code for my personal portfolio website.
 
-This portfolio showcases my journey as a **Computer Science & Artificial Intelligence graduate**, featuring projects, technical skills, certifications, internships, and practical experience in AI and software development.
+The portfolio showcases my journey in **Artificial Intelligence, Machine Learning, Software Development, and Full-Stack Web Development**, highlighting projects, technical skills, certifications, internships, and professional achievements.
 
-Built with **React**, **Tailwind CSS**, and **Framer Motion**, the website emphasizes clean UI, smooth animations, responsiveness, and performance while reflecting my passion for creating impactful AI-powered solutions.
+Built with **React**, **Vite**, **Tailwind CSS**, and **Framer Motion**, the portfolio focuses on performance, responsiveness, accessibility, and modern UI design.
 
 ---
 
 # ✨ Features
 
-- 🎨 Modern and responsive UI
-- 📱 Mobile-first design
-- 🌌 AI-generated animated background
-- ⚡ Smooth page transitions
-- 👩‍💻 Interactive Hero section
-- 💻 Professional project showcase
-- 💼 Experience timeline
-- 🏆 Certifications section
-- 📄 Resume download
-- 📬 Contact form with social links
-- 🚀 Fast loading and optimized performance
+- Responsive design for all devices
+- Modern UI with smooth animations
+- Interactive Hero section
+- AI-generated animated background
+- Professional project showcase
+- Technical skills section
+- Experience timeline
+- Certifications
+- Resume download
+- Contact section
+- Fast loading performance
+- SEO-friendly structure
 
 ---
 
-# 🖥️ Tech Stack
+# 🛠 Tech Stack
 
-## Frontend
+### Frontend
 
 - React.js
 - JavaScript (ES6+)
 - HTML5
 - CSS3
 - Tailwind CSS
+- Vite
 
-## Animation
+### Animation
 
 - Framer Motion
 
-## Icons
+### AI & Machine Learning
 
-- React Icons
+- Python
+- Machine Learning
+- Deep Learning
+- Generative AI
+- NLP
+- Ollama
+- Hugging Face
 
-## Development Tools
+### Developer Tools
 
 - Git
 - GitHub
 - VS Code
+- Google AI Studio
 - Vercel
 
 ---
@@ -80,23 +89,23 @@ Built with **React**, **Tailwind CSS**, and **Framer Motion**, the website empha
 
 | Tool | Purpose |
 |------|---------|
-| ChatGPT | UI improvements, content writing, debugging, React development, code optimization |
-| ChatGPT Image Generation | Portfolio graphics and image enhancement |
-| Google AI Studio | Component development and implementation |
-| Google Flow | Cinematic AI-generated animated background |
+| ChatGPT | Development, debugging, content refinement |
+| ChatGPT Image Generation | Portfolio graphics |
+| Google AI Studio | Component development |
+| Google Flow | AI-generated animated background |
 
 ---
 
 # 📂 Portfolio Sections
 
-- 🏠 Home
-- 👩 About
-- 💻 Skills
-- 🚀 Projects
-- 💼 Experience
-- 🏆 Certifications
-- 📄 Resume
-- 📬 Contact
+- Home
+- About
+- Skills
+- Projects
+- Experience
+- Certifications
+- Resume
+- Contact
 
 ---
 
@@ -104,68 +113,85 @@ Built with **React**, **Tailwind CSS**, and **Framer Motion**, the website empha
 
 ## 🤖 CodeGenie — AI Code Generator & Explainer
 
-An offline AI coding assistant powered by local Large Language Models that helps developers generate, explain, review, and debug code without requiring an internet connection.
+Offline AI coding assistant powered by local Large Language Models.
 
-**Highlights**
-
-- AI Code Generation
-- Code Explanation
-- Bug Detection
-- Code Review
-- Debugging Assistance
-
-**Tech Stack**
+**Technologies**
 
 - Python
 - Streamlit
 - Ollama
 - LLM
 
+**Highlights**
+
+- AI Code Generation
+- Code Review
+- Debugging
+- Code Explanation
+- Bug Detection
+
 ---
 
 ## 🍷 Wine Quality Prediction
 
-A machine learning application that predicts wine quality using classification algorithms with an intuitive Streamlit interface.
+Machine Learning application that predicts wine quality using classification algorithms.
+
+**Technologies**
+
+- Python
+- Scikit-learn
+- Streamlit
 
 **Highlights**
 
 - Random Forest Classifier
-- Streamlit Web Application
-- Interactive Data Visualization
+- Interactive Dashboard
+- Data Visualization
 - 87% Prediction Accuracy
 
 ---
 
 ## 🏡 House Price Prediction
 
-A regression-based machine learning application that estimates house prices using real-world housing features.
+Regression-based Machine Learning application for estimating house prices.
+
+**Technologies**
+
+- Python
+- Scikit-learn
+- Streamlit
 
 **Highlights**
 
 - Linear Regression
 - Feature Engineering
-- Real-time Predictions
-- Streamlit Deployment
+- Real-time Prediction
 
 ---
 
 ## 🩺 AI Health Symptom Checker
 
-An AI-powered healthcare assistant that provides preliminary disease predictions based on user symptoms.
+Healthcare assistant powered by AI.
+
+**Technologies**
+
+- Python
+- Hugging Face
+- SQLite
+- Streamlit
 
 **Highlights**
 
 - Symptom Analysis
 - Disease Prediction
-- Hugging Face Integration
-- SQLite Database
-- PDF Medical Report Generation
+- PDF Medical Report
+- AI Assistance
 
 ---
 
-# 🛠 Technical Skills
+# 💻 Technical Skills
 
-### Programming Languages
+### Programming
 
 - Python
 - Java
@@ -176,9 +202,9 @@ An AI-powered healthcare assistant that provides preliminary disease predictions
 
 - Machine Learning
 - Deep Learning
+- NLP
 - Generative AI
 - Prompt Engineering
-- Natural Language Processing (NLP)
 
 ### Python Libraries
 
@@ -196,7 +222,7 @@ An AI-powered healthcare assistant that provides preliminary disease predictions
 - CSS3
 - Tailwind CSS
 
-### Developer Tools
+### Tools
 
 - Git
 - GitHub
@@ -208,13 +234,13 @@ An AI-powered healthcare assistant that provides preliminary disease predictions
 
 # 🚀 Getting Started
 
-## Clone the Repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/CheboluGayatri/Gayatri-portfolio.git
 ```
 
-## Navigate to the Project
+## Move to Project
 
 ```bash
 cd Gayatri-portfolio
@@ -226,10 +252,77 @@ cd Gayatri-portfolio
 npm install
 ```
 
-## Start the Development Server
+## Run Development Server
 
 ```bash
 npm run dev
+```
+
+Open:
+
+```
+http://localhost:5173
+```
+
+---
+
+# 📦 Production Build
+
+```bash
+npm run build
+```
+
+Preview Production Build
+
+```bash
+npm run preview
+```
+
+---
+
+# ☁️ Deploy on Vercel
+
+### Option 1 (Recommended)
+
+1. Fork or clone this repository.
+2. Import the repository into **Vercel**.
+3. Framework Preset: **Vite**
+4. Build Command:
+
+```bash
+npm run build
+```
+
+5. Output Directory
+
+```text
+dist
+```
+
+6. Install Command
+
+```bash
+npm install
+```
+
+7. Click **Deploy**.
+
+---
+
+### Option 2 (Vercel CLI)
+
+```bash
+npm install -g vercel
+```
+
+```bash
+vercel
+```
+
+For production deployment:
+
+```bash
+vercel --prod
 ```
 
 ---
@@ -240,6 +333,8 @@ npm run dev
 Gayatri-portfolio/
 │
 ├── public/
+│   └── resume/
+│
 ├── src/
 │   ├── assets/
 │   ├── components/
@@ -248,73 +343,50 @@ Gayatri-portfolio/
 │   ├── App.jsx
 │   └── main.jsx
 │
+├── index.html
 ├── package.json
 ├── vite.config.js
-├── tailwind.config.js
+├── package-lock.json
 └── README.md
 ```
 
 ---
 
-# 🚀 Deployment
+# 🌍 Live Website
 
-The portfolio is deployed on **Vercel**.
-
-🌍 **Live Demo**
+**Portfolio**
 
 https://gayatri-portfolio-flax.vercel.app/
 
 ---
 
-# 📫 Connect With Me
+# 📬 Contact
 
-### 👩 Gayatri Chebolu
+**Gayatri Chebolu**
 
-📧 **Email**
+📧 gayathrichebolu6@gmail.com
 
-gayathrichebolu6@gmail.com
+💼 https://www.linkedin.com/in/gayatri-chebolu
 
-💼 **LinkedIn**
+🐙 https://github.com/CheboluGayatri
 
-https://www.linkedin.com/in/gayatri-chebolu
-
-🐙 **GitHub**
-
-https://github.com/CheboluGayatri
-
-🌐 **Portfolio**
-
-https://gayatri-portfolio-flax.vercel.app/
-
----
-
-# ⭐ Support
-
-If you found this portfolio inspiring or useful:
-
-- ⭐ Star this repository
-- 🍴 Fork the project
-- 🤝 Connect with me on LinkedIn
-
-Your support motivates me to continue building innovative AI-powered applications.
+🌐 https://gayatri-portfolio-flax.vercel.app/
 
 ---
 
 # 📄 License
 
-This project is licensed under the **MIT License**.
-
-Feel free to fork and customize it for learning purposes.
+Licensed under the **MIT License**.
 
 ---
 
 <div align="center">
 
-# ⭐ Thank You for Visiting
+## ⭐ Thank you for visiting!
 
-**Made with ❤️ by Gayatri Chebolu**
+If you found this project helpful or inspiring, consider giving it a ⭐ on GitHub.
 
-*"Continuously learning, exploring emerging technologies, and building AI solutions that solve real-world problems."*
+**Designed & Developed by Gayatri Chebolu**
 
 </div>
 
