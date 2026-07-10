@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import { getLocalMedia } from "./db";
 
@@ -39,6 +40,34 @@ export const travelTalesScreenshot = findLocalImage("travel_tales") || "https://
 export const symptomCheckerScreenshot = findLocalImage("symptom_checker_mockup") || "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800";
 
 // Project Slugs mapping
+=======
+import { useEffect, useState } from "react";
+
+import profileImage from "../assets/images/profile.png";
+import homeVideo from "../assets/videos/home-video.mp4";
+import housePriceImage from "../assets/images/house_price_dashboard_1781588924241.jpg";
+import irisImage from "../assets/images/iris_classifier_dashboard_1781588952509.jpg";
+import symptomCheckerImage from "../assets/images/symptom_checker_mockup_1783096655183.jpg";
+import wineImage from "../assets/images/wine_quality_dashboard_1781588938539.jpg";
+
+export const defaultProfile = profileImage;
+export const defaultVideo = homeVideo;
+
+export const housePriceScreenshot = housePriceImage;
+export const wineQualityScreenshot = wineImage;
+export const irisClassifierScreenshot = irisImage;
+export const symptomCheckerScreenshot = symptomCheckerImage;
+
+// These projects don't currently have local screenshots in the ZIP.
+// Keeping empty strings avoids broken imports and keeps layout/content unchanged.
+export const codegenaiScreenshot = "";
+export const aiChatbotScreenshot = "";
+export const thinkChampQuizScreenshot = "";
+export const thinkChampGenScreenshot = "";
+export const movieVerseScreenshot = "";
+export const travelTalesScreenshot = "";
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
 export const PROJECT_SLUGS = {
   "AI Health Symptom Checker": "ai_health_symptom_checker",
   "House Price Prediction System": "house_price",
@@ -48,28 +77,44 @@ export const PROJECT_SLUGS = {
   "AI Chatbot Web Application": "ai_chatbot",
   "AI Quiz Generator": "ai_quiz_generator",
   "Movie-versa": "movie_versa",
+<<<<<<< HEAD
   "Travel-Tales": "travel_tales"
 };
 
 // Certificate Slugs mapping
+=======
+  "Travel-Tales": "travel_tales",
+};
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
 export const CERTIFICATE_SLUGS = {
   "Foundations of Modern Machine Learning (FMML)": "fmml",
   "Applied Artificial Intelligence: Practical Implementation": "applied_ai",
   "Web Development with HTML, CSS, and JavaScript Internship": "apexplanet",
   "Web Development Internship program": "coincent",
   "SAWit.AI Learnathon Program (Generative AI Completion)": "sawit_ai",
+<<<<<<< HEAD
   "JobReady: Employability Skills": "jobready"
 };
 
 export interface DetectedAssets {
   profileUrl: string | null;
   videoUrl: string | null;
+=======
+  "JobReady: Employability Skills": "jobready",
+};
+
+export interface DetectedAssets {
+  profileUrl: string;
+  videoUrl: string;
+>>>>>>> 6a3934a (Initial updated portfolio project)
   resumeUrl: string | null;
   projectScreenshots: Record<string, string[]>;
   certificateImages: Record<string, string | null>;
   isScanning: boolean;
 }
 
+<<<<<<< HEAD
 export function getEmbedVideoUrl(url: any): { type: "direct" | "youtube" | "vimeo"; embedUrl: string } {
   let urlStr = "";
   if (url) {
@@ -219,12 +264,53 @@ export function useAssetDetection() {
     profileUrl: getDirectDriveUrl(sanitizeUrl(localStorage.getItem("custom_profile_url")) || getLocalProfileImage() || FALLBACK_ASSETS.profileUrl, false),
     videoUrl: getDirectDriveUrl(sanitizeUrl(localStorage.getItem("custom_video_url")) || getLocalVideoUrl() || FALLBACK_ASSETS.videoUrl, true),
     resumeUrl: null,
+=======
+export function getEmbedVideoUrl(url: string): {
+  type: "direct";
+  embedUrl: string;
+} {
+  return {
+    type: "direct",
+    embedUrl: url,
+  };
+}
+
+export const FALLBACK_ASSETS = {
+  profileUrl: defaultProfile,
+  videoUrl: defaultVideo,
+  localProfileUrl: defaultProfile,
+  localVideoUrl: defaultVideo,
+  resumeUrl: "/resume.pdf",
+};
+
+export const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
+  "House Price Prediction System": housePriceScreenshot ? [housePriceScreenshot] : [],
+  "Wine Quality Prediction": wineQualityScreenshot ? [wineQualityScreenshot] : [],
+  "Iris Flower Classification": irisClassifierScreenshot ? [irisClassifierScreenshot] : [],
+  "CodeGenAi & Explainer": codegenaiScreenshot ? [codegenaiScreenshot] : [],
+  "AI Chatbot Web Application": aiChatbotScreenshot ? [aiChatbotScreenshot] : [],
+  "AI Quiz Generator":
+    thinkChampQuizScreenshot || thinkChampGenScreenshot
+      ? [thinkChampQuizScreenshot, thinkChampGenScreenshot].filter(Boolean)
+      : [],
+  "Movie-versa": movieVerseScreenshot ? [movieVerseScreenshot] : [],
+  "Travel-Tales": travelTalesScreenshot ? [travelTalesScreenshot] : [],
+  "AI Health Symptom Checker": symptomCheckerScreenshot ? [symptomCheckerScreenshot] : [],
+};
+
+export function useAssetDetection(): DetectedAssets {
+  const [assets, setAssets] = useState<DetectedAssets>({
+    profileUrl: defaultProfile,
+    videoUrl: defaultVideo,
+    resumeUrl: "/resume.pdf",
+>>>>>>> 6a3934a (Initial updated portfolio project)
     projectScreenshots: STATIC_PROJECT_SCREENSHOTS,
     certificateImages: {},
     isScanning: false,
   });
 
   useEffect(() => {
+<<<<<<< HEAD
     let active = true;
 
     // Clean up stale or broken Vimeo URLs from local storage to ensure the new working fallback loads
@@ -314,3 +400,17 @@ export function useAssetDetection() {
 
   return assets;
 }
+=======
+    setAssets({
+      profileUrl: defaultProfile,
+      videoUrl: defaultVideo,
+      resumeUrl: "/resume.pdf",
+      projectScreenshots: STATIC_PROJECT_SCREENSHOTS,
+      certificateImages: {},
+      isScanning: false,
+    });
+  }, []);
+
+  return assets;
+}
+>>>>>>> 6a3934a (Initial updated portfolio project)

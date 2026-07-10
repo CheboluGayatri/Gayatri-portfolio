@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🌐 Gayatri Chebolu — AI Portfolio
 
 <div align="center">
@@ -331,3 +332,25 @@ Feel free to fork and customize it for learning purposes.
 *"Continuously learning, exploring emerging technologies, and building AI solutions that solve real-world problems."*
 
 </div>
+=======
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/79172c54-4617-473e-a470-eb9173ffc13a
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
+>>>>>>> 6a3934a (Initial updated portfolio project)

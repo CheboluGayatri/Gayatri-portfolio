@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+<<<<<<< HEAD
 import { ExternalLink, Github, BookOpen, X, ChevronLeft, ChevronRight, Sparkles, Terminal, Shield, ListCollapse, Folder, GitBranch } from "lucide-react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "motion/react";
 import { Project } from "../data";
@@ -15,6 +16,33 @@ import {
   travelTalesScreenshot,
   symptomCheckerScreenshot
 } from "../utils/assetDetector";
+=======
+import {
+  Github,
+  BookOpen,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Folder,
+  GitBranch,
+} from "lucide-react";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  useSpring,
+} from "motion/react";
+import { Project } from "../data";
+import { useAssetDetection } from "../utils/assetDetector";
+
+// Keep only the screenshots that actually exist in src/assets/images
+import housePriceScreenshot from "../assets/images/house_price_dashboard_1781588924241.jpg";
+import wineQualityScreenshot from "../assets/images/wine_quality_dashboard_1781588938539.jpg";
+import irisClassifierScreenshot from "../assets/images/iris_classifier_dashboard_1781588952509.jpg";
+import symptomCheckerScreenshot from "../assets/images/symptom_checker_mockup_1783096655183.jpg";
+>>>>>>> 6a3934a (Initial updated portfolio project)
 
 interface TiltCardProps {
   children: React.ReactNode;
@@ -24,6 +52,7 @@ interface TiltCardProps {
 
 function TiltCard({ children, className = "", onClick }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+<<<<<<< HEAD
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -32,6 +61,16 @@ function TiltCard({ children, className = "", onClick }: TiltCardProps) {
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), springConfig);
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), springConfig);
   
+=======
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const springConfig = { damping: 22, stiffness: 220, mass: 0.6 };
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [6, -6]), springConfig);
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-6, 6]), springConfig);
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
   const glareX = useSpring(useTransform(x, [-0.5, 0.5], [0, 100]), springConfig);
   const glareY = useSpring(useTransform(y, [-0.5, 0.5], [0, 100]), springConfig);
   const glareOpacity = useSpring(useMotionValue(0), springConfig);
@@ -39,12 +78,20 @@ function TiltCard({ children, className = "", onClick }: TiltCardProps) {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
     const width = rect.width;
     const height = rect.height;
     const mouseX = e.clientX - rect.left - width / 2;
     const mouseY = e.clientY - rect.top - height / 2;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
     x.set(mouseX / width);
     y.set(mouseY / height);
     glareOpacity.set(0.12);
@@ -63,6 +110,7 @@ function TiltCard({ children, className = "", onClick }: TiltCardProps) {
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       style={{
+<<<<<<< HEAD
         rotateX: rotateX,
         rotateY: rotateY,
         transformStyle: "preserve-3d",
@@ -76,16 +124,36 @@ function TiltCard({ children, className = "", onClick }: TiltCardProps) {
       className={`relative rounded-2xl bg-black/40 border border-white/5 cursor-pointer overflow-hidden transition-colors duration-350 ${className}`}
     >
       {/* Glare spotlight layer */}
+=======
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        perspective: 1000,
+      }}
+      whileHover={{
+        y: -8,
+        scale: 1.018,
+        boxShadow: "0px 18px 36px rgba(59, 130, 246, 0.1)",
+      }}
+      className={`relative rounded-2xl bg-black/40 border border-white/5 cursor-pointer overflow-hidden transition-colors duration-350 ${className}`}
+    >
+>>>>>>> 6a3934a (Initial updated portfolio project)
       <motion.div
         style={{
           background: useTransform(
             [glareX, glareY],
+<<<<<<< HEAD
             ([gx, gy]) => `radial-gradient(circle 140px at ${gx}% ${gy}%, rgba(255, 255, 255, 0.08), transparent)`
+=======
+            ([gx, gy]) =>
+              `radial-gradient(circle 140px at ${gx}% ${gy}%, rgba(255, 255, 255, 0.08), transparent)`
+>>>>>>> 6a3934a (Initial updated portfolio project)
           ),
           opacity: glareOpacity,
         }}
         className="absolute inset-0 pointer-events-none z-30 mix-blend-overlay"
       />
+<<<<<<< HEAD
       
       {/* Outer subtle glow highlight layer */}
       <motion.div 
@@ -93,6 +161,15 @@ function TiltCard({ children, className = "", onClick }: TiltCardProps) {
           background: useTransform(
             [glareX, glareY],
             ([gx, gy]) => `radial-gradient(circle 240px at ${gx}% ${gy}%, rgba(59, 130, 246, 0.15), transparent)`
+=======
+
+      <motion.div
+        style={{
+          background: useTransform(
+            [glareX, glareY],
+            ([gx, gy]) =>
+              `radial-gradient(circle 240px at ${gx}% ${gy}%, rgba(59, 130, 246, 0.15), transparent)`
+>>>>>>> 6a3934a (Initial updated portfolio project)
           ),
           opacity: glareOpacity,
         }}
@@ -113,20 +190,32 @@ export default function Projects({ projects }: ProjectsProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
 
+<<<<<<< HEAD
   // Featured projects are those with liveUrl demos
   const featuredProjects = projects.filter(
     (project) => project.liveUrl !== undefined
   );
 
   // Other projects are those without liveUrl demos, excluding CodeGenAi & Explainer
+=======
+  // Featured projects are those with live demos
+  const featuredProjects = projects.filter((project) => project.liveUrl !== undefined);
+
+  // Other projects are those without live demos, excluding CodeGenAi & Explainer
+>>>>>>> 6a3934a (Initial updated portfolio project)
   const otherProjects = projects.filter(
     (project) => project.liveUrl === undefined && project.title !== "CodeGenAi & Explainer"
   );
 
+<<<<<<< HEAD
+=======
+  // Use only screenshots that actually exist
+>>>>>>> 6a3934a (Initial updated portfolio project)
   const STATIC_PROJECT_SCREENSHOTS: Record<string, string[]> = {
     "House Price Prediction System": [housePriceScreenshot],
     "Wine Quality Prediction": [wineQualityScreenshot],
     "Iris Flower Classification": [irisClassifierScreenshot],
+<<<<<<< HEAD
     "CodeGenAi & Explainer": [codegenaiScreenshot],
     "AI Chatbot Web Application": [aiChatbotScreenshot],
     "AI Quiz Generator": [thinkChampQuizScreenshot, thinkChampGenScreenshot],
@@ -142,6 +231,27 @@ export default function Projects({ projects }: ProjectsProps) {
       return STATIC_PROJECT_SCREENSHOTS[productTitle];
     }
     return assets.projectScreenshots[productTitle] || [];
+=======
+    "AI Health Symptom Checker": [symptomCheckerScreenshot],
+
+    // These images do not exist in your assets folder, so keep them empty
+    "CodeGenAi & Explainer": [],
+    "AI Chatbot Web Application": [],
+    "AI Quiz Generator": [],
+    "Movie-versa": [],
+    "Travel-Tales": [],
+  };
+
+  const getScreenshots = (projectTitle: string): string[] => {
+    if (
+      STATIC_PROJECT_SCREENSHOTS[projectTitle] &&
+      STATIC_PROJECT_SCREENSHOTS[projectTitle].length > 0
+    ) {
+      return STATIC_PROJECT_SCREENSHOTS[projectTitle];
+    }
+
+    return assets.projectScreenshots[projectTitle] || [];
+>>>>>>> 6a3934a (Initial updated portfolio project)
   };
 
   const handleOpenDetailedModal = (proj: Project) => {
@@ -157,14 +267,24 @@ export default function Projects({ projects }: ProjectsProps) {
     setCarouselIndex((prev) => (prev - 1 + total) % total);
   };
 
+<<<<<<< HEAD
   // Render highly customized blue mockups for active live apps
   const renderProjectMockUI = (title: string) => {
     const screens = getScreenshots(title);
+=======
+  const renderProjectMockUI = (title: string) => {
+    const screens = getScreenshots(title);
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
     if (screens.length > 0) {
       return (
         <div className="w-full h-full relative overflow-hidden group/img bg-[#020617] flex items-center justify-center border-b border-blue-950/20">
           <img
+<<<<<<< HEAD
             src={screens[0] || undefined}
+=======
+            src={screens[0]}
+>>>>>>> 6a3934a (Initial updated portfolio project)
             alt={`${title} Preview`}
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover group-hover/img:scale-105 duration-700"
@@ -189,12 +309,25 @@ export default function Projects({ projects }: ProjectsProps) {
 
           <div className="grid grid-cols-2 gap-2 text-[8px] flex-1">
             <div className="bg-slate-900/40 p-2 rounded space-y-1 flex flex-col justify-center border border-blue-950/10">
+<<<<<<< HEAD
               <div className="text-[7px] text-blue-400 uppercase font-black tracking-wider">Features Grid</div>
               <div className="flex justify-between border-b border-white/5 pb-0.5">
                 <span>Total Area:</span> <span className="text-slate-200 font-bold">1,850 sqf</span>
               </div>
               <div className="flex justify-between">
                 <span>Rooms:</span> <span className="text-slate-200 font-bold">3 BHK</span>
+=======
+              <div className="text-[7px] text-blue-400 uppercase font-black tracking-wider">
+                Features Grid
+              </div>
+              <div className="flex justify-between border-b border-white/5 pb-0.5">
+                <span>Total Area:</span>
+                <span className="text-slate-200 font-bold">1,850 sqf</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Rooms:</span>
+                <span className="text-slate-200 font-bold">3 BHK</span>
+>>>>>>> 6a3934a (Initial updated portfolio project)
               </div>
             </div>
 
@@ -226,7 +359,12 @@ export default function Projects({ projects }: ProjectsProps) {
           <div className="grid grid-cols-1 gap-1.5 flex-1 justify-center">
             <div className="bg-slate-900/40 p-2 rounded flex flex-col justify-center gap-1.5 border border-blue-950/10">
               <div className="flex justify-between text-[7px] text-slate-400">
+<<<<<<< HEAD
                 <span>Volatile Acidity:</span> <span className="text-blue-400 font-bold">7.00/10</span>
+=======
+                <span>Volatile Acidity:</span>
+                <span className="text-blue-400 font-bold">7.00/10</span>
+>>>>>>> 6a3934a (Initial updated portfolio project)
               </div>
               <div className="h-1 w-full bg-white/5 rounded-full relative">
                 <div className="absolute left-[70%] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-blue-500" />
@@ -234,7 +372,13 @@ export default function Projects({ projects }: ProjectsProps) {
             </div>
 
             <div className="p-1.5 rounded flex items-center justify-between text-[8px] text-slate-300">
+<<<<<<< HEAD
               <span className="text-slate-500 uppercase font-bold text-[7px]">CLASSIFICATION</span>
+=======
+              <span className="text-slate-500 uppercase font-bold text-[7px]">
+                CLASSIFICATION
+              </span>
+>>>>>>> 6a3934a (Initial updated portfolio project)
               <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20 font-bold text-[8px]">
                 Quality Tier: Average
               </span>
@@ -258,15 +402,30 @@ export default function Projects({ projects }: ProjectsProps) {
           <div className="grid grid-cols-2 gap-2 flex-1">
             <div className="bg-slate-900/40 p-2 rounded text-[7px] space-y-1 border border-blue-950/10 flex flex-col justify-center">
               <div className="flex justify-between border-b border-white/5 py-0.5">
+<<<<<<< HEAD
                 <span>Sepal Wt:</span> <span className="text-blue-400 font-semibold">3.2 cm</span>
               </div>
               <div className="flex justify-between">
                 <span>Petal Lg:</span> <span className="text-blue-400 font-semibold">4.8 cm</span>
+=======
+                <span>Sepal Wt:</span>
+                <span className="text-blue-400 font-semibold">3.2 cm</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Petal Lg:</span>
+                <span className="text-blue-400 font-semibold">4.8 cm</span>
+>>>>>>> 6a3934a (Initial updated portfolio project)
               </div>
             </div>
 
             <div className="bg-slate-900/40 p-2 rounded flex flex-col items-center justify-center text-center border border-blue-950/10">
+<<<<<<< HEAD
               <div className="text-[7px] text-slate-400 uppercase font-black leading-none">Iris-Setosa</div>
+=======
+              <div className="text-[7px] text-slate-400 uppercase font-black leading-none">
+                Iris-Setosa
+              </div>
+>>>>>>> 6a3934a (Initial updated portfolio project)
               <span className="text-[6px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded mt-1 font-mono font-bold uppercase tracking-widest text-[#66bb6a]">
                 PROB: 99.8%
               </span>
@@ -284,7 +443,13 @@ export default function Projects({ projects }: ProjectsProps) {
           <span className="text-[8px] text-blue-400/70 ml-2">gayatri@intelligence:~</span>
         </div>
         <div className="space-y-1.5 my-auto text-left pl-1">
+<<<<<<< HEAD
           <p className="text-blue-400 font-extrabold"><span className="text-slate-500">$</span> python execute.py</p>
+=======
+          <p className="text-blue-400 font-extrabold">
+            <span className="text-slate-500">$</span> python execute.py
+          </p>
+>>>>>>> 6a3934a (Initial updated portfolio project)
           <p className="text-slate-500 text-[8px]">&gt; Model nodes compiled successfully.</p>
         </div>
       </div>
@@ -292,14 +457,24 @@ export default function Projects({ projects }: ProjectsProps) {
   };
 
   return (
+<<<<<<< HEAD
     <section id="projects" className="relative py-28 bg-[#030712] overflow-hidden border-t border-white/5">
       {/* Decorative Glow Elements */}
+=======
+    <section
+      id="projects"
+      className="relative py-28 bg-[#030712] overflow-hidden border-t border-white/5"
+    >
+>>>>>>> 6a3934a (Initial updated portfolio project)
       <div className="absolute top-[30%] right-[10%] w-[35rem] h-[35rem] rounded-full bg-blue-650/5 blur-[150px] -z-10 pointer-events-none" />
       <div className="absolute bottom-[30%] left-[10%] w-[35rem] h-[35rem] rounded-full bg-blue-650/5 blur-[150px] -z-10 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6">
+<<<<<<< HEAD
         
         {/* ================= SECTION 1: FEATURED CODEBASE ================= */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
         <div className="flex flex-col items-center mb-16 text-center">
           <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-widest uppercase mb-4">
             <Sparkles className="w-3.5 h-3.5 text-blue-500" />
@@ -310,6 +485,7 @@ export default function Projects({ projects }: ProjectsProps) {
           </h2>
           <div className="w-16 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-4" />
           <p className="text-slate-400 text-xs sm:text-sm max-w-lg mt-5 leading-relaxed font-normal">
+<<<<<<< HEAD
             High-performance machine learning deployments, interactive regression models, and target predictions running in real time.
           </p>
         </div>
@@ -318,6 +494,17 @@ export default function Projects({ projects }: ProjectsProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-28">
           {featuredProjects.map((project, idx) => {
             const hasPics = getScreenshots(project.title).length > 0;
+=======
+            High-performance machine learning deployments, interactive regression models, and
+            target predictions running in real time.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-28">
+          {featuredProjects.map((project, idx) => {
+            const hasPics = getScreenshots(project.title).length > 0;
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
             return (
               <motion.div
                 key={project.title}
@@ -328,12 +515,16 @@ export default function Projects({ projects }: ProjectsProps) {
                 className="h-full"
               >
                 <TiltCard className="group flex flex-col h-full hover:border-blue-500/40">
+<<<<<<< HEAD
                   {/* Visual simulator frame header */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   <div className="px-4 py-2 bg-stone-950 border-b border-white/5 flex items-center justify-between text-[10px] font-mono text-slate-500">
                     <div className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                       <span>STREAMLIT_SYS_DOCK</span>
                     </div>
+<<<<<<< HEAD
                     <span className="text-blue-400 text-[8px] tracking-wider uppercase font-extrabold">Live app</span>
                   </div>
 
@@ -342,6 +533,16 @@ export default function Projects({ projects }: ProjectsProps) {
                     {renderProjectMockUI(project.title)}
 
                     {/* Overlay Interaction trigger */}
+=======
+                    <span className="text-blue-400 text-[8px] tracking-wider uppercase font-extrabold">
+                      Live app
+                    </span>
+                  </div>
+
+                  <div className="h-44 w-full relative">
+                    {renderProjectMockUI(project.title)}
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                     <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <button
                         onClick={() => handleOpenDetailedModal(project)}
@@ -353,10 +554,16 @@ export default function Projects({ projects }: ProjectsProps) {
                     </div>
                   </div>
 
+<<<<<<< HEAD
                   {/* Card textual content segment */}
                   <div className="p-6 flex-1 flex flex-col justify-between text-left">
                     <div className="space-y-3">
                       <h3 
+=======
+                  <div className="p-6 flex-1 flex flex-col justify-between text-left">
+                    <div className="space-y-3">
+                      <h3
+>>>>>>> 6a3934a (Initial updated portfolio project)
                         onClick={() => handleOpenDetailedModal(project)}
                         className="font-display font-bold text-lg text-white group-hover:text-blue-400 cursor-pointer transition-colors duration-200"
                       >
@@ -368,7 +575,10 @@ export default function Projects({ projects }: ProjectsProps) {
                     </div>
 
                     <div className="mt-6 pt-5 border-t border-white/5">
+<<<<<<< HEAD
                       {/* Tags */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                       <div className="flex flex-wrap gap-1.5 mb-5">
                         {project.tags.slice(0, 6).map((tag) => (
                           <span
@@ -385,7 +595,10 @@ export default function Projects({ projects }: ProjectsProps) {
                         )}
                       </div>
 
+<<<<<<< HEAD
                       {/* CTAs */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                       <div className="flex gap-2.5">
                         {project.liveUrl && (
                           <a
@@ -398,11 +611,19 @@ export default function Projects({ projects }: ProjectsProps) {
                             <span>Launch Live Demo</span>
                           </a>
                         )}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                         <a
                           href={project.codeUrl}
                           target="_blank"
                           rel="noreferrer"
+<<<<<<< HEAD
                           className="px-3.5 py-2 rounded-lg bg-stone-900 border border-white/10 hover:bg-black hover:border-blue-500/50 text-slate-355 hover:text-white text-[11px] font-black duration-250 flex items-center justify-center gap-1 cursor-pointer"
+=======
+                          className="px-3.5 py-2 rounded-lg bg-stone-900 border border-white/10 hover:bg-black hover:border-blue-500/50 text-slate-400 hover:text-white text-[11px] font-black duration-250 flex items-center justify-center gap-1 cursor-pointer"
+>>>>>>> 6a3934a (Initial updated portfolio project)
                           title="View Codebase"
                         >
                           <Github className="w-3.5 h-3.5" />
@@ -416,10 +637,15 @@ export default function Projects({ projects }: ProjectsProps) {
             );
           })}
         </div>
+<<<<<<< HEAD
         {/* ================= SECTION 2: SYSTEM LOGS & OTHER REPOS ================= */}
         <div className="border border-white/5 bg-slate-900/15 backdrop-blur-md rounded-2xl p-6 sm:p-9 shadow-xl relative">
 
           {/* Subsection B: Other Projects & Repositories */}
+=======
+
+        <div className="border border-white/5 bg-slate-900/15 backdrop-blur-md rounded-2xl p-6 sm:p-9 shadow-xl relative">
+>>>>>>> 6a3934a (Initial updated portfolio project)
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/5 mb-8 gap-4 text-left">
               <div className="flex items-center gap-3">
@@ -442,7 +668,10 @@ export default function Projects({ projects }: ProjectsProps) {
               </div>
             </div>
 
+<<<<<<< HEAD
             {/* Logs Viewport List Grid */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               {otherProjects.map((repo, i) => {
                 const getRepoCategory = (proj: Project) => {
@@ -466,11 +695,18 @@ export default function Projects({ projects }: ProjectsProps) {
                       className="group flex flex-col h-full p-6 bg-[#070c19] border border-white/5 hover:border-blue-500/30 hover:bg-[#0c142c] justify-between"
                     >
                       <div>
+<<<<<<< HEAD
                         {/* Header bar of the repo card */}
                         <div className="flex items-center justify-between mb-5">
                           <div className="flex items-center gap-2">
                             <Folder className="w-4 h-4 text-blue-450 group-hover:text-blue-400 transition-colors" />
                             <span className="text-[9px] font-mono text-slate-450 group-hover:text-slate-400 tracking-wider uppercase">
+=======
+                        <div className="flex items-center justify-between mb-5">
+                          <div className="flex items-center gap-2">
+                            <Folder className="w-4 h-4 text-blue-400 group-hover:text-blue-400 transition-colors" />
+                            <span className="text-[9px] font-mono text-slate-400 group-hover:text-slate-300 tracking-wider uppercase">
+>>>>>>> 6a3934a (Initial updated portfolio project)
                               {getRepoCategory(repo)}
                             </span>
                           </div>
@@ -483,11 +719,16 @@ export default function Projects({ projects }: ProjectsProps) {
                         <h3 className="font-display font-black text-base text-white group-hover:text-blue-400 transition-colors">
                           {repo.title}
                         </h3>
+<<<<<<< HEAD
                         
+=======
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                         <p className="text-slate-400 text-xs leading-relaxed mt-2 line-clamp-2">
                           {repo.description}
                         </p>
 
+<<<<<<< HEAD
                         {/* Key Features Block */}
                         {repo.features && repo.features.length > 0 && (
                           <div className="mt-4 space-y-1.5">
@@ -498,6 +739,24 @@ export default function Projects({ projects }: ProjectsProps) {
                                    <span className="w-1 h-1 rounded-full bg-blue-500 mt-2 shrink-0" />
                                    <span className="line-clamp-1 text-slate-400 group-hover:text-slate-200 transition-colors">{feat}</span>
                                  </li>
+=======
+                        {repo.features && repo.features.length > 0 && (
+                          <div className="mt-4 space-y-1.5">
+                            <span className="text-[9px] font-mono text-slate-500 tracking-wider block uppercase font-bold">
+                              // KEY ARCHITECTURE &amp; OUTCOMES
+                            </span>
+                            <ul className="space-y-1">
+                              {repo.features.slice(0, 2).map((feat, fIdx) => (
+                                <li
+                                  key={fIdx}
+                                  className="flex gap-2 text-xs text-slate-400 items-start"
+                                >
+                                  <span className="w-1 h-1 rounded-full bg-blue-500 mt-2 shrink-0" />
+                                  <span className="line-clamp-1 text-slate-400 group-hover:text-slate-200 transition-colors">
+                                    {feat}
+                                  </span>
+                                </li>
+>>>>>>> 6a3934a (Initial updated portfolio project)
                               ))}
                             </ul>
                           </div>
@@ -505,16 +764,28 @@ export default function Projects({ projects }: ProjectsProps) {
                       </div>
 
                       <div className="mt-5 pt-3.5 border-t border-white/5 flex flex-wrap items-center justify-between gap-3">
+<<<<<<< HEAD
                         {/* Language and tag highlights */}
                         <div className="flex flex-wrap gap-1 max-w-[75%]">
                           {repo.tags.slice(0, 4).map((item) => (
                             <span key={item} className="px-2.5 py-0.5 rounded text-[8px] font-mono bg-blue-500/5 border border-blue-500/15 text-blue-400 uppercase font-black tracking-wider">
+=======
+                        <div className="flex flex-wrap gap-1 max-w-[75%]">
+                          {repo.tags.slice(0, 4).map((item) => (
+                            <span
+                              key={item}
+                              className="px-2.5 py-0.5 rounded text-[8px] font-mono bg-blue-500/5 border border-blue-500/15 text-blue-400 uppercase font-black tracking-wider"
+                            >
+>>>>>>> 6a3934a (Initial updated portfolio project)
                               {item}
                             </span>
                           ))}
                         </div>
 
+<<<<<<< HEAD
                         {/* Github direct pipeline log code link */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                         <a
                           href={repo.codeUrl}
                           target="_blank"
@@ -534,7 +805,10 @@ export default function Projects({ projects }: ProjectsProps) {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Selected Project Detailed Specifications Dialog/Modal */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
         <AnimatePresence>
           {selectedProject && (() => {
             const screens = getScreenshots(selectedProject.title);
@@ -553,7 +827,10 @@ export default function Projects({ projects }: ProjectsProps) {
                   exit={{ scale: 0.95, y: 15 }}
                   className="relative w-full max-w-2xl rounded-2xl bg-black border border-blue-500/20 max-h-[90vh] overflow-y-auto hide-scrollbar text-left flex flex-col shadow-2xl"
                 >
+<<<<<<< HEAD
                   {/* Close floating button */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   <button
                     onClick={() => setSelectedProject(null)}
                     className="absolute top-5 right-5 p-2 rounded-xl bg-stone-900/80 hover:bg-blue-600 hover:text-white text-slate-400 transition duration-200 z-50 cursor-pointer"
@@ -561,18 +838,28 @@ export default function Projects({ projects }: ProjectsProps) {
                     <X className="w-4 h-4" />
                   </button>
 
+<<<<<<< HEAD
                   {/* Top Header Visual Block */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   <div className="relative h-64 sm:h-72 w-full bg-[#020617] border-b border-white/5 overflow-hidden flex items-center justify-center">
                     {hasMultipleImages ? (
                       <div className="w-full h-full relative">
                         <img
+<<<<<<< HEAD
                           src={screens[carouselIndex] || undefined}
+=======
+                          src={screens[carouselIndex]}
+>>>>>>> 6a3934a (Initial updated portfolio project)
                           alt={`${selectedProject.title} Slide ${carouselIndex + 1}`}
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover"
                         />
 
+<<<<<<< HEAD
                         {/* Navigation controls if multiple slides exist */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                         {screens.length > 1 && (
                           <>
                             <button
@@ -588,20 +875,33 @@ export default function Projects({ projects }: ProjectsProps) {
                               <ChevronRight className="w-4 h-4" />
                             </button>
 
+<<<<<<< HEAD
                             {/* Carousel pagination dots indicators */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                             <div className="absolute bottom-4 inset-x-0 flex justify-center gap-1.5">
                               {screens.map((_, i) => (
                                 <button
                                   key={i}
                                   onClick={() => setCarouselIndex(i)}
                                   className={`w-1.5 h-1.5 rounded-full transition-all ${
+<<<<<<< HEAD
                                     carouselIndex === i ? "bg-blue-500 scale-125 px-2" : "bg-white/40"
+=======
+                                    carouselIndex === i
+                                      ? "bg-blue-500 scale-125 px-2"
+                                      : "bg-white/40"
+>>>>>>> 6a3934a (Initial updated portfolio project)
                                   }`}
                                 />
                               ))}
                             </div>
                           </>
                         )}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                         <div className="absolute top-4 left-4 px-2.5 py-1 rounded bg-black/80 border border-white/10 text-[9px] font-mono text-blue-400">
                           RAW IMAGE PREVIEW {carouselIndex + 1} OF {screens.length}
                         </div>
@@ -622,7 +922,10 @@ export default function Projects({ projects }: ProjectsProps) {
                     )}
                   </div>
 
+<<<<<<< HEAD
                   {/* Details parameters fields logs */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   <div className="p-6 space-y-6">
                     {hasMultipleImages && (
                       <div>
@@ -647,7 +950,14 @@ export default function Projects({ projects }: ProjectsProps) {
                       </h4>
                       <ul className="space-y-2">
                         {selectedProject.features.map((feat, i) => (
+<<<<<<< HEAD
                           <li key={i} className="flex gap-2.5 text-xs text-slate-300 leading-relaxed text-left items-start">
+=======
+                          <li
+                            key={i}
+                            className="flex gap-2.5 text-xs text-slate-300 leading-relaxed text-left items-start"
+                          >
+>>>>>>> 6a3934a (Initial updated portfolio project)
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-1.5" />
                             <span>{feat}</span>
                           </li>
@@ -671,7 +981,10 @@ export default function Projects({ projects }: ProjectsProps) {
                       </div>
                     </div>
 
+<<<<<<< HEAD
                     {/* Actions inside modal footer */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                     <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row gap-3">
                       {selectedProject.liveUrl && (
                         <a
@@ -684,6 +997,10 @@ export default function Projects({ projects }: ProjectsProps) {
                           <span>Launch Live Dashboard</span>
                         </a>
                       )}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                       <a
                         href={selectedProject.codeUrl}
                         target="_blank"
@@ -703,4 +1020,8 @@ export default function Projects({ projects }: ProjectsProps) {
       </div>
     </section>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 6a3934a (Initial updated portfolio project)

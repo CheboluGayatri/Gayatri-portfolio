@@ -1,8 +1,35 @@
 import React, { useState, useRef, useEffect } from "react";
+<<<<<<< HEAD
 import { Download, Play, Pause, Volume2, VolumeX, Sparkles, ArrowRight, Cpu, Code2, Database, X, Settings, Upload, RotateCcw, AlertTriangle, Check, Link, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAssetDetection, FALLBACK_ASSETS, getEmbedVideoUrl } from "../utils/assetDetector";
 import { saveLocalMedia, clearLocalMedia } from "../utils/db"
+=======
+import {
+  Download,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Sparkles,
+  ArrowRight,
+  Cpu,
+  X,
+  Settings,
+  Upload,
+  RotateCcw,
+  AlertTriangle,
+  Check,
+  Link,
+  Globe,
+  ExternalLink,
+  Eye,
+} from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { useAssetDetection, FALLBACK_ASSETS } from "../utils/assetDetector";
+import { saveLocalMedia, clearLocalMedia } from "../utils/db";
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
 interface HeroProps {
   name: string;
   role: string;
@@ -11,6 +38,7 @@ interface HeroProps {
   onNavigate: (id: string) => void;
 }
 
+<<<<<<< HEAD
 export default function Hero({ name, role, tagline, email, onNavigate }: HeroProps) {
   const assets = useAssetDetection();
   const [isPlaying, setIsPlaying] = useState(true);
@@ -97,10 +125,66 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
   const videoDetails = getEmbedVideoUrl(resolvedVideoUrl);
 
   // Sync video audio/playback state safely
+=======
+export default function Hero({
+  name,
+  role,
+  tagline,
+  email,
+  onNavigate,
+}: HeroProps) {
+  const assets = useAssetDetection();
+
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [showVolumePrompt, setShowVolumePrompt] = useState(true);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hasInteractedRef = useRef(false);
+
+  const [isSetupOpen, setIsSetupOpen] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [videoUrlInput, setVideoUrlInput] = useState(
+    () => localStorage.getItem("custom_video_url") || ""
+  );
+  const [imageUrlInput, setImageUrlInput] = useState(
+    () => localStorage.getItem("custom_profile_url") || ""
+  );
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [uploadError, setUploadError] = useState("");
+  const [infoMessage, setInfoMessage] = useState("");
+
+  const [resolvedVideoUrl, setResolvedVideoUrl] = useState(
+    assets.videoUrl || FALLBACK_ASSETS.videoUrl
+  );
+  const [resolvedProfileUrl, setResolvedProfileUrl] = useState(
+    assets.profileUrl || FALLBACK_ASSETS.profileUrl
+  );
+
+  // Resume path from public folder
+  const resumeUrl = "/resume/Gayatri_Chebolu_Resume.pdf";
+
+  useEffect(() => {
+    setResolvedVideoUrl(assets.videoUrl || FALLBACK_ASSETS.videoUrl);
+    setResolvedProfileUrl(assets.profileUrl || FALLBACK_ASSETS.profileUrl);
+  }, [assets.videoUrl, assets.profileUrl]);
+
+  const handleVideoError = () => {
+    if (resolvedVideoUrl !== FALLBACK_ASSETS.localVideoUrl) {
+      setResolvedVideoUrl(FALLBACK_ASSETS.localVideoUrl);
+    }
+  };
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
+<<<<<<< HEAD
     // Directly set muted property
     video.muted = isMuted;
 
@@ -151,6 +235,20 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     };
 
     const cleanup = () => {
+=======
+    video.muted = isMuted;
+
+    if (isPlaying) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [isPlaying, isMuted, resolvedVideoUrl]);
+
+  useEffect(() => {
+    const handleFirstGesture = () => {
+      hasInteractedRef.current = true;
+>>>>>>> 6a3934a (Initial updated portfolio project)
       window.removeEventListener("click", handleFirstGesture);
       window.removeEventListener("touchstart", handleFirstGesture);
       window.removeEventListener("keydown", handleFirstGesture);
@@ -160,15 +258,28 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     window.addEventListener("touchstart", handleFirstGesture, { once: true });
     window.addEventListener("keydown", handleFirstGesture, { once: true });
 
+<<<<<<< HEAD
     return cleanup;
   }, []);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
+=======
+    return () => {
+      window.removeEventListener("click", handleFirstGesture);
+      window.removeEventListener("touchstart", handleFirstGesture);
+      window.removeEventListener("keydown", handleFirstGesture);
+    };
+  }, []);
+
+  const togglePlay = () => {
+    setIsPlaying((prev) => !prev);
+>>>>>>> 6a3934a (Initial updated portfolio project)
   };
 
   const toggleMute = () => {
     hasInteractedRef.current = true;
+<<<<<<< HEAD
     if (isMuted) {
       // Unmuting: reset video to start so they hear the greeting clearly
       if (videoRef.current) {
@@ -179,12 +290,16 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     } else {
       setIsMuted(true);
     }
+=======
+    setIsMuted((prev) => !prev);
+>>>>>>> 6a3934a (Initial updated portfolio project)
   };
 
   const handleUnmuteAndRestart = () => {
     hasInteractedRef.current = true;
     setIsMuted(false);
     setIsPlaying(true);
+<<<<<<< HEAD
     setIsAutoplayBlocked(false);
 
     if (videoRef.current) {
@@ -194,10 +309,18 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       videoRef.current.play().catch(err => {
         console.log("Manual play trigger error for video:", err);
       });
+=======
+
+    if (videoRef.current) {
+      videoRef.current.muted = false;
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+>>>>>>> 6a3934a (Initial updated portfolio project)
     }
   };
 
   const handleDownloadResume = () => {
+<<<<<<< HEAD
     if (assets.resumeUrl) {
       // Create a temporary link and trigger download for the discovered PDF path
       const link = document.createElement("a");
@@ -211,22 +334,46 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       // High-quality print-layout fallback representing Gayatri's profile details
       window.print();
     }
+=======
+    const link = document.createElement("a");
+    link.href = resumeUrl;
+    link.download = "Gayatri_Chebolu_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleOpenResumeInNewTab = () => {
+    window.open(resumeUrl, "_blank", "noopener,noreferrer");
+>>>>>>> 6a3934a (Initial updated portfolio project)
   };
 
   const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+<<<<<<< HEAD
     
     // Check file size (suggest under 25MB for browser safety)
     if (file.size > 25 * 1024 * 1024) {
       setUploadStatus("error");
       setUploadError(`⚠️ Video file is too large (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please choose a compressed video under 25MB, or paste a direct video link in the URL tab!`);
+=======
+
+    if (file.size > 25 * 1024 * 1024) {
+      setUploadStatus("error");
+      setUploadError(
+        `⚠️ Video file is too large (${(file.size / (1024 * 1024)).toFixed(
+          1
+        )}MB). Please choose a compressed video under 25MB.`
+      );
+>>>>>>> 6a3934a (Initial updated portfolio project)
       return;
     }
 
     setUploadStatus("loading");
     setUploadError("");
     setInfoMessage("");
+<<<<<<< HEAD
     
     try {
       await saveLocalMedia("custom_video", file);
@@ -250,12 +397,43 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     if (file.size > 10 * 1024 * 1024) {
       setUploadStatus("error");
       setUploadError(`⚠️ Image file is too large (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please select a photo under 10MB.`);
+=======
+
+    try {
+      await saveLocalMedia("custom_video", file);
+      localStorage.removeItem("custom_video_url");
+      setUploadStatus("success");
+      setInfoMessage("🎥 Background video uploaded successfully. Reloading...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    } catch (err: any) {
+      setUploadStatus("error");
+      setUploadError("Could not store video: " + (err.message || err.toString()));
+    }
+  };
+
+  const handleProfileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadStatus("error");
+      setUploadError(
+        `⚠️ Image file is too large (${(file.size / (1024 * 1024)).toFixed(
+          1
+        )}MB). Please select a photo under 10MB.`
+      );
+>>>>>>> 6a3934a (Initial updated portfolio project)
       return;
     }
 
     setUploadStatus("loading");
     setUploadError("");
     setInfoMessage("");
+<<<<<<< HEAD
     
     try {
       await saveLocalMedia("custom_profile", file);
@@ -269,6 +447,20 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       console.error(err);
       setUploadStatus("error");
       setUploadError("Could not store image in IndexedDB: " + (err.message || err.toString()));
+=======
+
+    try {
+      await saveLocalMedia("custom_profile", file);
+      localStorage.removeItem("custom_profile_url");
+      setUploadStatus("success");
+      setInfoMessage("📸 Profile picture uploaded successfully. Reloading...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    } catch (err: any) {
+      setUploadStatus("error");
+      setUploadError("Could not store image: " + (err.message || err.toString()));
+>>>>>>> 6a3934a (Initial updated portfolio project)
     }
   };
 
@@ -291,10 +483,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       }
 
       setUploadStatus("success");
+<<<<<<< HEAD
       setInfoMessage("✨ Custom media links saved successfully! Page will reload to update...");
       setTimeout(() => {
         window.location.reload();
       }, 1500);
+=======
+      setInfoMessage("✨ Custom media links saved successfully. Reloading...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+>>>>>>> 6a3934a (Initial updated portfolio project)
     } catch (err: any) {
       setUploadStatus("error");
       setUploadError("Failed to save links: " + (err.message || err.toString()));
@@ -305,10 +504,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     try {
       await clearLocalMedia("custom_video");
       localStorage.removeItem("custom_video_url");
+<<<<<<< HEAD
       setInfoMessage("Restoring Gayatri's default background video...");
       setTimeout(() => {
         window.location.reload();
       }, 1200);
+=======
+      setInfoMessage("Restoring default background video...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+>>>>>>> 6a3934a (Initial updated portfolio project)
     } catch (err) {
       console.error(err);
     }
@@ -318,10 +524,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
     try {
       await clearLocalMedia("custom_profile");
       localStorage.removeItem("custom_profile_url");
+<<<<<<< HEAD
       setInfoMessage("Restoring default Gayatri profile photo...");
       setTimeout(() => {
         window.location.reload();
       }, 1200);
+=======
+      setInfoMessage("Restoring default profile photo...");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+>>>>>>> 6a3934a (Initial updated portfolio project)
     } catch (err) {
       console.error(err);
     }
@@ -332,6 +545,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       id="home"
       className="relative min-h-[92vh] xl:min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden bg-slate-950"
     >
+<<<<<<< HEAD
       {/* 1. Cinematic Autoplay Fullscreen Background Video & Soundtrack */}
       <div 
         className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950"
@@ -370,12 +584,35 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             className="absolute inset-0 w-full h-full object-cover z-10"
+=======
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-slate-950">
+        {resolvedVideoUrl && (
+          <video
+            id="hero-video"
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            preload="auto"
+            onCanPlay={() => {
+              setVideoLoaded(true);
+              setIsVideoReady(true);
+            }}
+            onLoadedData={() => {
+              setVideoLoaded(true);
+              setIsVideoReady(true);
+            }}
+            onError={handleVideoError}
+>>>>>>> 6a3934a (Initial updated portfolio project)
             style={{
               objectFit: "cover",
               filter: "brightness(1.05) contrast(1.05)",
               width: "100%",
               height: "100%",
             }}
+<<<<<<< HEAD
           />
         )}
 
@@ -388,10 +625,24 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
 
         {/* Cinematic Glowing Background blobs constantly active underneath the video */}
         <div className="absolute inset-0 z-5">
+=======
+          >
+            <source src={resolvedVideoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
+
+        <div className="absolute inset-0 bg-slate-950/10 md:bg-slate-950/15 z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-full md:w-3/5 bg-gradient-to-r from-slate-950/70 via-slate-950/20 to-transparent z-[15] pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#030712] via-transparent to-transparent z-[15] pointer-events-none" />
+
+        <div className="absolute inset-0 z-[5]">
+>>>>>>> 6a3934a (Initial updated portfolio project)
           <div className="absolute top-[15%] left-[5%] w-[35rem] h-[35rem] rounded-full bg-blue-600/5 blur-[130px]" />
           <div className="absolute bottom-[15%] right-[5%] w-[40rem] h-[40rem] rounded-full bg-blue-800/5 blur-[150px]" />
         </div>
 
+<<<<<<< HEAD
         {/* Grid Overlay with a subtle blue glow feel */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.005)_1px,transparent_1px)] bg-[size:42px_42px] opacity-10 z-10 pointer-events-none" />
       </div>
@@ -406,14 +657,39 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           >
             <div className="flex items-center gap-3 cursor-pointer select-none" onClick={handleUnmuteAndRestart}>
               <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-450 animate-pulse">
+=======
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.005)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.005)_1px,transparent_1px)] bg-[size:42px_42px] opacity-10 z-10 pointer-events-none" />
+      </div>
+
+      {isMuted && showVolumePrompt && (
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-[35] w-[90%] max-w-lg pointer-events-auto">
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            className="flex items-center justify-between gap-3 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600/45 via-[#0047e1]/25 to-stone-950/60 border border-blue-500/40 backdrop-blur-md shadow-2xl hover:border-blue-400/60 transition-all duration-300"
+          >
+            <div
+              className="flex items-center gap-3 cursor-pointer select-none"
+              onClick={handleUnmuteAndRestart}
+            >
+              <div className="w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 animate-pulse">
+>>>>>>> 6a3934a (Initial updated portfolio project)
                 <Volume2 className="w-5 h-5 animate-bounce" />
               </div>
               <div className="text-left">
                 <p className="text-xs font-bold text-white tracking-wide">
+<<<<<<< HEAD
                   🔊 Click to unmute Gayatri's background video sound!
                 </p>
                 <p className="text-[10px] text-slate-300 font-mono">
                   Autoplay is default muted for browser compatibility. Click to play with full clear HD vocal sound!
+=======
+                  🔊 Click to unmute Gayatri&apos;s background video sound!
+                </p>
+                <p className="text-[10px] text-slate-300 font-mono">
+                  Autoplay is muted by default for browser compatibility. Click
+                  to play with sound.
+>>>>>>> 6a3934a (Initial updated portfolio project)
                 </p>
               </div>
             </div>
@@ -428,9 +704,13 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
       )}
 
       <div className="max-w-7xl mx-auto px-6 w-full relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<<<<<<< HEAD
         {/* Left Column: Headline, Bio & CTAs */}
         <div className="lg:col-span-8 flex flex-col items-start text-left mt-6">
           {/* Pulsing Tag / Badge with blue theme glow */}
+=======
+        <div className="lg:col-span-8 flex flex-col items-start text-left mt-6">
+>>>>>>> 6a3934a (Initial updated portfolio project)
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -442,10 +722,16 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
           </motion.div>
 
+<<<<<<< HEAD
           {/* Premium display typewriter header matching Sushmita Style */}
           <div className="mb-6">
             <span className="text-slate-400 font-display text-lg sm:text-2xl font-semibold tracking-wide block mb-1">
               Hi, I'm
+=======
+          <div className="mb-6">
+            <span className="text-slate-400 font-display text-lg sm:text-2xl font-semibold tracking-wide block mb-1">
+              Hi, I&apos;m
+>>>>>>> 6a3934a (Initial updated portfolio project)
             </span>
             <h1 className="font-display text-4xl sm:text-6xl font-black text-white leading-none tracking-tight mb-4">
               Gayatri
@@ -453,6 +739,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             <h2 className="text-blue-400 font-sans text-lg sm:text-2xl font-bold tracking-normal leading-relaxed max-w-2xl">
               {role.includes("with") ? (
                 <>
+<<<<<<< HEAD
                   {role.split("with")[0].trim()} with <br className="block" /> {role.split("with")[1].trim()}
                 </>
               ) : role}
@@ -460,6 +747,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
           </div>
 
           {/* Core Introduction / Tagline */}
+=======
+                  {role.split("with")[0].trim()} with <br className="block" />{" "}
+                  {role.split("with")[1].trim()}
+                </>
+              ) : (
+                role
+              )}
+            </h2>
+          </div>
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -469,7 +767,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             {tagline}
           </motion.p>
 
+<<<<<<< HEAD
           {/* Core Action Call To Actions using pristine round pills matching slide 1 */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -495,12 +796,19 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               onClick={() => setIsResumeOpen(true)}
               className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold rounded-full text-xs sm:text-sm hover:scale-[1.05] hover:shadow-[0_0_25px_rgba(59,130,246,0.45)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 pointer-events-auto cursor-pointer shadow-md"
             >
+<<<<<<< HEAD
               <span>📄 Download Resume</span>
+=======
+              <span>📄 View Resume</span>
+>>>>>>> 6a3934a (Initial updated portfolio project)
             </button>
           </motion.div>
         </div>
 
+<<<<<<< HEAD
         {/* Right Column: Speaker unmute controls / voice widget matching Slide 1 */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
         <div className="lg:col-span-4 w-full flex flex-col items-center lg:items-end justify-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -510,16 +818,25 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
             onClick={isMuted ? handleUnmuteAndRestart : toggleMute}
           >
             <div className="relative group flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/10 hover:border-blue-500 bg-black/40 hover:bg-black/80 shadow-2xl transition-all duration-500">
+<<<<<<< HEAD
               {/* Pulsating backdrop circle lines */}
               <div className="absolute -inset-2.5 rounded-full border border-blue-500/20 opacity-0 group-hover:opacity-100 group-hover:animate-ping [animation-duration:2.5s] -z-10" />
               <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 opacity-10 group-hover:opacity-20 blur-sm -z-10" />
 
               {/* Sound waves graphic overlay when active */}
+=======
+              <div className="absolute -inset-2.5 rounded-full border border-blue-500/20 opacity-0 group-hover:opacity-100 group-hover:animate-ping [animation-duration:2.5s] -z-10" />
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 opacity-10 group-hover:opacity-20 blur-sm -z-10" />
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
               {!isMuted && (
                 <div className="absolute inset-0.5 rounded-full border border-emerald-500/30 animate-spin [animation-duration:15s]" />
               )}
 
+<<<<<<< HEAD
               {/* Central Speaker Icon */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
               <div className="flex flex-col items-center gap-1 text-white">
                 {isMuted ? (
                   <VolumeX className="w-8 h-8 text-blue-500 animate-pulse group-hover:scale-110 duration-300" />
@@ -529,7 +846,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               </div>
             </div>
 
+<<<<<<< HEAD
             {/* Label below the speaker */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
             <div className="text-center mt-4">
               <span className="text-[11px] font-mono font-black tracking-widest text-[#f5f5f5] uppercase select-none opacity-80 group-hover:opacity-100 transition-opacity">
                 {isMuted ? "UNMUTE REEL" : "TAP TO MUTE"}
@@ -542,13 +862,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Background Player controls for cinematic video custom interface */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
       <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2 p-1.5 rounded-xl bg-slate-950/80 border border-white/5 shadow-2xl backdrop-blur-md">
         <button
           onClick={togglePlay}
           className="p-1.5 rounded bg-white/5 hover:bg-white/10 text-white transition cursor-pointer"
           title={isPlaying ? "Pause visual and audio stream" : "Play visual and audio stream"}
         >
+<<<<<<< HEAD
           {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
         </button>
         <button
@@ -561,17 +885,51 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         </button>
         
         {/* Custom Settings button to configure backgrounds and profile photos */}
+=======
+          {isPlaying ? (
+            <Pause className="w-3.5 h-3.5" />
+          ) : (
+            <Play className="w-3.5 h-3.5 fill-white" />
+          )}
+        </button>
+
+        <button
+          onClick={toggleMute}
+          className="p-1.5 rounded bg-white/5 hover:bg-white/10 text-white transition cursor-pointer flex items-center gap-1"
+          title={isMuted ? "Unmute background video sound" : "Mute background video sound"}
+        >
+          {isMuted ? (
+            <VolumeX className="w-3.5 h-3.5 text-slate-400" />
+          ) : (
+            <Volume2 className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+          )}
+          <span className="text-[9px] font-mono font-bold hidden sm:inline text-slate-400">
+            SPEECH/SOUND
+          </span>
+        </button>
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
         <button
           onClick={() => setIsSetupOpen(true)}
           className="p-1.5 rounded bg-white/5 hover:bg-white/10 hover:text-blue-400 text-slate-300 transition cursor-pointer flex items-center gap-1"
           title="Open Custom Background & Profile Photo Panel"
         >
+<<<<<<< HEAD
           <Settings className="w-3.5 h-3.5 animate-spin-slow" />
           <span className="text-[9px] font-mono font-bold hidden sm:inline">BG SETTINGS</span>
         </button>
       </div>
 
       {/* Floating Scroll Down button indicators */}
+=======
+          <Settings className="w-3.5 h-3.5" />
+          <span className="text-[9px] font-mono font-bold hidden sm:inline">
+            BG SETTINGS
+          </span>
+        </button>
+      </div>
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-auto">
         <button
           onClick={() => onNavigate("about")}
@@ -582,7 +940,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         </button>
       </div>
 
+<<<<<<< HEAD
       {/* Modern High-End Media Setup Modal for Background Video and Profile Images */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
       <AnimatePresence>
         {isSetupOpen && (
           <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
@@ -594,7 +955,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               className="relative w-full max-w-xl rounded-3xl border border-white/10 bg-slate-900/95 p-6 shadow-2xl text-left"
               onClick={(e) => e.stopPropagation()}
             >
+<<<<<<< HEAD
               {/* Header */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
               <div className="flex justify-between items-center pb-4 border-b border-white/5 mb-6">
                 <div>
                   <span className="text-[9px] font-mono tracking-widest text-blue-400 uppercase font-bold">
@@ -617,7 +981,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                 </button>
               </div>
 
+<<<<<<< HEAD
               {/* Status and Action alerts */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
               {infoMessage && (
                 <div className="p-3.5 bg-emerald-500/15 border border-emerald-500/35 rounded-xl text-emerald-400 text-xs font-mono mb-6 flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -633,13 +1000,21 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               )}
 
               <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+<<<<<<< HEAD
                 {/* Section 1: Presentation Background Video */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                 <div className="space-y-3 p-4 rounded-2xl bg-white/5 border border-white/5">
                   <div className="flex justify-between items-center">
                     <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
                       <Play className="w-3.5 h-3.5" /> 1. Home Background Video
                     </h4>
+<<<<<<< HEAD
                     {(localStorage.getItem("custom_video_url") || assets.videoUrl !== FALLBACK_ASSETS.videoUrl) && (
+=======
+                    {(localStorage.getItem("custom_video_url") ||
+                      assets.videoUrl !== FALLBACK_ASSETS.videoUrl) && (
+>>>>>>> 6a3934a (Initial updated portfolio project)
                       <button
                         onClick={handleResetVideo}
                         className="text-[10px] font-mono text-red-400 hover:text-red-300 font-bold uppercase cursor-pointer flex items-center gap-1"
@@ -648,18 +1023,29 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                       </button>
                     )}
                   </div>
+<<<<<<< HEAD
                   
                   {/* Option A: Link pasting (Best for Vercel!) */}
                   <div className="space-y-2">
                     <label className="text-[11px] font-mono text-slate-300 block">
                       🔗 Paste Direct Web Link (Supports direct .mp4, YouTube, or Vimeo!)
+=======
+
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-mono text-slate-300 block">
+                      🔗 Paste Direct Web Link
+>>>>>>> 6a3934a (Initial updated portfolio project)
                     </label>
                     <div className="flex gap-2">
                       <div className="relative flex-grow">
                         <Link className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                         <input
                           type="url"
+<<<<<<< HEAD
                           placeholder="https://example.com/video.mp4 or YouTube URL"
+=======
+                          placeholder="https://example.com/video.mp4"
+>>>>>>> 6a3934a (Initial updated portfolio project)
                           value={videoUrlInput}
                           onChange={(e) => setVideoUrlInput(e.target.value)}
                           className="w-full bg-slate-950/80 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors"
@@ -668,6 +1054,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                     </div>
                   </div>
 
+<<<<<<< HEAD
                   {/* Divider */}
                   <div className="relative my-3 flex items-center justify-center">
                     <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
@@ -675,6 +1062,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                   </div>
 
                   {/* Option B: Local upload */}
+=======
+                  <div className="relative my-3 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/5"></div>
+                    </div>
+                    <span className="relative bg-slate-900 px-3 text-[9px] font-mono text-slate-500 uppercase">
+                      OR UPLOAD
+                    </span>
+                  </div>
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   <div className="relative p-4 rounded-xl border border-dashed border-white/10 hover:border-blue-500/30 transition-all text-center group bg-black/20 flex flex-col items-center justify-center space-y-1 cursor-pointer">
                     <input
                       type="file"
@@ -685,21 +1083,38 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                     />
                     <Upload className="w-5 h-5 text-slate-400 group-hover:text-blue-400 duration-200" />
                     <span className="text-[11px] text-slate-300">
+<<<<<<< HEAD
                       {uploadStatus === "loading" ? "Uploading..." : "Select Local Video File (.mp4 / .mov)"}
                     </span>
                     <span className="text-[9px] text-slate-500 font-mono">
                       (Max 25MB for local browser memory)
+=======
+                      {uploadStatus === "loading"
+                        ? "Uploading..."
+                        : "Select Local Video File (.mp4 / .mov)"}
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-mono">
+                      (Max 25MB)
+>>>>>>> 6a3934a (Initial updated portfolio project)
                     </span>
                   </div>
                 </div>
 
+<<<<<<< HEAD
                 {/* Section 2: Profile Picture */}
+=======
+>>>>>>> 6a3934a (Initial updated portfolio project)
                 <div className="space-y-3 p-4 rounded-2xl bg-white/5 border border-white/5">
                   <div className="flex justify-between items-center">
                     <h4 className="text-xs font-bold text-violet-400 uppercase tracking-wider flex items-center gap-2">
                       <Globe className="w-3.5 h-3.5" /> 2. Profile Photo
                     </h4>
+<<<<<<< HEAD
                     {(localStorage.getItem("custom_profile_url") || assets.profileUrl !== FALLBACK_ASSETS.profileUrl) && (
+=======
+                    {(localStorage.getItem("custom_profile_url") ||
+                      assets.profileUrl !== FALLBACK_ASSETS.profileUrl) && (
+>>>>>>> 6a3934a (Initial updated portfolio project)
                       <button
                         onClick={handleResetProfile}
                         className="text-[10px] font-mono text-red-400 hover:text-red-300 font-bold uppercase cursor-pointer flex items-center gap-1"
@@ -709,10 +1124,16 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                     )}
                   </div>
 
+<<<<<<< HEAD
                   {/* Option A: Link pasting (Best for Vercel!) */}
                   <div className="space-y-2">
                     <label className="text-[11px] font-mono text-slate-300 block">
                       🔗 Paste Direct Image URL (https://...)
+=======
+                  <div className="space-y-2">
+                    <label className="text-[11px] font-mono text-slate-300 block">
+                      🔗 Paste Direct Image URL
+>>>>>>> 6a3934a (Initial updated portfolio project)
                     </label>
                     <div className="flex gap-2">
                       <div className="relative flex-grow">
@@ -728,6 +1149,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                     </div>
                   </div>
 
+<<<<<<< HEAD
                   {/* Divider */}
                   <div className="relative my-3 flex items-center justify-center">
                     <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
@@ -735,6 +1157,17 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                   </div>
 
                   {/* Option B: Local upload */}
+=======
+                  <div className="relative my-3 flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/5"></div>
+                    </div>
+                    <span className="relative bg-slate-900 px-3 text-[9px] font-mono text-slate-500 uppercase">
+                      OR UPLOAD
+                    </span>
+                  </div>
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   <div className="relative p-4 rounded-xl border border-dashed border-white/10 hover:border-violet-500/30 transition-all text-center group bg-black/20 flex flex-col items-center justify-center space-y-1 cursor-pointer">
                     <input
                       type="file"
@@ -745,13 +1178,20 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                     />
                     <Upload className="w-5 h-5 text-slate-400 group-hover:text-violet-400 duration-200" />
                     <span className="text-[11px] text-slate-300">
+<<<<<<< HEAD
                       {uploadStatus === "loading" ? "Uploading..." : "Select Local Image File (.png / .jpg)"}
+=======
+                      {uploadStatus === "loading"
+                        ? "Uploading..."
+                        : "Select Local Image File (.png / .jpg)"}
+>>>>>>> 6a3934a (Initial updated portfolio project)
                     </span>
                     <span className="text-[9px] text-slate-500 font-mono">
                       (Saved to browser IndexedDB)
                     </span>
                   </div>
                 </div>
+<<<<<<< HEAD
 
                 {/* Info Guide */}
                 <div className="p-4 rounded-xl border border-blue-500/10 bg-blue-500/5 text-xs text-slate-400 leading-relaxed space-y-1.5">
@@ -768,6 +1208,10 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
               </div>
 
               {/* Action Buttons */}
+=======
+              </div>
+
+>>>>>>> 6a3934a (Initial updated portfolio project)
               <div className="border-t border-white/5 pt-4 mt-6 flex justify-end gap-3">
                 <button
                   onClick={() => {
@@ -792,6 +1236,7 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
         )}
 
         {isResumeOpen && (
+<<<<<<< HEAD
           <div 
             id="printable-resume-container"
             className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
@@ -844,12 +1289,53 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                   <button
                     onClick={() => setIsResumeOpen(false)}
                     className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer"
+=======
+          <div className="fixed inset-0 z-[60] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.96, opacity: 0, y: 10 }}
+              transition={{ duration: 0.25 }}
+              className="relative w-full max-w-6xl h-[88vh] rounded-3xl border border-white/10 bg-slate-900 shadow-2xl overflow-hidden flex flex-col"
+            >
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-slate-900/95">
+                <div>
+                  <h3 className="text-white text-lg font-bold">
+                    Gayatri Resume
+                  </h3>
+                  <p className="text-slate-400 text-sm">
+                    Preview and download resume
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleOpenResumeInNewTab}
+                    className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 text-sm font-semibold transition flex items-center gap-2"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Open
+                  </button>
+
+                  <button
+                    onClick={handleDownloadResume}
+                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download
+                  </button>
+
+                  <button
+                    onClick={() => setIsResumeOpen(false)}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition"
+>>>>>>> 6a3934a (Initial updated portfolio project)
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
+<<<<<<< HEAD
               {/* Printable Area */}
               <div className="p-8 sm:p-12 bg-white text-slate-900 max-h-[75vh] overflow-y-auto custom-scrollbar" id="printable-resume">
                 {/* Resume Header */}
@@ -1112,6 +1598,14 @@ export default function Hero({ name, role, tagline, email, onNavigate }: HeroPro
                 >
                   Close
                 </button>
+=======
+              <div className="flex-1 bg-slate-950">
+                <iframe
+                  src={`${resumeUrl}#toolbar=1&navpanes=0&scrollbar=1`}
+                  title="Gayatri Resume Preview"
+                  className="w-full h-full border-0"
+                />
+>>>>>>> 6a3934a (Initial updated portfolio project)
               </div>
             </motion.div>
           </div>

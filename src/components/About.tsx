@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { 
   Code2, Database, Table, Cpu, Network, LineChart, Monitor, GitBranch, FileCode2, Bot, GraduationCap, Briefcase
@@ -125,10 +126,79 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
                 
                 {/* Tech glass reflection sheen (very subtle and clean, no heavy dimming overlays) */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-white/[0.05] pointer-events-none z-20" />
+=======
+import { motion } from "motion/react";
+import {
+  Code2,
+  Database,
+ Table2,
+  Brain,
+  Cpu,
+  ChartNoAxesCombined,
+  MonitorSmartphone,
+  GitBranch,
+  NotebookPen,
+  Bot,
+} from "lucide-react";
+import profileImage from "../assets/images/profile.png";
+
+const techStack = [
+  { name: "PYTHON", icon: Code2, color: "text-cyan-400" },
+  { name: "NUMPY", icon: Database, color: "text-cyan-400" },
+  { name: "PANDAS", icon: Table2, color: "text-cyan-400" },
+  { name: "SCIKIT-LEARN", icon: Brain, color: "text-orange-400" },
+  { name: "TENSORFLOW", icon: Cpu, color: "text-yellow-400" },
+  { name: "MATPLOTLIB", icon: ChartNoAxesCombined, color: "text-indigo-400" },
+  { name: "STREAMLIT", icon: MonitorSmartphone, color: "text-red-400" },
+  { name: "GIT", icon: GitBranch, color: "text-orange-400" },
+  { name: "JUPYTER NOTEBOOK", icon: NotebookPen, color: "text-blue-400" },
+  { name: "OLLAMA", icon: Bot, color: "text-pink-400" },
+];
+
+export default function About() {
+  return (
+    <section
+      id="about"
+      className="relative py-24 bg-[#020817] border-t border-white/5 overflow-hidden"
+    >
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-24 left-10 w-72 h-72 bg-blue-500/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-indigo-500/10 blur-[140px] rounded-full" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="grid lg:grid-cols-2 gap-14 items-center"
+        >
+          {/* Left side image */}
+          <motion.div
+            initial={{ opacity: 0, x: -28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative flex justify-center lg:justify-start"
+          >
+            <div className="relative group">
+              <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-transparent blur-2xl opacity-80" />
+
+              <div className="relative rounded-[2rem] border border-blue-500/20 p-3">
+                <div className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl">
+                  <img
+                    src={profileImage}
+                    alt="Gayatri profile"
+                    className="w-[320px] sm:w-[380px] lg:w-[420px] h-auto object-cover"
+                  />
+                </div>
+>>>>>>> 6a3934a (Initial updated portfolio project)
               </div>
             </div>
           </motion.div>
 
+<<<<<<< HEAD
           {/* RIGHT COLUMN: Redesigned typography detail matching mockup */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             
@@ -198,3 +268,60 @@ export default function About({ fullAbout, stats, location, email, phone, onNavi
     </section>
   );
 }
+=======
+          {/* Right side content */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono tracking-widest uppercase mb-5">
+              <span>01 // ABOUT ME</span>
+            </div>
+
+            <h2 className="font-display text-5xl sm:text-7xl font-black tracking-tight leading-none text-white">
+              HELLO<span className="text-blue-500">!</span>
+            </h2>
+
+            <div className="w-16 h-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-5 mb-7" />
+
+            <div className="space-y-5 text-slate-300 text-sm sm:text-base leading-8 max-w-3xl">
+              <p>
+                Hi, I'm{" "}
+                <span className="text-white font-semibold">Gayatri</span>. Passionate
+                about Artificial Intelligence and Machine Learning and committed
+                to continuous learning, exploring emerging technologies, and
+                building intelligent solutions through hands-on projects that
+                solve real-world problems.
+              </p>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-blue-300 text-sm sm:text-base font-mono tracking-[0.2em] uppercase font-bold mb-6">
+                // TECHNOLOGIES I WORK WITH
+              </h3>
+
+              <div className="flex flex-wrap gap-4">
+                {techStack.map((tech) => {
+                  const Icon = tech.icon;
+                  return (
+                    <div
+                      key={tech.name}
+                      className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#10204a] border border-blue-500/30 text-white font-bold text-sm sm:text-base shadow-md hover:border-blue-400/50 transition-all"
+                    >
+                      <Icon className={`w-5 h-5 ${tech.color}`} />
+                      <span className="font-mono tracking-wide">{tech.name}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+>>>>>>> 6a3934a (Initial updated portfolio project)
