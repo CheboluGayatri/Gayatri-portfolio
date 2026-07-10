@@ -206,20 +206,6 @@ An AI-powered healthcare assistant that provides preliminary disease predictions
 
 ---
 
-# 📸 Portfolio Preview
-
-> Replace these placeholders with actual screenshots or GIFs.
-
-| Home | Projects |
-|------|----------|
-| ![](screenshots/home.png) | ![](screenshots/projects.png) |
-
-| Skills | Contact |
-|---------|---------|
-| ![](screenshots/skills.png) | ![](screenshots/contact.png) |
-
----
-
 # 🚀 Getting Started
 
 ## Clone the Repository
