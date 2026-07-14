@@ -194,8 +194,6 @@ Healthcare assistant powered by AI.
 ### Programming
 
 - Python
-- Java
-- JavaScript
 - SQL
 
 ### Artificial Intelligence
